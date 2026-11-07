@@ -14,15 +14,23 @@ Daly, D., Brown, W., Ingo, H., O'Leary, J., & Bradford, D. (2020). The use of ch
 
 Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus areas in software testing. *IEEE Software, 34*(5), 38–45. https://doi.org/10.1109/MS.2017.3641116
 
+Humble, J., & Farley, D. (2010). *Continuous delivery: Reliable software releases through build, test, and deployment automation*. Addison-Wesley.
+
 International Organization for Standardization & International Electrotechnical Commission. (2023). *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — Product quality model* (ISO/IEC 25010:2023, 2.ª ed.). https://www.iso.org/standard/78176.html
 
 International Software Testing Qualifications Board. (2018). *Certified Tester Foundation Level Specialist syllabus: Performance testing* (Versión 2018). https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf
+
+International Software Testing Qualifications Board. (2024). *Certified Tester Foundation Level syllabus* (Versión 4.0.1). https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf
 
 Jiang, Z. M., & Hassan, A. E. (2015). A survey on load testing of large-scale software systems. *IEEE Transactions on Software Engineering, 41*(11), 1091–1118. https://doi.org/10.1109/TSE.2015.2445340
 
 Leitner, P., & Bezemer, C.-P. (2017). An exploratory study of the state of practice of performance testing in Java-based open source projects. En *Proceedings of the 8th ACM/SPEC International Conference on Performance Engineering (ICPE '17)* (pp. 373–384). ACM. https://doi.org/10.1145/3030207.3030213
 
+Microsoft. (2022, 21 de julio). *Shift right to test in production*. Microsoft Learn. Recuperado el 7 de noviembre de 2026, de https://learn.microsoft.com/en-us/devops/deliver/shift-right-test-production
+
 Nielsen, J. (1993, 1 de enero). *Response times: The 3 important limits*. Nielsen Norman Group. https://www.nngroup.com/articles/response-times-3-important-limits/
+
+Shahin, M., Ali Babar, M., & Zhu, L. (2017). Continuous integration, delivery and deployment: A systematic review on approaches, tools, challenges and practices. *IEEE Access, 5*, 3909–3943. https://doi.org/10.1109/ACCESS.2017.2685629
 
 Snyder, H. (2019). Literature review as a research methodology: An overview and guidelines. *Journal of Business Research, 104*, 333–339. https://doi.org/10.1016/j.jbusres.2019.07.039
 

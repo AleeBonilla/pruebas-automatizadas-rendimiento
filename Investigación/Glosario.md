@@ -15,12 +15,22 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 |---|---|---|---|---|---|---|
 | Rendimiento | performance | rendimiento | — | Atributo general del sistema relacionado con el tiempo y los recursos. «Desempeño» se acepta como sinónimo en la prosa, pero los términos fijos usan «rendimiento» (pruebas de rendimiento, regresión de rendimiento). | 5.2 | 02, 03, 04 |
 | Eficiencia de desempeño | performance efficiency | eficiencia de desempeño | eficiencia de rendimiento | Característica de calidad del producto en ISO/IEC 25010:2023. Es el término normativo, y solo se usa para referirse a la norma. | 5.2 | 02 |
+| Comportamiento temporal | time behaviour | comportamiento temporal | comportamiento en el tiempo | Subcaracterística de la eficiencia de desempeño (ISO/IEC 25010:2023). Provisional hasta aprobar 5.2. | 5.2 | — |
+| Utilización de recursos | resource utilization | utilización de recursos | uso de recursos (se acepta en prosa) | Subcaracterística de la eficiencia de desempeño (ISO/IEC 25010:2023). Provisional hasta aprobar 5.2. | 5.2 | — |
+| Capacidad | capacity | capacidad | — | Subcaracterística de la eficiencia de desempeño (ISO/IEC 25010:2023). No confundir con la prueba de capacidad (5.4). Provisional hasta aprobar 5.2. | 5.2 | — |
 | Prueba de rendimiento | performance testing | prueba de rendimiento | prueba de desempeño, test de performance | Prueba que evalúa el comportamiento temporal y el uso de recursos de un sistema bajo una carga dada. Provisional. | 5.3–5.4 | 02, 03, 04 |
+| Aseguramiento de la calidad | quality assurance (QA) | aseguramiento de la calidad, sin sigla | QA | Enfoque de proceso, preventivo; las pruebas son una forma de control de la calidad del producto. Provisional hasta aprobar 5.1. | 5.1 | — |
+| Modelo en V | V-model | modelo en V | modelo V | Modelo de ciclo de vida secuencial. Provisional hasta aprobar 5.1. | 5.1 | — |
+| Nivel de prueba | test level | nivel de prueba: prueba de componentes, de integración de componentes, de sistema, de integración de sistemas y de aceptación | etapa de prueba | Provisional hasta aprobar 5.1. | 5.1 | 02 |
+| DevOps | DevOps | DevOps (sin cursiva, asimilado) | — | Provisional hasta aprobar 5.1. | 5.1 | — |
 | Fase de implementación | implementation phase | fase de implementación | — | En este trabajo, la validación previa al despliegue del sistema integrado (`Alcance.md` §1). | 5.1 | 02 |
 | Integración continua (CI) | continuous integration | integración continua (CI); después, CI | CI/CD cuando solo se habla de integración | Provisional. | 5.1, 5.7 | 02, 03 |
-| Entrega continua (CD) | continuous delivery | entrega continua (CD) | — | Provisional. | 5.1 | — |
+| Entrega continua | continuous delivery | entrega continua, sin sigla propia | CD sola (ambigua: el CTFL la usa para la entrega y Shahin et al. para el despliegue) | Provisional hasta aprobar 5.1. | 5.1 | — |
+| Despliegue continuo | continuous deployment | despliegue continuo, sin sigla | CD sola | Provisional hasta aprobar 5.1. | 5.1 | — |
+| CI/CD | CI/CD | CI/CD | — | Integración continua junto con entrega o despliegue continuos. Término preferido para hablar de estas prácticas en conjunto (preferencia del usuario). | 5.1 | 03 |
 | Pipeline | pipeline | pipeline (sin cursiva, asimilado) | tubería, *pipeline* en cursiva | Secuencia automatizada de pasos de construcción, prueba y despliegue. | 5.1 | 02, 03 |
-| *Quality gate* | quality gate | *quality gate* | puerta de calidad | Control automatizado que aprueba o rechaza un cambio según criterios. Provisional. | 5.1, 5.7 | — |
+| Pipeline de despliegue | deployment pipeline | pipeline de despliegue (*deployment pipeline*) la primera vez; después, pipeline | — | Modelo automatizado del camino de cada cambio, desde el control de versiones hasta los usuarios (Humble y Farley). Provisional hasta aprobar 5.1. | 5.1 | — |
+| *Quality gate* | quality gate | *quality gate* | puerta de calidad | Compuerta del pipeline: un cambio no avanza a la etapa siguiente si no supera sus criterios (Humble y Farley la llaman *gate*). Provisional hasta aprobar 5.1. | 5.1, 5.7 | — |
 | *Shift-left* / *shift-right* | shift-left / shift-right | *shift-left*, *shift-right* | — | Provisional. | 5.1 | — |
 
 ## Métricas y modelos de carga
