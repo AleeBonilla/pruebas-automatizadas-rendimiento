@@ -1,7 +1,11 @@
 # Plan — Introducción
 
-**Estado:** Final | **Versión:** 5 | **Fecha:** 2026-11-06 | **Presupuesto:** 875 palabras
+**Estado:** Aprobado | **Modo:** Ligero | **Versión:** 7 | **Fecha:** 2026-11-07 | **Presupuesto:** 875 palabras
 
+> **Cambios en la versión 7:** migrado a la plantilla nueva. La tabla «Subsecciones» pasa a «Esquema argumental», con la idea central de cada bloque. Se quitan los puntos a investigar P1–P8 y la nota para el investigador, que el modo ligero no usa. Las fuentes y su verificación no cambian. Presupuesto ajustado según la auditoría, ronda 4: B1 375, B2 150, B3 225, B4 125.
+>
+> **Cambios en la versión 6:** se adopta el flujo de trabajo nuevo (ver `Workflow.md` y `Guía de redacción.md`); el estado «Final» pasa a «Aprobado». El borrador v3 se reescribió con voz propia y menos citas. B3 ya no enumera los objetivos específicos ni las preguntas de investigación, y no menciona el uso de IA. Las preguntas pasan a B4, junto a la sección que responde cada una. Presupuesto redistribuido: B1 350, B2 150, B3 225, B4 150.
+>
 > **Cambios en la versión 5:** el borrador v1 señaló que en B3 falta respaldo para la motivación de automatizar las pruebas e integrarlas en CI. Se agregan los puntos P7 y P8 y las fuentes F8 y F9. Se pasan 25 palabras de B1 a B3 para dar lugar a esa motivación. B1 ya tenía 385 palabras en el borrador.
 
 ## Objetivo y alcance
@@ -24,32 +28,14 @@ Sección 2 del documento («Introducción», `Alcance.md` §5 y §5.1; `Enunciad
 
 **Forma:** los cuatro bloques son grupos de párrafos dentro de una sola sección. No llevan subtítulos en el documento, porque en 2.5 páginas los subtítulos fragmentarían el texto.
 
-## Subsecciones
-| Subsección | Palabras | Qué comunica | Insumos | Puntos |
+## Esquema argumental
+| Bloque | Palabras | Idea central | Contenido | Insumos y fuentes |
 |---|---|---|---|---|
-| B1. El rendimiento como atributo de calidad | 325 | Que el rendimiento es una característica de calidad del producto según la norma, no un aspecto accesorio. Que tiene impacto en tres frentes: la experiencia del usuario (umbrales de tiempo de respuesta), el negocio (las fallas de sistemas a gran escala se deben con frecuencia a la incapacidad de escalar, como en el caso HealthCare.gov) y el costo de la infraestructura (el sobreaprovisionamiento compensa la ineficiencia). | `Alcance.md` §5.1; F2–F7 | P1, P2, P3, P4, P5 |
-| B2. Ubicación en el ciclo de vida | 175 | Que el trabajo se sitúa en la fase de implementación: validación previa al despliegue del sistema integrado, en los niveles de sistema e integración de sistemas, donde el entorno, los datos y la carga deben ser realistas. Que la ejecución en CI desde desarrollo se trata como puente y no como segundo eje. | `Alcance.md` §1; `Enunciado.md` (fases de desarrollo e implementación, objetivo específico 3); F2 | P6 |
-| B3. Motivación, enfoque y objetivos | 250 | Por qué automatizar estas pruebas sobre API REST y llevarlas a un pipeline de CI: el desempeño puede cambiar con cada versión, así que debe evaluarse de forma continua antes de pasar a producción, y ejecutar las pruebas en CI permite atribuir una regresión a los cambios que la introdujeron. Esto se dice en una o dos oraciones; cómo se detectan las regresiones y con qué umbrales le corresponde al Marco teórico §5.7. La herramienta del taller, Gatling. El objetivo general, los objetivos específicos y las preguntas PI-1 a PI-5. El uso de IA como base inicial validada críticamente, mencionado en una sola oración porque el procedimiento va en Metodología. | `Enunciado.md` (objetivo general, objetivos específicos, nota metodológica); `Alcance.md` §1 y §3; F8, F9 | P7, P8 |
-| B4. Estructura del documento | 125 | Qué contiene cada sección (3 a 9) y qué pregunta de investigación responde cada una. | `Alcance.md` §2 y §5 (tabla de secciones y PI) | — |
+| B1. El rendimiento como atributo de calidad | 375 | El rendimiento es un atributo de calidad reconocido por la norma, y descuidarlo tiene costos concretos para el usuario, para la organización y para la infraestructura. | Definición de eficiencia de desempeño (sin subcaracterísticas). Umbrales de tiempo de respuesta de Nielsen. Fallas por incapacidad de escalar y el caso HealthCare.gov. Sobreaprovisionamiento como costo de no medir. | `Alcance.md` §5.1; F7, F4, F3, F5, F6 |
+| B2. Ubicación en el ciclo de vida | 150 | El trabajo se concentra en la validación del sistema integrado antes del despliegue, porque es donde los resultados mejor anticipan el comportamiento en producción. | Fase de implementación. Recomendaciones del ISTQB: probar temprano y, en los niveles de sistema y de integración de sistemas, usar entornos, datos y cargas realistas. La CI desde desarrollo como puente, no como segundo eje. | `Alcance.md` §1; `Enunciado.md` (objetivo específico 3); F2 |
+| B3. Motivación, enfoque y objetivo | 225 | Como cada versión puede alterar el desempeño, las pruebas deben automatizarse e integrarse en CI; de ahí el enfoque y el objetivo del trabajo. | Entregas frecuentes y evaluación continua del desempeño. La experiencia de Daly et al. con la revisión manual. Enfoque: API REST, CI y Gatling. Objetivo general, con el taller y el plan de pruebas para los compañeros. No enumera los objetivos específicos ni menciona el uso de IA. La detección de regresiones y los umbrales van en el Marco teórico §5.7. | `Enunciado.md` (objetivo general, objetivos específicos 4 y 5); `Alcance.md` §1; F8, F9 |
+| B4. Estructura del documento y preguntas de investigación | 125 | El documento recorre cinco preguntas de investigación, y cada una se responde en una sección concreta. | Las preguntas PI-1 a PI-5, cada una una sola vez y junto a la sección que la responde; las secciones 3 a 9. | `Alcance.md` §2, §3 y §5 |
 | **Total** | **875** | | | |
-
-## Puntos a investigar
-| ID | Pregunta | Subsección | Fuentes |
-|---|---|---|---|
-| P1 | ¿Cómo define ISO/IEC 25010:2023 la eficiencia de desempeño (§3.2) y dónde la ubica dentro del modelo de calidad del producto (§4.1)? ¿Cómo relaciona el syllabus ISTQB CT-PT (§1.1) la eficiencia de desempeño con la experiencia del usuario? | B1 | F7, F2 |
-| P2 | ¿Qué tres límites de tiempo de respuesta propone Nielsen (1993) para la percepción del usuario y qué significa cada uno? | B1 | F4 |
-| P3 | ¿Qué afirman Jiang y Hassan (2015) sobre la causa predominante de las fallas en sistemas de gran escala (incapacidad de escalar frente a defectos funcionales) y qué casos públicos citan como ejemplo? | B1 | F3 |
-| P4 | ¿Qué consecuencias del lanzamiento de HealthCare.gov (1 de octubre de 2013) documenta la GAO en GAO-14-694 y qué concluye sobre la verificación de los requisitos de desempeño antes del lanzamiento? | B1 | F5 |
-| P5 | ¿Cómo define el AWS Well-Architected Framework la eficiencia de desempeño y cómo vincula el uso de los recursos con el costo, mediante el sobreaprovisionamiento? | B1 | F6 |
-| P6 | ¿En qué niveles de prueba ubica el syllabus ISTQB CT-PT (§1.3.2) las pruebas dinámicas de rendimiento y qué exige en los niveles de sistema e integración de sistemas? | B2 | F2 |
-| P7 | ¿Por qué sostiene el informe SPEC-RG-2015-01 (§4.4) que el desempeño de una aplicación debe evaluarse de forma continua antes de que cada versión pase a producción, y para qué propone integrar las pruebas de rendimiento en los sistemas de CI? | B3 | F8 |
-| P8 | Según la experiencia que relatan Daly et al. (2020, §1 y §1.1) en el sistema de CI de MongoDB, ¿qué se busca al ejecutar pruebas de rendimiento periódicas con cada cambio, y por qué la revisión manual de los resultados resultó insostenible? | B3 | F9 |
-
-> **Nota para el investigador:** en P1 basta con la definición y la ubicación. Las subcaracterísticas (§3.2.1–3.2.3) le corresponden al Marco teórico §5.2. La copia local de F7 es la adopción británica BS ISO/IEC 25010:2023, que implementa el texto de ISO/IEC 25010:2023. Se cita como ISO/IEC 25010:2023.
->
-> En P4 basta con el impacto y la conclusión sobre la falta de verificación. Las causas detalladas (pruebas incompletas, capacidad no planificada) están en GAO-15-238 y le corresponden al Planteamiento del problema.
->
-> En P7 y P8 basta con la razón para automatizar y llevar las pruebas a CI. El algoritmo de detección de puntos de cambio, el ruido de las mediciones y los umbrales de Daly et al. le corresponden al Marco teórico §5.7, y la evidencia de que esto se adopta poco le corresponde al Planteamiento del problema. Las citas de P8 deben salir del cuerpo del artículo, no solo del resumen.
 
 ## Fuentes
 | ID  | Referencia y enlace                                                                                                                                                                                                                                     | Acceso                    | Disponibilidad                                                                                                                                                        |
