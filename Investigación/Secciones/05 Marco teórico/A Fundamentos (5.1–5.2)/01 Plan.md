@@ -1,7 +1,9 @@
 # Plan — Marco teórico, grupo A: Fundamentos (5.1–5.2)
 
-**Estado:** Aprobado | **Modo:** Completo | **Versión:** 4 | **Fecha:** 2026-11-07 | **Presupuesto:** 550 palabras + 0,9 págs. de tabla y figura (2,5 págs. en total)
+**Estado:** Aprobado | **Modo:** Completo | **Versión:** 5 | **Fecha:** 2026-11-07 | **Presupuesto:** 550 palabras + 0,9 págs. de tabla y figura (2,5 págs. en total)
 
+> **Cambios en la versión 5:** corrige el espacio de la Figura 1 y la Tabla 1 para que sumen las 0,9 páginas del encabezado, como señaló la auditoría (rondas 3 y 4): 0,5 y 0,4 páginas, según el reparto de `Alcance.md` §5.4 (5.1: 350 palabras + Figura 1 en 1,5 páginas; 5.2: 200 palabras + Tabla 1 en 1 página). No cambia el contenido ni las afirmaciones.
+>
 > **Cambios en la versión 4:** condensación al nuevo presupuesto de `Alcance.md` (documento de 30–35 páginas, aprobado por el usuario): de 850 a 550 palabras. Se conservan las siete fuentes, la Figura 1 y la Tabla 1. Las afirmaciones bajan a 5 (tope de 1 por cada 100 palabras): A2 se funde con A1, A6 con A5 y A8 con A7; los IDs vigentes se conservan. La sección «Condensación» indica qué se recorta.
 >
 > **Cambios en la versión 3:** aprobado por el usuario sin cambios. Las fuentes nuevas (F1, F3, F4 y F6) se agregan a `Referencias.md`, y los términos nuevos, a `Glosario.md`.
@@ -61,8 +63,8 @@ E7 y E8 pasan a «Filas no usadas». Todas las fuentes siguen citadas.
 ## Tablas y figuras
 | ID | Tipo | Título | Bloque | Contenido | Fuentes | Espacio (págs.) |
 |---|---|---|---|---|---|---|
-| Figura 1 | Diagrama | Las pruebas de rendimiento en el modelo en V y en el pipeline de CI | B1, B3 | A la izquierda, el modelo en V con los cinco niveles de prueba, marcando sistema e integración de sistemas como foco de este trabajo y el nivel de componente como opción de *shift-left*. A la derecha, el pipeline (integración → entrega → despliegue) con el *quality gate* de rendimiento antes del despliegue. Producción, con su monitoreo, como *shift-right*. | Elaboración propia a partir de F1, F2 y F3 | 0,35 |
-| Tabla 1 | Tabla | Subcaracterísticas de la eficiencia de desempeño | B4 | Tres filas (comportamiento temporal, utilización de recursos, capacidad) y tres columnas: definición en ISO/IEC 25010:2023, objetivo de prueba según el CT-PT y qué se observa (puente a 5.3). | F5, F2; la última columna es elaboración propia | 0,35 |
+| Figura 1 | Diagrama | Las pruebas de rendimiento en el modelo en V y en el pipeline de CI | B1, B3 | A la izquierda, el modelo en V con los cinco niveles de prueba, marcando sistema e integración de sistemas como foco de este trabajo y el nivel de componente como opción de *shift-left*. A la derecha, el pipeline (integración → entrega → despliegue) con el *quality gate* de rendimiento antes del despliegue. Producción, con su monitoreo, como *shift-right*. | Elaboración propia a partir de F1, F2 y F3 | 0,5 |
+| Tabla 1 | Tabla | Subcaracterísticas de la eficiencia de desempeño | B4 | Tres filas (comportamiento temporal, utilización de recursos, capacidad) y tres columnas: definición en ISO/IEC 25010:2023, objetivo de prueba según el CT-PT y qué se observa (puente a 5.3). | F5, F2; la última columna es elaboración propia | 0,4 |
 
 ## Afirmaciones a respaldar
 | ID | Pregunta | Bloque | Fuentes |

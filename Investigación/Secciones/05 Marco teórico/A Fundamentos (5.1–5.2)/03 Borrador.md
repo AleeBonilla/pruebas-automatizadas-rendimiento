@@ -1,6 +1,6 @@
 # Marco teórico — 5.1 y 5.2
 
-<!-- Borrador v4 | Plan v4 | Evidencia v3 | 2026-11-07 -->
+<!-- Borrador v4 | Plan v5 | Evidencia v3 | 2026-11-07 -->
 <!-- v4: corrige el hallazgo bloqueante 1 y aplica la sugerencia 2 de la auditoría, ronda 3. v3: condensación al nuevo presupuesto (550 palabras), según el plan v4. Se conservan todas las fuentes, la Figura 1 y la Tabla 1; dejan de citarse E7 y E8. v2: corrige los hallazgos bloqueantes 1–4 y aplica las sugerencias 5–8 de la auditoría, ronda 1. -->
 
 ## 5.1 Aseguramiento de la calidad en la fase de implementación

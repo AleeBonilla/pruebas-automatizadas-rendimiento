@@ -1,6 +1,6 @@
 # Evidencia — Marco teórico, grupo A: Fundamentos (5.1–5.2)
 
-**Plan:** versión 4 | **Versión:** 3 | **Fecha:** 2026-11-07
+**Plan:** versión 5 | **Versión:** 3 | **Fecha:** 2026-11-07
 
 > **Cambios en la versión 3:** condensación del borrador (v3). Dejan de citarse E7 y E8, que pasan a «Filas no usadas».
 >
