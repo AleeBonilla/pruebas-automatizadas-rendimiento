@@ -4,15 +4,23 @@ Amazon Web Services. (s. f.-a). *Cost optimization: Definition*. En *AWS Well-Ar
 
 Amazon Web Services. (s. f.-b). *Performance efficiency*. En *AWS Well-Architected Framework*. Recuperado el 6 de noviembre de 2026, de https://docs.aws.amazon.com/wellarchitected/latest/framework/performance-efficiency.html
 
+Bezemer, C.-P., Eismann, S., Ferme, V., Grohmann, J., Heinrich, R., Jamshidi, P., Shang, W., van Hoorn, A., Villavicencio, M., Walter, J., & Willnecker, F. (2019). How is performance addressed in DevOps? A survey on industrial practices. En *Proceedings of the 2019 ACM/SPEC International Conference on Performance Engineering (ICPE '19)* (pp. 45–50). ACM. https://doi.org/10.1145/3297663.3309672
+
+Bondi, A. B., & Xiao, L. (2023). Early progress on enhancing existing software engineering courses to cultivate performance awareness. En *Companion of the 2023 ACM/SPEC International Conference on Performance Engineering (ICPE '23 Companion)* (pp. 345–349). ACM. https://doi.org/10.1145/3578245.3584352
+
 Brunnert, A., van Hoorn, A., Willnecker, F., Danciu, A., Hasselbring, W., Heger, C., Herbst, N., Jamshidi, P., Jung, R., von Kistowski, J., Koziolek, A., Kroß, J., Spinner, S., Vögele, C., Walter, J., & Wert, A. (2015). *Performance-oriented DevOps: A research agenda* (Informe técnico SPEC-RG-2015-01). SPEC Research Group — DevOps Performance Working Group, Standard Performance Evaluation Corporation. https://research.spec.org/publications/brunnert_performance_oriented_devops_2015
 
 Daly, D., Brown, W., Ingo, H., O'Leary, J., & Bradford, D. (2020). The use of change point detection to identify software performance regressions in a continuous integration system. En *Proceedings of the 2020 ACM/SPEC International Conference on Performance Engineering (ICPE '20)* (pp. 67–75). ACM. https://doi.org/10.1145/3358960.3375791
+
+Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus areas in software testing. *IEEE Software, 34*(5), 38–45. https://doi.org/10.1109/MS.2017.3641116
 
 International Organization for Standardization & International Electrotechnical Commission. (2023). *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — Product quality model* (ISO/IEC 25010:2023, 2.ª ed.). https://www.iso.org/standard/78176.html
 
 International Software Testing Qualifications Board. (2018). *Certified Tester Foundation Level Specialist syllabus: Performance testing* (Versión 2018). https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf
 
 Jiang, Z. M., & Hassan, A. E. (2015). A survey on load testing of large-scale software systems. *IEEE Transactions on Software Engineering, 41*(11), 1091–1118. https://doi.org/10.1109/TSE.2015.2445340
+
+Leitner, P., & Bezemer, C.-P. (2017). An exploratory study of the state of practice of performance testing in Java-based open source projects. En *Proceedings of the 8th ACM/SPEC International Conference on Performance Engineering (ICPE '17)* (pp. 373–384). ACM. https://doi.org/10.1145/3030207.3030213
 
 Nielsen, J. (1993, 1 de enero). *Response times: The 3 important limits*. Nielsen Norman Group. https://www.nngroup.com/articles/response-times-3-important-limits/
 
