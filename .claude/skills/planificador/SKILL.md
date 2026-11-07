@@ -62,4 +62,4 @@ No escribás ningún otro archivo. Si el plan ya existe, partí de él y no rein
 
 - **Disponibilidad:** en las fuentes abiertas, el enlace al texto completo. En las cerradas, «Pendiente», «No disponible» o «Local» para las que se tienen localmente.
 - **Sin investigación externa:** si la sección no la necesita, omití las tablas de puntos y de fuentes.
-- **Revisiones:** en cada una, subí la versión y anotá qué cambió.
+- **Revisiones:** en cada una, subí la versión.

@@ -27,7 +27,7 @@ No escribás ningún otro archivo. Si el plan no está en estado Final o la evid
 
 - **Estructura:** seguí las subsecciones del plan y ajustate a su presupuesto de palabras.
 - **Respaldo:** toda afirmación que necesite respaldo externo sale de una fila de la evidencia. No agregués nada que la fila no diga. El contenido interno sale solo de los insumos del plan.
-- **Citas:** citá en el texto con el formato de `Referencias.md` y poné después de cada cita el ID de la fila en un comentario oculto: `(Autor, año) <!-- E-07 -->`. En las citas textuales, usá comillas e incluí la ubicación.
+- **Citas:** citá en el texto con el formato de `Referencias.md` y poné después de cada cita el ID de la fila en un comentario oculto: `(Autor, año) <!-- E7 -->`. En las citas textuales, usá comillas e incluí la ubicación.
 - **Evidencia faltante:** si para cumplir el plan hace falta una afirmación que ninguna fila respalda, no la escribás; registrala en «Evidencia faltante».
 - **Correcciones:** si existe la auditoría de redacción, corregí solo lo señalado. Si el usuario hace observaciones, aplicalas.
 
@@ -40,18 +40,14 @@ No escribás ningún otro archivo. Si el plan no está en estado Final o la evid
 
 ## <subsección>
 
-<Texto con citas: (Autor, año) <!-- E-01 -->>
+<Texto con citas: (Autor, año) <!-- E1 -->>
 
 ---
 
 ## Evidencia faltante
 | Subsección | Qué falta |
 |---|---|
-
-## Cambios
-| Versión | Cambio |
-|---|---|
 ```
 
 - **Evidencia faltante:** omití la tabla si no falta nada.
-- **Revisiones:** en cada una, subí la versión y anotá qué cambió.
+- **Revisiones:** en cada una, subí la versión.

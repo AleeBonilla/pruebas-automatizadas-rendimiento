@@ -40,18 +40,14 @@ No escribás ningún otro archivo. Si el plan no está en estado Final, detenete
 
 | ID | Punto | Afirmación | Cita textual | Fuente | Enlace | Ubicación | Tipo |
 |---|---|---|---|---|---|---|---|
-| E-01 | P-01 | | | F-01 | | | |
+| E1 | P1 | | | F1 | | | |
 
 ## Puntos sin respaldo
 | Punto | Motivo |
-|---|---|
-
-## Cambios
-| Versión | Cambio |
 |---|---|
 ```
 
 - **Fuente:** el ID de la fuente en el plan.
 - **Enlace:** la URL o el DOI de la fuente; en las locales, el nombre del archivo.
 - **Puntos sin respaldo:** omití la tabla si no hay ninguno.
-- **Revisiones:** en cada una, subí la versión y anotá qué cambió.
+- **Revisiones:** en cada una, subí la versión.

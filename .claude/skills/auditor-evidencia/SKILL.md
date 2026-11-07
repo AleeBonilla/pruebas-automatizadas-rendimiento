@@ -50,7 +50,7 @@ Cada auditoría es una ronda nueva que se agrega al inicio del informe, sin borr
 
 | Fila | Resultado | Hallazgo | Corrección sugerida |
 |---|---|---|---|
-| E-01 | Rechazada / No verificable | | |
+| E1 | Rechazada / No verificable | | |
 
 **Cobertura:** Completa / <puntos sin cubrir>
 ```
