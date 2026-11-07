@@ -18,6 +18,7 @@ Sección: $ARGUMENTS (o la que indique el usuario). Puede ejecutarse sin interve
 | `Investigación/Secciones/<sección>/02 Evidencia.md` | Leer: registro de las afirmaciones citadas |
 | `Investigación/Secciones/<sección>/03 Borrador.md` | Leer: el texto a auditar |
 | `Investigación/Referencias.md` | Leer: formato y datos de las citas |
+| `Investigación/Glosario.md` | Leer: forma obligatoria de los términos |
 | `Alcance.md` | Leer si hace falta: alcance y criterios de fuentes (§5.3) |
 | Fuentes (enlaces y `Adjuntos/Local`) | Leer: para cotejar las citas |
 | `Investigación/Secciones/<sección>/04 Auditoría.md` | Leer si existe y escribir: el informe |
@@ -34,7 +35,7 @@ Por cada cita del borrador:
 
 Para todo el borrador:
 
-4. **Respaldo:** ninguna definición normativa, dato, cifra, caso concreto ni hallazgo empírico aparece sin cita. El razonamiento propio no se presenta como si lo dijera una fuente.
+4. **Respaldo:** ninguna definición normativa, dato, cifra, caso concreto ni hallazgo empírico aparece sin cita, tampoco en una tabla, una figura o sus notas. El razonamiento propio no se presenta como si lo dijera una fuente, y una tabla marcada «Elaboración propia» no introduce datos externos sin citar.
 5. **Fuentes nuevas:** las marcadas «Nueva» cumplen los criterios de `Alcance.md` §5.3 y están en `Referencias.md`.
 6. **Formato:** las citas siguen APA 7 con el formato de `Referencias.md`.
 
@@ -49,7 +50,9 @@ Revisá el borrador contra la guía y el plan:
 9. **Densidad y selección:** la cantidad de citas corresponde al modo; ninguna fuente se repite sin necesidad en un mismo párrafo; no hay detalles que no aporten al argumento.
 10. **Contenido interno:** objetivos, preguntas y alcance aparecen integrados, una sola vez, sin listas copiadas.
 11. **Metacomentarios:** el texto no habla del proceso con que se produjo (IA, skills, auditorías), salvo en la Metodología y los anexos.
-12. **Extensión:** cada bloque cabe en su presupuesto con un margen de ±10 %.
+12. **Extensión:** cada bloque cabe en su presupuesto con un margen de ±10 %, sin contar tablas ni figuras. Informá aparte si las tablas y figuras exceden el espacio que les da el plan.
+13. **Terminología:** los términos siguen la forma de `Glosario.md`, y un mismo concepto no se nombra de dos maneras.
+14. **Tablas y figuras:** las del plan están presentes, llevan número, título y origen, el texto las menciona y no repiten lo que ya dice la prosa (guía, §7).
 
 Los hallazgos de B son **sugerencias**, salvo los de 11, que son **bloqueantes**. Cada sugerencia debe ser concreta: dónde, qué falla y una reformulación propuesta.
 
@@ -70,7 +73,7 @@ Los hallazgos de B son **sugerencias**, salvo los de 11, que son **bloqueantes**
 
 | # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
 |---|---|---|---|---|---|
-| 1 | Bloqueante / Sugerencia | <bloque, párrafo> | <1–12> | | |
+| 1 | Bloqueante / Sugerencia | <bloque, párrafo o tabla> | <1–14> | | |
 
 **Extensión:**
 | Bloque | Plan | Borrador |

@@ -8,9 +8,9 @@ Las skills están en `.claude/skills/<skill>/SKILL.md`. En `.agents/skills/` hay
 
 | Skill | Lee | Escribe |
 |---|---|---|
-| `/planificador` | `Alcance.md`, `Enunciado.md`, la guía, `Referencias.md`, `Adjuntos/Local` y el plan, si existe | `01 Plan.md`; `Referencias.md` al aprobarse |
-| `/redactor` | El plan aprobado, la guía, `Alcance.md`, `Enunciado.md`, las fuentes y la auditoría, si existe | `02 Evidencia.md`, `03 Borrador.md`; `Referencias.md` si agrega una fuente |
-| `auditor` (Codex) | La guía, el plan, la evidencia, el borrador, `Referencias.md` y las fuentes | `04 Auditoría.md` |
+| `/planificador` | `Alcance.md`, `Enunciado.md`, la guía, el glosario, `Referencias.md`, `Adjuntos/Local` y el plan, si existe | `01 Plan.md`; `Referencias.md` y `Glosario.md` al aprobarse |
+| `/redactor` | El plan aprobado, la guía, el glosario, `Alcance.md`, `Enunciado.md`, las fuentes y la auditoría, si existe | `02 Evidencia.md`, `03 Borrador.md`; `Referencias.md` si agrega una fuente; `Glosario.md` si agrega un término no previsto |
+| `auditor` (Codex) | La guía, el glosario, el plan, la evidencia, el borrador, `Referencias.md` y las fuentes | `04 Auditoría.md` |
 
 El usuario invoca solo `/planificador` y `/redactor`. El redactor lanza el auditor con `codex exec` y corrige sus hallazgos sin intervención; si Codex no está disponible, pide ejecutar `$auditor <sección>` a mano.
 
@@ -21,7 +21,16 @@ El usuario invoca solo `/planificador` y `/redactor`. El redactor lanza el audit
 | **Ligero** | Introducción, Metodología, Conclusiones | Esquema argumental y pocas fuentes | ≤ 1 cita por párrafo en promedio |
 | **Completo** | Planteamiento del problema, Marco teórico | Además, afirmaciones a respaldar (como tope, 1 por cada 100 palabras) | 1–3 citas por párrafo |
 
-Una sección de más de unas 2 000 palabras se planifica y redacta por subsecciones (por ejemplo, el Marco teórico §5.1 a §5.8).
+Una sección de más de unas 2 000 palabras se planifica y redacta por subsecciones o por grupos de subsecciones afines. El Marco teórico se trabaja en cuatro grupos, en este orden:
+
+| Grupo | Subsecciones (`Alcance.md` §5.4) | Páginas | Carpeta |
+|---|---|---|---|
+| A. Fundamentos | 5.1 Aseguramiento de la calidad en la fase de implementación · 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 3 | `05 Marco teórico/A Fundamentos (5.1–5.2)` |
+| B. Conceptos y tipos | 5.3 Conceptos y métricas fundamentales · 5.4 Clasificación de las pruebas de rendimiento | 5.5 | `05 Marco teórico/B Conceptos y tipos (5.3–5.4)` |
+| C. Proceso y práctica | 5.5 Proceso · 5.6 Principios, buenas prácticas y antipatrones · 5.7 Automatización e integración en CI/CD | 5.5 | `05 Marco teórico/C Proceso y práctica (5.5–5.7)` |
+| D. Herramientas | 5.8 Catálogo y comparativa de herramientas | 3 | `05 Marco teórico/D Herramientas (5.8)` |
+
+B fija el vocabulario que usan C y D. D va al final, cerca de la entrega, porque depende de la documentación vigente de cada herramienta.
 
 ## Criterios de avance
 
@@ -53,52 +62,13 @@ El modelo del auditor sale de `~/.codex/config.toml`; para fijarlo en la invocac
 
 ![Flujo de trabajo](../Adjuntos/Workflow.png)
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as Usuario
-    participant P as Planificador
-    participant R as Redactor
-    participant A as Auditor (Codex)
-
-    U->>P: /planificador «sección»
-    P->>P: Lee Alcance.md, Enunciado.md, la guía y Referencias.md
-    P->>U: 01 Plan.md en Borrador (modo, esquema argumental, fuentes)
-    loop Mientras haya observaciones
-        U->>P: Observaciones al plan
-        P->>U: 01 Plan.md revisado
-    end
-    opt Hay fuentes cerradas
-        U->>P: Fuentes cerradas en Adjuntos/Local
-        P->>P: Reemplaza las no disponibles por fuentes abiertas
-    end
-    U->>P: Aprobación explícita
-    P->>P: 01 Plan.md en Aprobado y actualiza Referencias.md
-    U->>R: /redactor «sección»
-    R->>R: Lee las fuentes y escribe 03 Borrador.md y 02 Evidencia.md
-    opt Falta respaldo
-        R->>R: Reformula, agrega una fuente nueva o marca [FALTA FUENTE]
-    end
-    loop Hasta 2 rondas, mientras haya bloqueantes
-        R->>A: codex exec (auditor)
-        A->>A: Coteja las citas con las fuentes y revisa la prosa
-        A->>R: 04 Auditoría.md (veredicto, bloqueantes y sugerencias)
-        R->>R: Corrige 03 Borrador.md y 02 Evidencia.md
-    end
-    R->>U: 03 Borrador.md y resumen (extensión, citas, pendientes)
-    opt Observaciones al borrador
-        U->>R: Observaciones
-        R->>R: Aplica los cambios y vuelve a auditar si tocan citas
-    end
-    U->>U: Revisión humana e integración al documento
-```
-
 ## Artefactos
 
 ```
 Adjuntos/Local/                      fuentes cerradas disponibles
 Investigación/
-├── Guía de redacción.md             reglas de estilo y de citas
+├── Guía de redacción.md             reglas de estilo, citas, tablas y terminología
+├── Glosario.md                      forma obligatoria de los términos
 ├── Referencias.md                   referencias de todo el documento
 └── Secciones/<sección>/
     ├── 01 Plan.md
@@ -107,4 +77,4 @@ Investigación/
     └── 04 Auditoría.md
 ```
 
-**Nombre de las carpetas de sección:** `<NN> <Nombre>`, donde `NN` es el número de la sección en el documento, según la estructura del `Enunciado.md`: `02 Introducción`, `03 Planteamiento del problema`, `04 Metodología`, `05 Marco teórico`, `06 Propuesta de taller práctico` y `07 Conclusiones`. Así coincide con la numeración de los subtítulos de los borradores (3.1, 4.1…). Las secciones que se planifican por subsección usan el número de la subsección del documento: por ejemplo, `05.1 Aseguramiento de la calidad en la fase de implementación`.
+**Nombre de las carpetas de sección:** `<NN> <Nombre>`, donde `NN` es el número de la sección en el documento, según la estructura del `Enunciado.md`: `02 Introducción`, `03 Planteamiento del problema`, `04 Metodología`, `05 Marco teórico`, `06 Propuesta de taller práctico` y `07 Conclusiones`. Así coincide con la numeración de los subtítulos de los borradores (3.1, 4.1…). Las secciones que se trabajan por grupos tienen una subcarpeta por grupo, con una letra, un nombre y las subsecciones que cubre, por ejemplo `05 Marco teórico/A Fundamentos (5.1–5.2)`. Al invocar las skills, la sección es esa ruta completa: `/planificador 05 Marco teórico/A Fundamentos (5.1–5.2)`.

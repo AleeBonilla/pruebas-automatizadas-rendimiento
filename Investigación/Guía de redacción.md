@@ -42,4 +42,16 @@ Reglas de estilo del documento. Las aplica el redactor al escribir y las verific
 - Español, registro académico y oraciones claras. Se prefiere una oración simple a una con varias subordinadas.
 - Los términos técnicos en inglés van en cursiva (*throughput*, *commit*), salvo los ya asimilados (API, pipeline, CI).
 - Las citas siguen APA 7 con el formato de `Referencias.md`. Después de cada cita va un comentario oculto con los IDs de las filas de evidencia que la respaldan: `(Autor, año) <!-- E7, E8 -->`.
-- La extensión se ajusta al presupuesto del plan, con un margen de ±10 %.
+- La extensión se ajusta al presupuesto del plan, con un margen de ±10 %. Las tablas y las figuras no cuentan en ese presupuesto: el plan les asigna un espacio aparte, en páginas.
+
+## 7. Tablas y figuras
+
+- Se usan cuando ordenan mejor que la prosa: comparaciones con varios criterios, clasificaciones o procesos. No repiten lo que ya dice el texto.
+- Cada una lleva número y título («Tabla 1. …», «Figura 1. …»), numerados en orden en todo el documento, y el texto la menciona antes de que aparezca y dice qué muestra.
+- **Respaldo:** todo dato de una tabla que venga de una fuente (una cifra, una característica de una herramienta, una definición) lleva cita, en la celda o en una nota bajo la tabla, con el comentario oculto de su fila de evidencia. Debajo de cada tabla o figura va su origen: «Fuente: Autor (año)», «Adaptado de Autor (año)» o «Elaboración propia» si es una síntesis del autor a partir de fuentes ya citadas.
+- **Formato en el borrador:** las tablas van en Markdown. Las figuras se describen con un comentario `<!-- FIGURA: … -->` que indica qué representa y de qué fuente sale; se dibujan al pasar el texto al documento final.
+
+## 8. Terminología
+
+- Los términos técnicos siguen `Glosario.md`: se usa la forma indicada y no sus sinónimos. Un mismo concepto se nombra siempre igual en todo el documento.
+- La primera vez que aparece un término en inglés, va en cursiva y con su equivalente en español, si lo tiene, según el glosario.
