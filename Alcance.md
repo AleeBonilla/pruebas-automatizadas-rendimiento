@@ -25,6 +25,10 @@ La forma de trabajo con IA (skills) se definirá aparte y se incorporará a este
 
 ## 3. Preguntas de investigación
 
+**Pregunta-problema** (formulada en el Planteamiento del problema, §3.4): ¿Cómo pueden integrarse pruebas de rendimiento automatizadas sobre una API REST en un pipeline de CI, con un costo de adopción bajo y con resultados que permitan decidir de forma confiable si un cambio degradó el desempeño?
+
+Las preguntas de investigación la descomponen. PI-2 justifica el problema; PI-1 y PI-3 dan la base conceptual y práctica (incluida la integración en CI y la interpretación de resultados); PI-4 informa el costo de adopción mediante la comparativa de herramientas, y PI-5 lo demuestra en el taller.
+
 | PI | Pregunta | Fase |
 |---|---|---|
 | PI-1 | ¿Qué son las pruebas de rendimiento, cómo se clasifican y qué métricas las definen según ISTQB e ISO/IEC 25010? | 1 |
@@ -49,17 +53,17 @@ La forma de trabajo con IA (skills) se definirá aparte y se incorporará a este
 
 Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
 
-| # | Sección | Fase | Páginas | Palabras aprox. | PI que responde |
-|---|---|---|---|---|---|
-| 1 | Portada + índice general (figuras y tablas en el mismo índice) | 1 | 2 | — | — |
-| 2 | Introducción | 1 | 2.5 | 875 | — |
-| 3 | Planteamiento del problema | 1 | 4.5 | 1 550 | PI-2 |
-| 4 | Metodología | 1 | 3.5 | 1 200 | — |
-| 5 | Marco teórico | 1 | 17 | 5 400 + tablas/figuras | PI-1, PI-3, PI-4 |
-| 6 | Propuesta de taller práctico | 2 | 11.5 | por definir | PI-5 |
-| 7 | Conclusiones | 2 | 2.5 | 875 | todas |
-| 8 | Referencias | 1 | 3 | 25–35 entradas | — |
-| 9 | Anexos | 1 y 2 | 6.5 | — | — |
+| #   | Sección                                                        | Fase  | Páginas | Palabras aprox.        | PI que responde  |
+| --- | -------------------------------------------------------------- | ----- | ------- | ---------------------- | ---------------- |
+| 1   | Portada + índice general (figuras y tablas en el mismo índice) | 1     | 2       | —                      | —                |
+| 2   | Introducción                                                   | 1     | 2.5     | 875                    | —                |
+| 3   | Planteamiento del problema                                     | 1     | 4.5     | 1 550                  | PI-2             |
+| 4   | Metodología                                                    | 1     | 3.5     | 1 200                  | —                |
+| 5   | Marco teórico                                                  | 1     | 17      | 5 400 + tablas/figuras | PI-1, PI-3, PI-4 |
+| 6   | Propuesta de taller práctico                                   | 2     | 11.5    | por definir            | PI-5             |
+| 7   | Conclusiones                                                   | 2     | 2.5     | 875                    | todas            |
+| 8   | Referencias                                                    | 1     | 3       | 25–35 entradas         | —                |
+| 9   | Anexos                                                         | 1 y 2 | 6.5     | —                      | —                |
 
 ### 5.1 Introducción (2.5 p.)
 
@@ -103,6 +107,7 @@ Contenido mínimo exigido por el enunciado: contexto de aplicación, recursos y 
 ### 5.6 Conclusiones (2.5 p.) — Fase 2
 
 - Hallazgos por pregunta de investigación.
+- Respuesta a la pregunta-problema, a partir de esos hallazgos.
 - Balance técnico del taller.
 - Reflexión metodológica sobre el uso y la validación de la IA.
 
@@ -133,16 +138,19 @@ Esta sección se construirá mediante discusión de opciones. Solo está fijado 
 - **Herramienta:** Gatling.
 - **Objeto bajo prueba:** una API REST.
 - **Restricción ética:** solo se prueba contra un entorno propio, nunca contra sistemas de terceros ni sitios públicos.
+- **Integración con CI:** las pruebas se ejecutan en un pipeline de CI (§1 y pregunta-problema).
+- **Regresión a demostrar:** el taller introduce un problema de rendimiento, lo detecta y verifica su corrección (PI-5).
 - **Extensión:** 11.5 páginas en el documento.
+- **Confiabilidad del veredicto:** el taller debe comprobar que la decisión de aprobar o rechazar se mantiene estable entre ejecuciones repetidas. Sin la regresión, todas las repeticiones pasan; con la regresión, todas fallan. Se reporta cuánto varían las métricas entre ejecuciones, y los umbrales se justifican con un margen respecto de esa variación. Origen: la pregunta-problema y el cierre del Planteamiento del problema (§3.4).
 
 **Decisiones pendientes:**
 
 - [ ] Sistema bajo prueba: qué API, qué lenguaje o framework, si se construye desde cero o se reutiliza una existente
-- [ ] Problema de rendimiento a demostrar, si lo hay, y cómo se evidencia
+- [ ] Problema de rendimiento a demostrar: qué regresión se introduce y cómo se evidencia
 - [ ] Forma de uso de Gatling (lenguaje del DSL, herramienta de build, ejecución)
 - [ ] Entorno de ejecución y reproducibilidad para los compañeros
-- [ ] Integración con CI: si se incluye y con qué plataforma
-- [ ] Escenarios de prueba y criterios de aceptación (SLO)
+- [ ] Plataforma de CI
+- [ ] Escenarios de prueba y criterios de aceptación (SLO), incluido el número de repeticiones necesario para la confiabilidad del veredicto
 - [ ] Estructura del plan de pruebas y de la guía paso a paso
 
 ## 8. Fuentes ancla (verificar existencia antes de usar)
