@@ -33,6 +33,7 @@ No escribás ningún otro archivo. Si el plan ya existe, partí de él y no rein
 - **Afirmaciones a respaldar** (solo en modo completo): las afirmaciones externas clave, formuladas como preguntas acotadas que se respondan con una cita. Como tope, una por cada 100 palabras del presupuesto. Lo que es conocimiento común o razonamiento propio no se incluye (ver la guía, §2).
 - **Fuentes:** usá primero las de `Referencias.md` que sirvan y después buscá las que falten. Preferí originales: normas, artículos arbitrados y documentación oficial, según los criterios de `Alcance.md` §5.3. Verificá cada una en su página de publicación: título, autor, fecha o versión y enlace.
   - **Acceso:** *abierta* si el texto completo se lee gratis y de forma legal; *cerrada* si requiere pago o suscripción, o si solo se lee el resumen; *por verificar* si no lo pudiste comprobar.
+- **Registro de búsqueda:** anotá cada consulta que hagas para encontrar fuentes, en el momento en que la hacés: fecha, buscador o base (buscador web, Crossref, OpenAlex, arXiv, ACM Digital Library, IEEE Xplore…), cadena exacta, qué resultados revisaste y qué fuentes elegiste o descartaste, con el motivo. No reconstruyás consultas de memoria ni registrés consultas que no hiciste. Las verificaciones de una fuente ya identificada (por ejemplo, buscar su DOI en Crossref) van en «Verificación», no aquí. Este registro sostiene la transparencia que exige la Metodología y alimenta el anexo A.
 
 ## Estados
 
@@ -62,9 +63,17 @@ No escribás ningún otro archivo. Si el plan ya existe, partí de él y no rein
 ## Fuentes
 | ID | Referencia y enlace | Acceso | Disponibilidad |
 |---|---|---|---|
+
+**Verificación (<AAAA-MM-DD>):**
+<Por fuente: qué datos se comprobaron, dónde, y dónde están los pasajes clave. Al final, las fuentes descartadas y por qué.>
+
+## Registro de búsqueda
+| # | Fecha | Buscador o base | Cadena | Resultados revisados | Elegidas / descartadas (motivo) |
+|---|---|---|---|---|---|
 ```
 
 - **Afirmaciones a respaldar:** omití la tabla en modo ligero.
+- **Registro de búsqueda:** si la sección solo usa fuentes que ya estaban en `Referencias.md`, poné una línea que lo diga y omití la tabla.
 - **Disponibilidad:** en las fuentes abiertas, el enlace al texto completo; en las cerradas, «Local» o el motivo por el que no está.
 - **Sin fuentes externas:** si la sección no las necesita, omití la tabla de fuentes.
 - **Revisiones:** en cada una, subí la versión y anotá los cambios al inicio.

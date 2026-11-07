@@ -81,8 +81,10 @@ Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
 ### 5.3 Metodología (3.5 p.)
 
 - **Enfoque:** investigación teórico-aplicada: revisión de literatura semi-sistemática + estudio experimental (taller).
-- **Fuentes:** IEEE Xplore, ACM Digital Library, Scopus/Google Scholar, normas ISO/IEC, syllabus ISTQB, documentación oficial de herramientas.
+- **Tipos de fuente, por orden de preferencia:** normas ISO/IEC, syllabus ISTQB, artículos arbitrados (sobre todo de ACM e IEEE) y documentación oficial de herramientas.
+- **Estrategia de búsqueda:** búsquedas dirigidas a las afirmaciones que necesita cada plan, en buscadores web y en bases bibliográficas abiertas (Crossref, OpenAlex, arXiv, ACM Digital Library, IEEE Xplore). Cada fuente se verifica en la página del editor y por su DOI en Crossref, y se lee en texto completo, en una copia abierta y legal (actas de SPEC, arXiv, copia de autor o repositorio institucional) o en una copia local si es cerrada. No se usa Scopus.
 - **Cadenas de búsqueda** (ejemplos): `"performance testing" AND ("load testing" OR "stress testing")`, `"load testing" AND (survey OR "state of practice")`, `"performance regression" AND ("continuous integration" OR DevOps)`.
+- **Registro de búsqueda:** a partir del Marco teórico, cada plan registra sus consultas: fecha, buscador o base, cadena, resultados y fuentes elegidas o descartadas con su motivo. En la Introducción y en el Planteamiento del problema solo se registraron las fuentes verificadas y las descartadas, y la Metodología lo declara así.
 - **Criterios de inclusión:** 2010–2026 (excepto clásicos), revisado por pares, normas, o documentación oficial; en inglés o español.
 - **Criterios de exclusión:** blogs sin autoría identificable, contenido de marketing sin datos, temas de la columna "Excluir".
 - **Procedimiento de uso y validación de IA:**
