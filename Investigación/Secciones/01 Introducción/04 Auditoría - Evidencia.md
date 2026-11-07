@@ -1,5 +1,24 @@
 # Auditoría de evidencia — Introducción
 
+## Ronda 3 — 2026-11-07 — Evidencia versión 4
+
+**Veredicto:** Aprobada | **Filas revisadas:** E14 y E23–E29
+
+Plan auditado: versión 5. La ronda 2 no dejó filas rechazadas ni no verificables. Se revisaron las siete filas nuevas E23–E29 y E14, cuyo apartado se corrigió en la versión 3, posterior a la versión auditada en la ronda 2. La comparación del historial y de la tabla actual no muestra otros cambios en E1–E22 fuera de las correcciones ya comprobadas en la ronda 2. Las otras 21 filas conservan su aprobación. Resultado de esta ronda: 8 filas aprobadas, ninguna rechazada y ninguna no verificable. Resultado acumulado: 29 filas aprobadas.
+
+Se comprobaron fuente prevista en el plan, enlace, literalidad y ubicación de la cita en el cuerpo, fidelidad de la afirmación, correspondencia con el punto y adecuación del tipo. Los saltos de línea y de párrafo no se consideran alteraciones del contenido.
+
+- **E14 — Aprobada:** la cita aparece en el cuerpo de [GAO-14-694](https://www.gao.gov/assets/gao-14-694.pdf), p. impresa 25 (página 30 del PDF), bajo «Some Governance Reviews Were Not Fully Conducted or Approved». La ubicación corregida es válida; la afirmación, P4, F5 y el tipo «Literatura gris» son adecuados.
+- **E23 y E24 — Aprobadas:** las citas son literales en §4.4 de [SPEC-RG-2015-01, copia de arXiv prevista en F8](https://arxiv.org/pdf/1508.04752), p. impresa 20 (página 24 del PDF). El contexto inmediato respalda la referencia de E23 al entorno de negocio. E24 conserva el carácter posible de los cambios de desempeño. Ambas aportan a P7; «Literatura gris» corresponde al informe técnico.
+- **E25 — Aprobada:** cita literal en §4.4 del mismo informe, p. impresa 21 (página 25 del PDF). La afirmación conserva la propuesta de integración en CI y explicita que el antecedente son pruebas unitarias de rendimiento. Esa precisión respeta el contexto y permite usarla para P7 sin generalizar el pasaje a pruebas de carga de API REST. Fuente, enlace y tipo correctos.
+- **E26 y E27 — Aprobadas:** citas literales del cuerpo de [Daly et al. (2020), versión publicada de F9](https://research.spec.org/icpe_proceedings/2020/proceedings/p67.pdf), §1.1 y §1 respectivamente, p. impresa 67 (página 1 del PDF). Las afirmaciones distinguen el seguimiento de cada *commit* de la ejecución periódica de los *benchmarks*; no afirman que cada prueba de rendimiento se ejecute con cada cambio. Ambas responden a P8 y el tipo «Artículo arbitrado» es adecuado.
+- **E28 — Aprobada:** cita literal del cuerpo del mismo artículo, §1.1, p. impresa 68 (página 2 del PDF). Respalda la dificultad de sostener la revisión manual y la incorporación de detección automatizada, sin atribuirle resultados adicionales. Corresponde a P8; fuente, enlace y tipo correctos.
+- **E29 — Aprobada:** cita literal de «Problem 1», §2, p. impresa 69 (página 3 del PDF). Aunque el plan orienta la búsqueda de P8 a §1 y §1.1, este pasaje de la misma fuente responde directamente a la finalidad investigada. La afirmación se limita al problema de atribuir cambios de desempeño a *commits*; no desarrolla el algoritmo ni sus umbrales. Fuente, enlace y tipo correctos.
+
+**Cobertura:** Completa. P1: E1–E5; P2: E6–E9; P3: E10–E11; P4: E12–E15; P5: E16–E18; P6: E19–E22; P7: E23–E25; P8: E26–E29. Todos los puntos del plan vigente tienen filas aprobadas; no hay puntos sin respaldo. B4 no tiene puntos de investigación asignados.
+
+Se agregó esta ronda sin borrar las anteriores. Se escribió únicamente este informe; la tabla de evidencia y el plan no se modificaron.
+
 ## Ronda 2 — 2026-11-06 — Evidencia versión 2
 
 **Veredicto:** Aprobada | **Filas revisadas:** E1, E2 y E13
