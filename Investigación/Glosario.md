@@ -61,6 +61,7 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 | Prueba de escalabilidad, de volumen, de capacidad | scalability, volume, capacity testing | prueba de escalabilidad, de volumen, de capacidad | — | Solo se mencionan (`Alcance.md` §4). El volumen se trata como la dimensión de datos de la capacidad: el CT-PT no define una prueba de volumen aparte. Provisional hasta aprobar 5.4. | 5.4 | — |
 | Perfil de carga | load profile | perfil de carga | — | Forma de la carga en el tiempo (rampas, escalones, mesetas, ráfagas). Provisional hasta aprobar 5.4. | 5.4 | — |
 | Rampa de subida / de bajada | ramp-up / ramp-down | rampa de subida (*ramp-up*), rampa de bajada (*ramp-down*) | — | Provisional hasta aprobar 5.4. | 5.4 | — |
+| Estado estable | steady state | estado estable (*steady state*) la primera vez; después, estado estable | régimen estacionario | Fase de la prueba en que el comportamiento del sistema es estable, después de la rampa de subida. Agregado por el redactor. Provisional hasta aprobar 5.4. | 5.4 | — |
 | Prueba comparativa | benchmark | prueba comparativa (*benchmark*); después, prueba comparativa | — | Ejecución repetible que mide el rendimiento para comparar versiones o configuraciones. Provisional. | 5.4 | 02, 03 |
 | *Microbenchmark* | microbenchmark | *microbenchmark* | — | Excluido como tema (`Alcance.md` §4); solo se menciona. | — | 03, 04 |
 
