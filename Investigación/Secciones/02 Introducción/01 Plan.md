@@ -1,7 +1,9 @@
 # Plan — Introducción
 
-**Estado:** Aprobado | **Modo:** Ligero | **Versión:** 7 | **Fecha:** 2026-11-07 | **Presupuesto:** 875 palabras
+**Estado:** Aprobado | **Modo:** Ligero | **Versión:** 8 | **Fecha:** 2026-11-07 | **Presupuesto:** 700 palabras
 
+> **Cambios en la versión 8:** condensación al nuevo presupuesto de `Alcance.md` (documento de 30–35 páginas, aprobado por el usuario): de 875 a 700 palabras. Se conservan todas las fuentes que cita el borrador. La sección «Condensación» indica qué se recorta.
+>
 > **Cambios en la versión 7:** migrado a la plantilla nueva. La tabla «Subsecciones» pasa a «Esquema argumental», con la idea central de cada bloque. Se quitan los puntos a investigar P1–P8 y la nota para el investigador, que el modo ligero no usa. Las fuentes y su verificación no cambian. Presupuesto ajustado según la auditoría, ronda 4: B1 375, B2 150, B3 225, B4 125.
 >
 > **Cambios en la versión 6:** se adopta el flujo de trabajo nuevo (ver `Workflow.md` y `Guía de redacción.md`); el estado «Final» pasa a «Aprobado». El borrador v3 se reescribió con voz propia y menos citas. B3 ya no enumera los objetivos específicos ni las preguntas de investigación, y no menciona el uso de IA. Las preguntas pasan a B4, junto a la sección que responde cada una. Presupuesto redistribuido: B1 350, B2 150, B3 225, B4 150.
@@ -31,11 +33,20 @@ Sección 2 del documento («Introducción», `Alcance.md` §5 y §5.1; `Enunciad
 ## Esquema argumental
 | Bloque | Palabras | Idea central | Contenido | Insumos y fuentes |
 |---|---|---|---|---|
-| B1. El rendimiento como atributo de calidad | 375 | El rendimiento es un atributo de calidad reconocido por la norma, y descuidarlo tiene costos concretos para el usuario, para la organización y para la infraestructura. | Definición de eficiencia de desempeño (sin subcaracterísticas). Umbrales de tiempo de respuesta de Nielsen. Fallas por incapacidad de escalar y el caso HealthCare.gov. Sobreaprovisionamiento como costo de no medir. | `Alcance.md` §5.1; F7, F4, F3, F5, F6 |
-| B2. Ubicación en el ciclo de vida | 150 | El trabajo se concentra en la validación del sistema integrado antes del despliegue, porque es donde los resultados mejor anticipan el comportamiento en producción. | Fase de implementación. Recomendaciones del ISTQB: probar temprano y, en los niveles de sistema y de integración de sistemas, usar entornos, datos y cargas realistas. La CI desde desarrollo como puente, no como segundo eje. | `Alcance.md` §1; `Enunciado.md` (objetivo específico 3); F2 |
-| B3. Motivación, enfoque y objetivo | 225 | Como cada versión puede alterar el desempeño, las pruebas deben automatizarse e integrarse en CI; de ahí el enfoque y el objetivo del trabajo. | Entregas frecuentes y evaluación continua del desempeño. La experiencia de Daly et al. con la revisión manual. Enfoque: API REST, CI y Gatling. Objetivo general, con el taller y el plan de pruebas para los compañeros. No enumera los objetivos específicos ni menciona el uso de IA. La detección de regresiones y los umbrales van en el Marco teórico §5.7. | `Enunciado.md` (objetivo general, objetivos específicos 4 y 5); `Alcance.md` §1; F8, F9 |
-| B4. Estructura del documento y preguntas de investigación | 125 | El documento recorre cinco preguntas de investigación, y cada una se responde en una sección concreta. | Las preguntas PI-1 a PI-5, cada una una sola vez y junto a la sección que la responde; las secciones 3 a 9. | `Alcance.md` §2, §3 y §5 |
-| **Total** | **875** | | | |
+| B1. El rendimiento como atributo de calidad | 300 | El rendimiento es un atributo de calidad reconocido por la norma, y descuidarlo tiene costos concretos para el usuario, para la organización y para la infraestructura. | Definición de eficiencia de desempeño (sin subcaracterísticas). Umbrales de tiempo de respuesta de Nielsen. Fallas por incapacidad de escalar y el caso HealthCare.gov. Sobreaprovisionamiento como costo de no medir. | `Alcance.md` §5.1; F7, F4, F3, F5, F6 |
+| B2. Ubicación en el ciclo de vida | 120 | El trabajo se concentra en la validación del sistema integrado antes del despliegue, porque es donde los resultados mejor anticipan el comportamiento en producción. | Fase de implementación. Recomendaciones del ISTQB: probar temprano y, en los niveles de sistema y de integración de sistemas, usar entornos, datos y cargas realistas. La CI desde desarrollo como puente, no como segundo eje. | `Alcance.md` §1; `Enunciado.md` (objetivo específico 3); F2 |
+| B3. Motivación, enfoque y objetivo | 175 | Como cada versión puede alterar el desempeño, las pruebas deben automatizarse e integrarse en CI; de ahí el enfoque y el objetivo del trabajo. | Entregas frecuentes y evaluación continua del desempeño. La experiencia de Daly et al. con la revisión manual. Enfoque: API REST, CI y Gatling. Objetivo general, con el taller y el plan de pruebas para los compañeros. No enumera los objetivos específicos ni menciona el uso de IA. La detección de regresiones y los umbrales van en el Marco teórico §5.7. | `Enunciado.md` (objetivo general, objetivos específicos 4 y 5); `Alcance.md` §1; F8, F9 |
+| B4. Estructura del documento y preguntas de investigación | 105 | El documento recorre cinco preguntas de investigación, y cada una se responde en una sección concreta. | Las preguntas PI-1 a PI-5, cada una una sola vez y junto a la sección que la responde; las secciones 3 a 9. | `Alcance.md` §2, §3 y §5 |
+| **Total** | **700** | | | |
+
+## Condensación (versión 8)
+
+El borrador v4 aprobado tiene 864 palabras. Las ideas centrales y las ocho citas se conservan; se recortan desarrollos:
+
+- **B1:** la norma en un párrafo (E1, E2). Nielsen sin el tercer umbral (E7–E9). Jiang y Hassan sin la cobertura mediática, y HealthCare.gov sin la oración de cierre (E10–E12, E14). AWS en una oración (E17), sin la frase final sobre el gasto.
+- **B2:** las dos recomendaciones del ISTQB (E19, E22) sin la enumeración de niveles, y la justificación de los dos niveles en una oración.
+- **B3:** sin la frase de transición inicial ni la oración de cierre sobre relacionar la degradación con el cambio; quedan Brunnert et al. (E23, E24) y Daly et al. (E26, E28, E29).
+- **B4:** la misma estructura, con menos repeticiones de «la sección».
 
 ## Fuentes
 | ID  | Referencia y enlace                                                                                                                                                                                                                                     | Acceso                    | Disponibilidad                                                                                                                                                        |

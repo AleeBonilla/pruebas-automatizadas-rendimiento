@@ -1,5 +1,61 @@
 # Auditoría — 04 Metodología
 
+## Ronda 2 — 2026-11-07 — Borrador v3 · Evidencia v2
+
+**Veredicto:** Aprobada | **Citas revisadas:** E1, E2, E3 y E4
+
+Plan auditado: versión 3, modo ligero. Se comparó la condensación con el borrador v2 registrado en Git y con la evidencia v1, se revisaron las sugerencias de la ronda 1 y se contrastaron las afirmaciones del procedimiento con los archivos y el historial del repositorio. Resultado: **ningún hallazgo bloqueante y tres sugerencias de precisión del procedimiento**. Los párrafos se numeran dentro de cada subsección. La ronda anterior se conserva íntegra debajo.
+
+| # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
+|---|---|---|---|---|---|
+| 1 | Sugerencia | B2, §4.2, párrafo 3, «Toda fuente se verificó en la página del editor…» | 7 — Correspondencia con los insumos internos | La formulación universal excede lo documentado. En el plan del grupo A del Marco teórico, «Verificación», F6, Humble y Farley se verifican mediante los créditos de la copia local: editorial, ISBN y primera impresión. No consta allí una consulta a la página del editor. Los planes de la Introducción también registran comprobaciones en portadas, copias de autor y actas. La revisión bibliográfica sí consta; el repositorio no permite atribuir a todas las fuentes exactamente el mismo canal de verificación. | Sustituir el inicio por «Los datos bibliográficos se comprobaron en páginas oficiales de publicación o en las propias copias consultadas, y los DOI se contrastaron en Crossref cuando correspondía. Las fuentes se leyeron en texto completo». No afirmar que una comprobación no registrada ocurrió. |
+| 2 | Sugerencia | B3, §4.3, párrafo 2, «sus hallazgos bloqueantes […] deben resolverse antes de la revisión humana final» | 7 — Precisión del flujo descrito | Resume la condición de aprobación, pero omite una salida que el procedimiento operativo admite: `Workflow.md`, «Criterios de avance», y la skill del redactor, pasos 7–8, permiten entregar bloqueantes pendientes después de dos rondas por invocación. Conviene distinguir la aprobación de la sección de su entrega al usuario con pendientes, para que la frase no describa un avance más estricto que el implementado. | Reformular el cierre como «La aprobación exige resolver los hallazgos bloqueantes; si quedan pendientes tras dos rondas por invocación, se entregan al usuario para revisión». Conservar la exigencia de revisión humana antes de integrar el texto, establecida en `Alcance.md` §5.3. |
+| 3 | Sugerencia | B2, §4.2, último enunciado, y B3, §4.3, último enunciado: remisiones a los anexos A y B | 7 y 8 — Estado del trabajo y precisión | El alcance §9 los identifica como anexos previstos y el plan v3 traslada allí el detalle recortado, pero en los archivos disponibles todavía no están redactados. «Resume» y «detalla» funcionan como remisiones para el documento final; no permiten comprobar ahora que el material ya se haya trasladado. | Mientras se trabaja con el borrador, usar «El anexo A previsto resumirá las consultas y las fuentes descartadas» y «El anexo B previsto detallará los hallazgos y sus resoluciones». Al integrar los anexos, restituir el presente y comprobar las remisiones. |
+
+**Seguimiento de la ronda 1:**
+
+- **Sugerencia 1 — Reconsiderada según el plan v3.** El borrador v2 había separado la distribución entre modelos de los pasos. La condensación vuelve a reunirlos, pero ahora el plan pide expresamente el procedimiento en un párrafo. Las oraciones distinguen las tres funciones y permiten seguir la secuencia; no se reitera la sugerencia de dividirlo. La precisión pendiente sobre la entrega con bloqueantes figura en el hallazgo 2 de esta ronda.
+- **Sugerencia 2 — Resuelta.** Desaparecen las valoraciones sobre el argumento y la lentitud. El cierre conserva resultados y cambios observables del procedimiento, con fecha de corte, sin anticipar la reflexión de las Conclusiones.
+
+**Cotejo de las citas que cambiaron:**
+
+Las afirmaciones, pasajes, fuentes y ubicaciones de E1–E4 no cambian entre evidencia v1 y v2; E5 pasa a «Filas no usadas» y deja de citarse. Aunque podía conservarse la literalidad aprobada en la ronda 1, se volvieron a consultar los pasajes de E1–E4 para comprobar las dos oraciones citadas que la condensación modifica.
+
+| Filas | Fuente y ubicación comprobadas | Resultado de la condensación |
+|---|---|---|
+| E1–E3 | [Snyder (2019), versión publicada en la copia de la autora](https://www.researchgate.net/profile/Hannah-Snyder-7/publication/334848557_Literature_review_as_a_research_methodology_An_overview_and_guidelines/links/5d482ec9a6fdcc370a7ccb34/Literature-review-as-a-research-methodology-An-overview-and-guidelines.pdf): §2.1.2, p. 335, y tabla 1, p. 334. | **Conformes.** Los pasajes son literales, normalizando saltos de línea y particiones tipográficas. La oración conserva la diversidad de aproximaciones, la búsqueda sistemática o no y la exigencia de transparencia y estrategia definida. Omite desarrollar la dificultad de una revisión sistemática completa, pero no afirma exhaustividad ni invierte el sentido. La aplicación a las pruebas de rendimiento sigue presentada como razonamiento del autor. |
+| E4 | [Walters y Wilder (2023), texto completo del editor disponible en ResearchGate](https://www.researchgate.net/publication/373738246_Fabrication_and_errors_in_the_bibliographic_citations_generated_by_ChatGPT): Resultados, «Extent of fabrication», p. 4. | **Conforme.** Los dos fragmentos aparecen en el cuerpo, en el orden registrado. La oración conserva los porcentajes de obras inventadas por modelo dentro del estudio; no los confunde con errores en referencias reales. Mantiene la advertencia sobre los modelos anteriores y no extrapola las cifras a los empleados aquí. La retirada de E5 no deja una afirmación huérfana. |
+
+**Acceso y límites:** el enlace de NORA no fue accesible y Nature redirigió a una autenticación técnica. F1 se cotejó en el PDF publicado alojado en el perfil de la autora; F2, en la transcripción íntegra identificada como texto suministrado por Springer Nature, con encabezados de página. No se afirma haber descargado el PDF de Nature. Coinciden autores, años, títulos y DOI con las referencias. No quedaron pasajes citados sin comprobar.
+
+**Contraste del procedimiento con el repositorio:**
+
+| Afirmación del borrador | Registro contrastado y resultado |
+|---|---|
+| Revisión para PI-1–PI-4 y taller experimental para PI-5 | Compatible con `Alcance.md` §§2–3 y `Enunciado.md`. Describe el diseño metodológico; no se verificó una ejecución del taller, cuya Fase 2 sigue por definir. |
+| Criterios de selección y búsqueda dirigida a cada afirmación | Coinciden con el alcance §5.3 y con los planes de la Introducción y del Planteamiento: fuentes verificadas y descartadas con motivos, sin registro de cadenas. Se contrasta lo conservado en archivos, no se reconstruye un historial externo del buscador. |
+| Registro de consultas desde el Marco teórico y cadena real de ejemplo | Los planes de los grupos A y B contienen fecha, buscador, cadena, resultados y selección o descarte. La cadena del borrador coincide literalmente con la consulta 2 del grupo B, fechada 2026-11-07, que eligió Friedrich et al. (2017). No se presenta una cadena prevista como búsqueda ejecutada. |
+| Lectura completa, copias abiertas y fuentes cerradas locales | Los registros de verificación y las auditorías documentan pasajes del cuerpo y las vías de acceso indicadas. Existen copias locales de ISO/IEC 25010 y de Humble y Farley; se elimina correctamente la antigua exclusividad de ISO como fuente cerrada. La afirmación sobre el canal universal de verificación requiere la precisión del hallazgo 1. No se releen en esta ronda todas las fuentes de las demás secciones. |
+| Claude produce, Codex audita; plan aprobado, evidencia literal y sesión independiente | La distribución y los modelos nombrados coinciden con `Workflow.md` y el alcance §5.3. Las skills originales del planificador, redactor y auditor establecen los tres pasos, los controles y la aprobación humana. Esto comprueba el procedimiento documentado; los archivos no certifican por sí solos el modelo efectivo de cada ejecución pasada. La excepción de entrega tras dos rondas se recoge en el hallazgo 2. |
+| Errores de fidelidad y cambio de antecedente detectados | La ronda 4 de la auditoría de la Introducción documenta las afirmaciones que excedían la fuente y la ronda 5, su resolución. La ronda 1 del Planteamiento observa la ubicación y el antecedente de E25; la ronda 2 verifica su corrección. La condensación no añade casos ni atribuciones nuevas. |
+| Introducción de 882 palabras y 17 citas frente a una reescritura similar con 8 | Conteos reproducidos en `8196213` y `577e43c`: **882/17** y **864/8**, respectivamente. La Introducción disponible al cotejar también conserva **864/8**. Se cuentan apariciones de cita con comentario de IDs, no referencias únicas ni filas de evidencia. La comparación es histórica, acorde con el plan v3. |
+| La primera redacción solo podía parafrasear evidencia aprobada | En `8196213`, la skill del redactor exige evidencia auditada antes de redactar y restringe las afirmaciones externas a sus filas. El procedimiento actual reúne investigación y redacción y audita después. El cambio está documentado en Git. |
+
+**Comprobaciones restantes:** las dos citas llevan IDs existentes y autores y años correctos; el formato narrativo de Snyder y el parentético de Walters & Wilder siguen APA 7 y las referencias del documento. No hay fuentes nuevas ni datos externos añadidos sin respaldo. F1 y F2 se conservan citadas, como exige la condensación. Los tres bloques mantienen la función asignada por el plan; objetivos y preguntas están integrados, sin listas ni repeticiones. Hay dos citas en ocho párrafos, promedio de 0,25, compatible con el modo ligero. Los metacomentarios son pertinentes en la Metodología; los comentarios HTML se excluyen del texto visible. No se detectan discrepancias con el glosario. El plan no exige tablas ni figuras para esta sección y el borrador no las introduce.
+
+**Extensión:**
+
+| Bloque | Plan | Borrador |
+|---|---|---|
+| B1. 4.1 Enfoque metodológico | 150; margen 135–165 | 160; +6,7 % — cumple |
+| B2. 4.2 Fuentes y estrategia de búsqueda | 250; margen 225–275 | 265; +6,0 % — cumple |
+| B3. 4.3 Uso y validación crítica de la inteligencia artificial | 300; margen 270–330 | 294; −2,0 % — cumple |
+| **Total** | **700; margen 630–770** | **719; +2,7 % — cumple** |
+
+Conteo por unidades separadas por espacios del texto visible, incluidas citas autor–año y la cadena de búsqueda; sin título, subtítulos, comentarios HTML ni delimitadores de cursiva o código. Todos los bloques cumplen el margen de ±10 %. No hay espacio de tablas o figuras que cotejar. Solo se escribe este informe; no se aplican las reformulaciones sugeridas.
+
+---
+
 ## Ronda 1 — 2026-11-07 — Borrador v1 · Evidencia v1
 
 **Veredicto:** Aprobada | **Citas revisadas:** E1, E2, E3, E4 y E5

@@ -1,7 +1,9 @@
 # Evidencia — Introducción
 
-**Plan:** versión 7 | **Versión:** 5 | **Fecha:** 2026-11-07
+**Plan:** versión 8 | **Versión:** 6 | **Fecha:** 2026-11-07
 
+> **Cambios en la versión 6:** condensación del borrador (v5). Las filas citadas no cambian.
+>
 > **Cambios en la versión 5:** migrada a la plantilla nueva. La tabla principal contiene solo las filas que cita el borrador v4; las demás pasan a «Filas no usadas». Los IDs no cambian. Los enlaces de cada fuente están en la tabla de fuentes del plan.
 
 | ID | Afirmación | Cita textual | Fuente | Ubicación |

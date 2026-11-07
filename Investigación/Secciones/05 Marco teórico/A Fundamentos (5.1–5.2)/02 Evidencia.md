@@ -1,7 +1,9 @@
 # Evidencia — Marco teórico, grupo A: Fundamentos (5.1–5.2)
 
-**Plan:** versión 3 | **Versión:** 2 | **Fecha:** 2026-11-07
+**Plan:** versión 4 | **Versión:** 3 | **Fecha:** 2026-11-07
 
+> **Cambios en la versión 3:** condensación del borrador (v3). Dejan de citarse E7 y E8, que pasan a «Filas no usadas».
+>
 > **Cambios en la versión 2:** según la auditoría, ronda 1: ubicación corregida en E2 y E9; E19 registra las filas de la tabla A.1, no solo su título.
 
 | ID | Afirmación | Cita textual | Fuente | Ubicación |
@@ -12,8 +14,6 @@
 | E4 | El syllabus distingue cinco niveles de prueba; el de sistema prueba el comportamiento del sistema completo, incluidas sus características no funcionales, y el de integración de sistemas requiere entornos preferiblemente similares al de operación. | «In this syllabus, the following five test levels are described: [...] System testing focuses on the overall behavior and capabilities of an entire system or product, often including functional testing of end-to-end tasks and the non-functional testing of quality characteristics. [...] System integration testing requires suitable test environments preferably similar to the operational environment.» | F1 | §2.2.1 «Test Levels», pp. 28–29 |
 | E5 | En el nivel de sistema, las pruebas de rendimiento evalúan el comportamiento de extremo a extremo bajo distintas condiciones de carga. | «During system testing of overall end-to-end behaviors under various load conditions» | F2 | §1.3.2 «Dynamic testing», p. 14. Cita aprobada como E20 en la evidencia de la Introducción |
 | E6 | En el nivel de integración de sistemas, se enfocan en los flujos de datos y de trabajo a través de las interfaces clave entre sistemas. | «During system integration testing, especially for data flows and workflows across key inter-system interfaces.» | F2 | §1.3.2 «Dynamic testing», p. 14. Cita aprobada como E21 en la evidencia de la Introducción |
-| E7 | DevOps promueve prácticas técnicas como la integración continua y la entrega continua. | «DevOps promotes team autonomy, fast feedback, integrated toolchains, and technical practices like continuous integration (CI) and continuous delivery (CD).» | F1 | §2.1.4 «DevOps and Testing», p. 26 |
-| E8 | Para las pruebas, DevOps aporta retroalimentación rápida sobre si los cambios perjudican el código existente y más visibilidad de las características no funcionales, como la eficiencia de desempeño. | «From the testing perspective, some of the benefits of DevOps are as follows: [...] Fast feedback on the code quality, and whether changes adversely affect existing code [...] The visibility on non-functional quality characteristics increases (e.g., performance efficiency, reliability)» | F1 | §2.1.4 «DevOps and Testing», pp. 26–27 |
 | E9 | En la integración continua el equipo integra su trabajo con frecuencia, por ejemplo varias veces al día; en la entrega continua la aplicación está siempre lista para producción tras superar pruebas automatizadas y controles de calidad; en el despliegue continuo se despliega a producción automáticamente. | «Continuous Integration (CI) is a widely established development practice in software development industry [4], in which members of a team integrate and merge development work (e.g., code) frequently, for example multiple times per day. [...] Continuous DElivery (CDE) is aimed at ensuring an application is always at production-ready state after successfully passing automated tests and quality checks [19, 20]. [...] Continuous Deployment (CD) practice goes a step further and automatically and continuously deploys the application to production or customer environments [19, 22].» | F3 | §II.A «Foundations — Background», p. 2 (preprint de arXiv) |
 | E10 | El pipeline de despliegue es la manifestación automatizada del proceso que lleva el software desde el control de versiones hasta los usuarios. | «At an abstract level, a deployment pipeline is an automated manifestation of your process for getting software from version control into the hands of your users.» | F6 | Cap. 5, «What Is a Deployment Pipeline?», p. 106 |
 | E11 | Superar la etapa de *commit* es una compuerta del proceso. | «Passing the commit stage is an important milestone in the journey of a release candidate. It is a gate in our process that, once passed, frees developers to move on to their next task.» | F6 | Cap. 5, «The Commit Stage», p. 122 |
@@ -32,3 +32,12 @@
 | E24 | La utilización de recursos se investiga con pruebas específicas cuando la disponibilidad de los recursos es un riesgo. | «Resource Utilization: If the availability of system resources is identified as a risk, the utilization of those resources (e.g., the allocation of limited RAM) may be investigated by conducting specific performance tests.» | F2 | §1.1 «Principles of Performance Testing», p. 11 |
 | E25 | La capacidad se evalúa cuando el riesgo está en el comportamiento del sistema en sus límites requeridos, como el número de usuarios o el volumen de datos. | «Capacity: If issues of system behavior at the required capacity limits of the system (e.g., numbers of users or volumes of data) is identified as a risk, performance tests may be conducted to evaluate the suitability of the system architecture.» | F2 | §1.1 «Principles of Performance Testing», p. 11 |
 | E26 | Entre los recursos, la norma cuenta la CPU, la memoria, el almacenamiento y los dispositivos de red. | «Note 1 to entry: Resources can be CPU, memory, storage, and network devices.» | F5 | §3.2, nota 1, p. 2 |
+
+## Filas no usadas
+
+Filas aprobadas en versiones anteriores que el borrador v3 ya no cita. No se renumeran.
+
+| ID | Afirmación | Cita textual | Fuente | Ubicación |
+|---|---|---|---|---|
+| E7 | DevOps promueve prácticas técnicas como la integración continua y la entrega continua. | «DevOps promotes team autonomy, fast feedback, integrated toolchains, and technical practices like continuous integration (CI) and continuous delivery (CD).» | F1 | §2.1.4 «DevOps and Testing», p. 26 |
+| E8 | Para las pruebas, DevOps aporta retroalimentación rápida sobre si los cambios perjudican el código existente y más visibilidad de las características no funcionales, como la eficiencia de desempeño. | «From the testing perspective, some of the benefits of DevOps are as follows: [...] Fast feedback on the code quality, and whether changes adversely affect existing code [...] The visibility on non-functional quality characteristics increases (e.g., performance efficiency, reliability)» | F1 | §2.1.4 «DevOps and Testing», pp. 26–27 |

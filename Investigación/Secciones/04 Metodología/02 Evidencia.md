@@ -1,6 +1,8 @@
 # Evidencia — Metodología
 
-**Plan:** versión 2 | **Versión:** 1 | **Fecha:** 2026-11-07
+**Plan:** versión 3 | **Versión:** 2 | **Fecha:** 2026-11-07
+
+> **Cambios en la versión 2:** condensación del borrador (v3). Deja de citarse E5, que pasa a «Filas no usadas».
 
 | ID | Afirmación | Cita textual | Fuente | Ubicación |
 |---|---|---|---|---|
@@ -8,4 +10,11 @@
 | E2 | En la revisión semisistemática, la estrategia de búsqueda puede ser sistemática o no. | «May or may not be systematic» | F1 | Tabla 1 «Approaches to literature reviews», fila «Search strategy», columna «Semi-systematic», p. 334 |
 | E3 | El proceso debe ser transparente y seguir una estrategia definida que permita al lector juzgar si las decisiones fueron razonables. | «However, while covering broad topics and different types of studies, this approach holds that the research process should be transparent and should have a developed research strategy that enables readers to assess whether the arguments for the judgments made were reasonable, both for the chosen topic and from a methodological perspective.» | F1 | §2.1.2 «Semi-systematic review», p. 335 |
 | E4 | El 55 % de las obras citadas por GPT-3.5 eran inventadas, frente al 18 % con GPT-4. | «Of the 222 works cited in the GPT-3.5 papers, 55% are fabricated (Table 3). [...] Unlike the GPT-3.5 citations, most of the GPT-4 citations refer to works that are verifiably real. Only 18% are fabricated.» | F2 | Resultados, «Extent of fabrication», p. 4 |
+
+## Filas no usadas
+
+Filas aprobadas en versiones anteriores que el borrador v3 ya no cita. No se renumeran.
+
+| ID | Afirmación | Cita textual | Fuente | Ubicación |
+|---|---|---|---|---|
 | E5 | Entre las citas a obras reales, el 43 % (GPT-3.5) y el 24 % (GPT-4) tenían errores sustantivos. | «Likewise, 43% of the real GPT-3.5 citations but just 24% of the real GPT-4 citations include substantive citation errors.» | F2 | Discusión, p. 5 |

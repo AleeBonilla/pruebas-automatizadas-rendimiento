@@ -1,7 +1,9 @@
 # Plan — Marco teórico, grupo A: Fundamentos (5.1–5.2)
 
-**Estado:** Aprobado | **Modo:** Completo | **Versión:** 3 | **Fecha:** 2026-11-07 | **Presupuesto:** 850 palabras + 0,7 págs. de tabla y figura (3 págs. en total)
+**Estado:** Aprobado | **Modo:** Completo | **Versión:** 4 | **Fecha:** 2026-11-07 | **Presupuesto:** 550 palabras + 0,9 págs. de tabla y figura (2,5 págs. en total)
 
+> **Cambios en la versión 4:** condensación al nuevo presupuesto de `Alcance.md` (documento de 30–35 páginas, aprobado por el usuario): de 850 a 550 palabras. Se conservan las siete fuentes, la Figura 1 y la Tabla 1. Las afirmaciones bajan a 5 (tope de 1 por cada 100 palabras): A2 se funde con A1, A6 con A5 y A8 con A7; los IDs vigentes se conservan. La sección «Condensación» indica qué se recorta.
+>
 > **Cambios en la versión 3:** aprobado por el usuario sin cambios. Las fuentes nuevas (F1, F3, F4 y F6) se agregan a `Referencias.md`, y los términos nuevos, a `Glosario.md`.
 >
 > **Cambios en la versión 2:** el usuario aportó Humble y Farley (2010) en copia local (F6). Los *quality gates* dejan de ser síntesis propia: se apoyan en las compuertas (*gates*) del *deployment pipeline* de F6, y el término «quality gates» en Bezemer et al. (2019, F7), que cita F6. Se quitan los criterios de salida del CTFL (A4), que ya no hacen falta. Por preferencia del usuario, el texto usa «CI/CD» siempre que se pueda. Se actualiza la ruta local de F5.
@@ -29,11 +31,22 @@ Subsecciones 5.1 y 5.2 del Marco teórico (`Alcance.md` §5.4; `Enunciado.md` §
 ## Esquema argumental
 | Bloque | Palabras | Idea central | Contenido | Insumos y fuentes |
 |---|---|---|---|---|
-| B1. 5.1, bloque 1: ciclo de vida y niveles de prueba | 220 | Asegurar la calidad es un enfoque de proceso que acompaña todo el ciclo de vida; las pruebas son una de sus formas de control, y las de rendimiento rinden más en los niveles superiores, donde el sistema está integrado y el entorno se parece al de operación. | La diferencia entre aseguramiento de la calidad y pruebas. Los modelos de ciclo de vida y el modelo en V, en el que cada actividad de desarrollo tiene una de prueba. Los cinco niveles de prueba. Los niveles de sistema y de integración de sistemas, y el entorno que necesitan. Remite a la Figura 1. | F1, F2 |
-| B2. 5.1, bloque 2: DevOps, CI/CD y *quality gates* | 200 | CI/CD convierte las pruebas en un paso automático de cada cambio, y un *quality gate* es la forma de que ese paso decida si el cambio avanza. | DevOps y sus beneficios para las pruebas, incluida la visibilidad de las características no funcionales. Qué abarca CI/CD: integración continua, entrega continua y despliegue continuo. El pipeline de despliegue como modelo automatizado del camino de cada cambio hasta producción. Sus etapas como compuertas: la de *commit*, la de pruebas de aceptación y la de pruebas de capacidad, cuyos resultados pueden funcionar como compuerta o solo informar una decisión humana. El término *quality gate*. | F1, F3, F6, F7 |
-| B3. 5.1, bloque 3: *shift-left* y *shift-right* | 160 | Probar antes (*shift-left*) no reemplaza las pruebas posteriores, y probar en producción (*shift-right*) las complementa. Este trabajo se sitúa entre ambos: valida el sistema integrado antes del despliegue y usa CI como puente. | *Shift-left* según el CTFL, incluidas las pruebas no funcionales desde el nivel de componente y la advertencia de no descuidar las posteriores. *Shift-right* como mención: pruebas en producción y umbrales de rendimiento monitoreados en producción. La ubicación de este trabajo, con remisión a `Alcance.md` §1. | F1, F4, F2; `Alcance.md` §1 |
-| B4. 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 270 | La norma descompone la eficiencia de desempeño en tres subcaracterísticas, y cada una corresponde a un objetivo distinto de las pruebas de rendimiento; por eso la norma sirve para decidir qué medir. | Las tres subcaracterísticas y su definición. La edición de 2023 conserva las tres de la de 2011. El objetivo de prueba que el CT-PT asocia a cada una (el comportamiento temporal es el más común). Qué observa cada una, como puente a 5.3. Remite a la Tabla 1. | F5, F2 |
-| **Total** | **850** | | | |
+| B1. 5.1, bloque 1: ciclo de vida y niveles de prueba | 130 | Asegurar la calidad es un enfoque de proceso que acompaña todo el ciclo de vida; las pruebas son una de sus formas de control, y las de rendimiento rinden más en los niveles superiores, donde el sistema está integrado y el entorno se parece al de operación. | La diferencia entre aseguramiento de la calidad y pruebas. Los modelos de ciclo de vida y el modelo en V, en el que cada actividad de desarrollo tiene una de prueba. Los cinco niveles de prueba. Los niveles de sistema y de integración de sistemas, y el entorno que necesitan. Remite a la Figura 1. | F1, F2 |
+| B2. 5.1, bloque 2: DevOps, CI/CD y *quality gates* | 120 | CI/CD convierte las pruebas en un paso automático de cada cambio, y un *quality gate* es la forma de que ese paso decida si el cambio avanza. | DevOps y sus beneficios para las pruebas, incluida la visibilidad de las características no funcionales. Qué abarca CI/CD: integración continua, entrega continua y despliegue continuo. El pipeline de despliegue como modelo automatizado del camino de cada cambio hasta producción. Sus etapas como compuertas: la de *commit*, la de pruebas de aceptación y la de pruebas de capacidad, cuyos resultados pueden funcionar como compuerta o solo informar una decisión humana. El término *quality gate*. | F1, F3, F6, F7 |
+| B3. 5.1, bloque 3: *shift-left* y *shift-right* | 100 | Probar antes (*shift-left*) no reemplaza las pruebas posteriores, y probar en producción (*shift-right*) las complementa. Este trabajo se sitúa entre ambos: valida el sistema integrado antes del despliegue y usa CI como puente. | *Shift-left* según el CTFL, incluidas las pruebas no funcionales desde el nivel de componente y la advertencia de no descuidar las posteriores. *Shift-right* como mención: pruebas en producción y umbrales de rendimiento monitoreados en producción. La ubicación de este trabajo, con remisión a `Alcance.md` §1. | F1, F4, F2; `Alcance.md` §1 |
+| B4. 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 200 | La norma descompone la eficiencia de desempeño en tres subcaracterísticas, y cada una corresponde a un objetivo distinto de las pruebas de rendimiento; por eso la norma sirve para decidir qué medir. | Las tres subcaracterísticas y su definición. La edición de 2023 conserva las tres de la de 2011. El objetivo de prueba que el CT-PT asocia a cada una (el comportamiento temporal es el más común). Qué observa cada una, como puente a 5.3. Remite a la Tabla 1. | F5, F2 |
+| **Total** | **550** | | | |
+
+## Condensación (versión 4)
+
+El borrador v2 aprobado tiene 886 palabras. Las ideas centrales no cambian; la Figura 1 y la Tabla 1 se mantienen sin cambios y cargan más contenido:
+
+- **B1:** la distinción entre aseguramiento de la calidad y pruebas (E1), el modelo en V y los cinco niveles (E2–E4) y el papel de los niveles de sistema y de integración de sistemas en rendimiento (E5, E6), en un párrafo.
+- **B2:** sale la oración sobre los beneficios de DevOps para las pruebas (E7, E8). Quedan CI/CD (E9), el pipeline de despliegue y sus compuertas (E10, E11, E13) y el término *quality gate* (E14). E12 sigue citada en la fuente de la Figura 1.
+- **B3:** *shift-left* (E15, E16), *shift-right* (E17, E18) y la ubicación del trabajo, más breve.
+- **B4:** la descomposición en tres subcaracterísticas (E19–E22) y el argumento de por qué distinguirlas (E23), con un ejemplo en una API. La oración sobre los recursos que cuenta la norma sale de la prosa; E26 sigue citada en la Tabla 1.
+
+E7 y E8 pasan a «Filas no usadas». Todas las fuentes siguen citadas.
 
 **Presupuesto:** `Alcance.md` asigna 3 páginas a 5.1 y 5.2 (2 + 1) y 5 400 palabras «+ tablas/figuras» a todo el Marco teórico. Con unas 350 palabras por página, 850 palabras ocupan unas 2,4 páginas, y la tabla y la figura completan las 3. Las palabras que este grupo deja libres frente a la proporción del Marco teórico (unas 950) se reservan para los grupos B y C.
 
@@ -54,14 +67,11 @@ Subsecciones 5.1 y 5.2 del Marco teórico (`Alcance.md` §5.4; `Enunciado.md` §
 ## Afirmaciones a respaldar
 | ID | Pregunta | Bloque | Fuentes |
 |---|---|---|---|
-| A1 | ¿Cómo distingue el CTFL el aseguramiento de la calidad de las pruebas, y qué lugar da al modelo en V y a la correspondencia entre actividades de desarrollo y de prueba? | B1 | F1 |
-| A2 | ¿Qué evalúan los niveles de sistema y de integración de sistemas, en general (CTFL) y para el rendimiento (CT-PT), y qué entorno requieren? | B1 | F1, F2 |
+| A1 | ¿Cómo distingue el CTFL el aseguramiento de la calidad de las pruebas, qué lugar da al modelo en V y a la correspondencia entre actividades de desarrollo y de prueba, y qué evalúan los niveles de sistema y de integración de sistemas, en general (CTFL) y para el rendimiento (CT-PT)? (incluye la antigua A2) | B1 | F1, F2 |
 | A3 | ¿Cómo definen Shahin et al. la integración continua, la entrega continua y el despliegue continuo, y qué beneficios para las pruebas atribuye el CTFL a DevOps y a CI/CD? | B2 | F3, F1 |
 | A4 | ¿Cómo definen Humble y Farley el *deployment pipeline*, qué papel cumplen sus compuertas (*commit*, pruebas de aceptación, pruebas de capacidad) y dónde aparece el término «quality gates»? | B2 | F6, F7 |
-| A5 | ¿Cómo define el CTFL el *shift-left*, qué dice sobre las pruebas no funcionales y por qué no implica descuidar las pruebas posteriores? | B3 | F1 |
-| A6 | ¿Qué es *shift-right* según la guía de Microsoft, y qué propone el CT-PT sobre umbrales de rendimiento monitoreados en producción? | B3 | F4, F2 |
-| A7 | ¿Cómo define ISO/IEC 25010:2023 cada subcaracterística de la eficiencia de desempeño, y se mantienen respecto de la edición de 2011? | B4 | F5 |
-| A8 | ¿Qué objetivo de las pruebas de rendimiento asocia el CT-PT a cada subcaracterística? | B4 | F2 |
+| A5 | ¿Cómo define el CTFL el *shift-left* y qué dice sobre las pruebas no funcionales; qué es *shift-right* según la guía de Microsoft, y qué propone el CT-PT sobre umbrales de rendimiento monitoreados en producción? (incluye la antigua A6) | B3 | F1, F4, F2 |
+| A7 | ¿Cómo define ISO/IEC 25010:2023 cada subcaracterística de la eficiencia de desempeño, se mantienen respecto de la edición de 2011, y qué objetivo de las pruebas de rendimiento asocia el CT-PT a cada una? (incluye la antigua A8) | B4, Tabla 1 | F5, F2 |
 
 ## Términos nuevos
 | Término | Inglés | Forma propuesta | Define |

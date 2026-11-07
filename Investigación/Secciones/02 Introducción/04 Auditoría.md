@@ -1,4 +1,53 @@
-# Auditoría — 01 Introducción
+# Auditoría — 02 Introducción
+
+## Ronda 6 — 2026-11-07 — Borrador v5 · Evidencia v6
+
+**Veredicto:** Aprobada | **Citas revisadas:** E1, E2, E7, E8, E9, E10, E11, E12, E14, E17, E19, E22, E23, E24, E26, E28 y E29
+
+Plan auditado: versión 8, modo ligero. Se comparó la condensación v4 → v5 con el borrador aprobado y se revisaron las ocho citas contra las 17 filas que las respaldan, con especial atención a las oraciones modificadas. Resultado: **ningún hallazgo bloqueante y una sugerencia de legibilidad**. Los cuatro bloques y el total cumplen el presupuesto vigente con su margen de ±10 %.
+
+**Continuidad y alcance del cotejo.** La ronda 5 aprobó el borrador v4 y no dejó pendientes. Se compararon las 29 filas completas de la evidencia v6 con la evidencia v5 registrada en Git: son idénticas; solo cambia la cabecera de versión y se agrega la nota de condensación. Se conserva, por tanto, la aprobación de literalidad y ubicación en el cuerpo de las fuentes documentada en las rondas 1–4. No se repitió la consulta externa de esos pasajes sin cambios. Esta ronda comprueba la fidelidad del nuevo uso de la evidencia, además de la trazabilidad, el respaldo, el formato y la prosa del borrador completo.
+
+**Fidelidad de las oraciones con cita en v4 → v5:**
+
+| Ubicación y evidencia | Cambio y resultado |
+|---|---|
+| B1, párrafo 1 — E1, E2; ISO/IEC (2023) | Se unen la ubicación de la eficiencia de desempeño entre las nueve características y su definición. **Fiel:** permanecen los parámetros especificados de tiempo y de *throughput*, el uso eficiente de recursos y las condiciones especificadas. La unión no agrega una propiedad normativa. |
+| B1, párrafo 2 — E7, E8, E9; Nielsen (1993) | Se acorta la transición y se suprime la conducta descrita para esperas mayores de diez segundos. **Fiel:** uno y diez segundos siguen siendo límites aproximados; se conserva la percepción de demora alrededor del primero y la atención alrededor del segundo. La aplicación de las pautas a la web sigue respaldada por E9. No reaparece la pérdida categórica de atención rechazada en la ronda 4. |
+| B1, párrafo 3, primera cita — E10, E11; Jiang y Hassan (2015) | Se elimina la cobertura mediática desfavorable y se integra la transición sobre la organización. **Fiel:** se mantiene la tendencia, sin convertirla en una explicación universal, y el carácter frecuente de las fallas catastróficas. No se incorporan datos ni resultados adicionales. |
+| B1, párrafo 3, segunda cita — E12, E14; GAO (2014) | Se quita la presentación como «caso documentado» y el cierre interpretativo del párrafo. **Fiel:** permanecen el lanzamiento sin la verificación requerida, la fecha de apertura y los problemas de acceso y uso. No se excluyen fallas funcionales ni se afirma que la falta de verificación sea una causa demostrada de todos los problemas. |
+| B1, párrafo 4 — E17; AWS (s. f.-a) | Se abrevia la presentación del costo de infraestructura y se suprime el cierre sobre el gasto. **Fiel:** «puede conducir» mantiene la posibilidad expresada por la fuente; se conserva la alternativa de medir para buscar el despliegue de menor costo. La conexión inicial con desconocer la carga soportada funciona como razonamiento del autor. |
+| B2, párrafo 1 — E19, E22; ISTQB (2018) | Se elimina la enumeración de niveles y se atribuyen directamente al syllabus sus dos recomendaciones. **Fiel:** empezar lo antes posible corresponde a E19; el realismo de entornos, datos y cargas en sistema e integración de sistemas corresponde a E22. La decisión de concentrar el estudio en esos niveles queda en una oración propia, sin atribuir al ISTQB una interpretación adicional. |
+| B3, párrafo 1, primera cita — E23, E24; Brunnert et al. (2015) | La oración citada no cambia; se acorta la transición anterior. **Fiel:** conserva la frecuencia de entregas, las versiones pequeñas, la posibilidad de alterar el desempeño y la evaluación continua antes de producción. |
+| B3, párrafo 1, segunda cita — E26, E28, E29; Daly et al. (2020) | El equipo de MongoDB pasa a ser sujeto explícito; se elimina la introducción del ejemplo y la conclusión posterior sobre relacionar degradaciones con cambios. **Fiel:** la ejecución de pruebas en CI procede de E26, la finalidad de identificar cambios de desempeño de E29 y la revisión manual insostenible seguida de detección automatizada de E28. No se afirma que cada prueba se ejecute con cada *commit*, ni se generaliza el caso a pruebas de carga de API REST. |
+
+**Hallazgos:**
+
+| # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
+|---|---|---|---|---|---|
+| 1 | Sugerencia | B1, párrafo 1, última oración | 8 — Legibilidad; guía §6 | La condensación vuelve a reunir en una oración de 65 palabras la ubicación en el modelo, la definición y los nombres completos de ambas instituciones. La ronda 5 había dado por atendida la separación propuesta en la ronda 4; la nueva unión dificulta distinguir las dos afirmaciones normativas, aunque sigue siendo fiel. | Recuperar dos oraciones con una sola cita final: «La norma ISO/IEC 25010:2023 lo incluye, con el nombre de eficiencia de desempeño, entre las nueve características de su modelo de calidad del producto. Lo define como la capacidad de ejecutar las funciones dentro de parámetros especificados de tiempo y de *throughput*, con un uso eficiente de los recursos en condiciones especificadas [cita actual e IDs E1, E2]». El cambio conserva el presupuesto de B1. |
+
+**Otras comprobaciones:**
+
+- **Trazabilidad, respaldo y formato (1, 4 y 6):** las ocho citas conservan sus 17 IDs, todos existentes en la tabla principal, y los autores y años corresponden al plan y a `Referencias.md`. El sufijo s. f.-a de AWS identifica *Cost optimization: Definition*. No aparecen definiciones normativas, cifras, hechos históricos ni hallazgos empíricos nuevos sin respaldo. El contenido interno y las conexiones del autor no requieren citas adicionales.
+- **Fuentes nuevas (5):** se conservan las ocho fuentes del borrador aprobado; no hay fuentes nuevas ni filas marcadas «Nueva». Todas figuran en las referencias. No corresponde repetir la evaluación de inclusión de fuentes ya aprobadas.
+- **Argumento y selección (7–9):** B1 conserva la relevancia para el usuario, la organización y la infraestructura; B2, el foco en implementación; B3, la motivación de automatizar, el enfoque y el objetivo; B4, la relación de las cinco preguntas con las secciones 3–9. Los recortes siguen la condensación prevista en el plan v8. Hay ocho citas en ocho párrafos, promedio de una por párrafo, y ninguna fuente se repite dentro de un mismo párrafo.
+- **Contenido interno y metacomentarios (10 y 11):** el enfoque y el objetivo general siguen integrados en B3; cada pregunta aparece una vez en B4. No hay listas copiadas ni comentarios sobre IA, skills o auditorías en la prosa visible. Los comentarios HTML de control de versión, bloques e IDs se excluyen de esta comprobación de prosa.
+- **Terminología y recursos visuales (13 y 14):** no se introducen variantes contrarias al glosario; se mantienen las formas de los niveles de prueba, CI, CI/CD, pipeline y los términos en cursiva. El plan no exige tablas ni figuras y el borrador no incorpora ninguna: no hay espacio gráfico que contabilizar aparte.
+
+**Extensión:**
+
+| Bloque | Plan | Borrador |
+|---|---|---|
+| B1. El rendimiento como atributo de calidad | 300; margen 270–330 | 316; +5,3 % — cumple |
+| B2. Ubicación en el ciclo de vida | 120; margen 108–132 | 112; −6,7 % — cumple |
+| B3. Motivación, enfoque y objetivo | 175; margen entero 158–192 | 180; +2,9 % — cumple |
+| B4. Estructura del documento y preguntas | 105; margen entero 95–115 | 111; +5,7 % — cumple |
+| **Total** | **700; margen 630–770** | **719; +2,7 % — cumple** |
+
+Conteo reproducible: palabras separadas por espacios en el texto visible de cada bloque; incluye las citas autor–año, excluye el título y todos los comentarios HTML, y elimina los delimitadores de cursiva. Los márgenes enteros incluyen solo cantidades comprendidas dentro de ±10 %. Frente a las 864 palabras aprobadas en la ronda 5, se recortan 145 (16,8 %), conservando las ocho citas y sus fuentes.
+
+Se agrega esta ronda al inicio y se conservan íntegramente las rondas 1–5. Se escribe únicamente `04 Auditoría.md`; no se corrigen el borrador, la evidencia ni el plan.
 
 ## Ronda 5 — 2026-11-07 — Borrador v4 · Evidencia v5
 

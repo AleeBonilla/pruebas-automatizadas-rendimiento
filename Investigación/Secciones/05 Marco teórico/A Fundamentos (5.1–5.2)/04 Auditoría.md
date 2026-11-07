@@ -1,5 +1,92 @@
 # Auditoría — 05 Marco teórico / A Fundamentos (5.1–5.2)
 
+## Ronda 4 — 2026-11-07 — Borrador v4 · Evidencia v3
+
+**Veredicto:** Aprobada | **Citas revisadas:** E2–E4, E10–E11, E13 y E14, cotejadas con sus fuentes en los pasajes corregidos y su contexto de atribución.
+
+Plan vigente: versión 4, aprobado, modo completo; evidencia vigente: versión 3. Se revisaron el hallazgo 1 y la sugerencia 2 de la ronda 3, las formulaciones corregidas y su contexto, con lectura completa del borrador y del registro de evidencia. Se consultaron también la guía de redacción, el plan, el glosario, las referencias y los criterios de fuentes del alcance. **Ambas observaciones quedan atendidas, sin nuevos hallazgos bloqueantes ni sugerencias.** Se conserva el cotejo favorable anterior de las citas que no cambiaron, conforme al procedimiento de rondas de la skill. Se actualiza la entrada de ronda 4 ya existente, sin duplicarla ni alterar las rondas 1–3.
+
+**Seguimiento de la ronda 3:**
+
+| Observación anterior | Estado | Comprobación |
+|---|---|---|
+| 1. Bloqueante de fidelidad; B1, correspondencia entre actividades y cinco niveles | Resuelto | La tercera oración termina en la correspondencia entre actividades de desarrollo y de prueba. La cuarta, «El ISTQB distingue cinco niveles…», presenta la clasificación por separado y cierra con ISTQB (2024), E2–E4. Ya no afirma que cada actividad de prueba correspondiente esté organizada en los cinco niveles. En el [CTFL v4.0.1](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf), §2.1 y §2.1.2, p. 25, se confirman el carácter secuencial del modelo en V y la buena práctica independiente del modelo; §2.2.1, pp. 28–29, enumera los cinco niveles. La cita al final de las dos oraciones consecutivas cubre ambas sin repetición innecesaria. |
+| 2. Sugerencia de legibilidad y densidad; B2, pipeline y compuertas | Aplicada | «Sus etapas incluyen compuertas, como la de *commit*» recupera un ejemplo concreto y evita generalizar que todas las etapas sean compuertas. La misma oración conserva la alternativa entre compuerta y decisión humana para los resultados de las pruebas de capacidad. La cita de Humble y Farley queda al final de las dos oraciones que respalda, en forma parentética: (Humble & Farley, 2010), E10, E11 y E13. Bezemer et al. (2019), E14, es ahora la única cita narrativa del párrafo, conforme a la guía, §1. La denominación *quality gates* sigue atribuida a Bezemer y su uso para esas compuertas se declara como decisión terminológica del trabajo. |
+
+**Cotejo de Humble y Farley:** se leyó el cuerpo de la copia local convertida a Markdown, `Adjuntos/Local/Continuous-Delivery - Jez Humble & David Farley/Continuous-Delivery - Jez Humble & David Farley.md`, cap. 5, pp. 106, 122 y 128 impresas (marcas de páginas PDF 140, 156 y 162). E10 conserva la definición del pipeline; E11 respalda la compuerta de *commit* que v4 vuelve a explicitar; E13 mantiene las dos posibilidades para los resultados de capacidad. Las transcripciones de esas filas coinciden con los pasajes, normalizando solo saltos de línea. Sus paráfrasis y las oraciones actuales no amplían el sentido de la fuente.
+
+**Cotejo de E14:** se confirmó en el cuerpo de [Bezemer et al. (2019)](https://research.spec.org/icpe_proceedings/2019/proceedings/p45.pdf), §1, p. 45, la mención de *quality gates* junto con los pipelines de entrega continua como medios de automatización. Su referencia [16], p. 50, identifica a Humble y Farley (2010). La transcripción de E14 coincide con el pasaje al normalizar los saltos de línea; el borrador distingue esa atribución de su propia decisión terminológica.
+
+**Comprobaciones de continuidad:** los IDs citados existen en la evidencia y sus autores y años corresponden a las referencias. No se incorporan fuentes nuevas ni datos externos sin respaldo. La prosa conserva los cuatro bloques del plan, integra el alcance en B3 y respeta el glosario; no contiene metacomentarios visibles sobre su producción. La Figura 1 y la Tabla 1 mantienen número, título, mención previa y notas de atribución con IDs. La figura sigue en el formato de descripción oculta admitido por la guía. Los comentarios HTML de control no forman parte de la prosa visible.
+
+**Extensión:**
+
+| Bloque | Plan v4 | Borrador v4 |
+|---|---|---|
+| B1. Ciclo de vida y niveles de prueba | 130; margen 117–143 | 143; +10,0 % — cumple, en el límite superior |
+| B2. DevOps, CI/CD y *quality gates* | 120; margen 108–132 | 130; +8,3 % — cumple |
+| B3. *Shift-left* y *shift-right* | 100; margen 90–110 | 109; +9,0 % — cumple |
+| B4. Subcaracterísticas de la eficiencia de desempeño | 200; margen 180–220 | 207; +3,5 % — cumple |
+| **Total** | **550; margen 495–605** | **589; +7,1 % — cumple** |
+
+Conteo directo por unidades separadas por espacios de la prosa visible, incluidas las citas autor–año, sin títulos, subtítulos, comentarios HTML ni delimitadores de cursiva. Se excluyen la tabla y los títulos y notas de tabla y figura. Frente a la ronda 3, B1 y B2 aumentan una palabra cada uno; B3 y B4 mantienen sus conteos.
+
+**Espacio de tabla y figura:** se mantiene la limitación registrada en la ronda 3: el encabezado del plan reserva 0,9 páginas y su tabla de elementos suma 0,7. Los dos pasajes corregidos no alteran estos elementos; su ocupación en páginas queda pendiente de maquetación. Esta limitación no impide aprobar.
+
+## Ronda 3 — 2026-11-07 — Borrador v3 · Evidencia v3
+
+**Veredicto:** No aprobada | **Citas revisadas:** E1–E6, E9–E11 y E13–E23 en las formulaciones modificadas de la prosa; E12 y E24–E26 en cuanto a continuidad de sus atribuciones en la figura y la tabla.
+
+Plan auditado: versión 4, aprobado, modo completo. Se compararon el borrador v3 y la evidencia v3 con la v2 conservada en Git y con la ronda 2. Se revisaron la guía, el glosario, las referencias y el alcance. Resultado: **un hallazgo bloqueante de fidelidad y una sugerencia de redacción**. Las filas de evidencia no cambiaron de contenido: E7 y E8 se trasladaron a «Filas no usadas». La Figura 1 y la Tabla 1, incluidas sus notas, son idénticas a las de v2. Se conserva la aprobación anterior de sus citas sin exigir un cotejo íntegro nuevo.
+
+| # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
+|---|---|---|---|---|---|
+| 1 | Bloqueante | B1, tercera oración, cita E2–E4: «a cada actividad de desarrollo le corresponde una actividad de prueba, organizada en cinco niveles» | 3 — Fidelidad | La condensación atribuye a la actividad de prueba correspondiente a cada actividad de desarrollo una organización en los cinco niveles. E3 respalda la correspondencia entre actividades; E4 registra una clasificación general de niveles. Ninguna fila establece que cada actividad correspondiente se organice en los cinco. El CTFL trata ambas ideas por separado (§2.1.2 y §2.2.1), y define los niveles como agrupaciones de actividades. La v2 conservaba esa separación; la construcción singular «una actividad […] organizada» introduce una relación que la evidencia no acredita. | Separar la correspondencia de la clasificación: «El modelo en V es secuencial. Con independencia del modelo, a cada actividad de desarrollo le corresponde una actividad de prueba. El CTFL distingue cinco niveles: componentes, integración de componentes, sistema, integración de sistemas y aceptación (ISTQB, 2024) <!-- E2, E3, E4 -->». No hace falta agregar una fuente ni cambiar la evidencia. |
+| 2 | Sugerencia | B2, único párrafo, citas E10–E14 | 8–9 — Legibilidad y densidad; guía, §1 | Al unir los dos párrafos de v2 quedan dos citas narrativas, «Humble y Farley (2010)» y «Bezemer et al. (2019)». La guía permite como máximo una por párrafo. Además, la frase general «Sus etapas funcionan como compuertas» pierde la concreción que aportaban los ejemplos de v2, aunque la salvedad inmediata sobre capacidad conserva la opción de decisión humana. | Mantener narrativa solo la cita de Bezemer y llevar la de Humble y Farley al final de las dos oraciones que respalda: «El pipeline de despliegue (*deployment pipeline*) automatiza el proceso que lleva el software del control de versiones a los usuarios. Algunas etapas funcionan como compuertas; los resultados de las pruebas de capacidad pueden funcionar como una o informar una decisión humana (Humble & Farley, 2010) <!-- E10, E11, E13 -->». Continuar con Bezemer et al. (2019) y E14. |
+
+**Cotejo de las oraciones con cita modificadas:**
+
+Se leyeron los pasajes en el cuerpo de las fuentes, fuera de sus resúmenes. Las diferencias de saltos de línea, ligaduras y particiones de palabras de los PDF se normalizaron solo para comprobar la transcripción.
+
+| Filas y ubicación | Comprobación de v2 → v3 |
+|---|---|
+| E1; B1, primera oración | **Conforme.** La versión breve conserva la distinción entre el enfoque preventivo del proceso y el correctivo del producto del [CTFL, §1.2.2, p. 17](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf). La oración siguiente es una conexión propia, sin nuevos datos externos. |
+| E2–E4; B1, tercera oración | El carácter secuencial y la enumeración de niveles se confirman en el [CTFL, §2.1, §2.1.2 y §2.2.1, pp. 25 y 28–29](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf). **No conforme la relación introducida al unirlos:** véase el hallazgo 1. La ubicación corregida de E2 sigue siendo correcta. |
+| E5–E6; B1, última oración | **Conformes.** El [CT-PT, §1.3.2, p. 14](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf), conserva el alcance de extremo a extremo bajo distintas cargas para sistema y los flujos entre sistemas para integración de sistemas. La reducción no cambia los niveles ni sus funciones. |
+| E9; B2, primera oración | **Conforme.** Se suprime el ejemplo de frecuencia «varias veces al día», sin convertirlo en una exigencia distinta. Se conservan la preparación para producción en la entrega y el despliegue automático en producción en el despliegue continuo. Las definiciones están en [Shahin et al., §II.A, p. 2 del preprint](https://arxiv.org/pdf/1703.07019); E9 mantiene el localizador corregido. |
+| E10–E11 y E13; B2, segunda y tercera oraciones | **Conformes en su contenido, con la precisión sugerida en el hallazgo 2.** Se cotejaron el PDF local de Humble y Farley y su conversión Markdown: cap. 5, pp. 106, 122 y 128 impresas, páginas 140, 156 y 162 del PDF. Se conservan la definición del pipeline y la alternativa entre compuerta y decisión humana para las pruebas de capacidad. La cita narrativa alcanza las dos oraciones consecutivas del mismo párrafo; no es necesario repetirla. E12 deja de citarse en esta prosa, pero sigue respaldando la figura. |
+| E14; B2, última oración | **Conforme.** [Bezemer et al., §1, p. 45](https://research.spec.org/icpe_proceedings/2019/proceedings/p45.pdf), mencionan los *quality gates* entre los medios de automatización; su referencia [16], en p. 50, identifica a Humble y Farley (2010). «Aquí, el término designa esas compuertas» sigue siendo una decisión terminológica explícita del trabajo. No se atribuye la expresión inglesa al libro. |
+| E15–E16; B3, primera oración | **Conformes.** Se mantienen tanto la advertencia de no descuidar las pruebas posteriores como la condición «cuando sea posible» para las pruebas no funcionales desde componentes. La supresión de la explicación del entorno no invierte ni absolutiza lo dicho en el [CTFL, §2.1.5, p. 27](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf). |
+| E17–E18; B3, segunda oración | **Conformes.** La definición del [primer párrafo de Microsoft](https://learn.microsoft.com/en-us/devops/deliver/shift-right-test-production) y la posibilidad de monitorear umbrales una vez conocidos los límites de escalabilidad del [CT-PT, §1.2, p. 12](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf), permanecen diferenciadas por sus citas. La unión mediante «donde» no atribuye a Microsoft la afirmación del ISTQB. |
+| E19–E22; B4, primer párrafo | **Conformes.** Se comprobó la tabla A.1 en la imagen local existente de la página 23 del PDF de ISO/IEC 25010:2023, p. 13 impresa: ambas ediciones conservan las tres denominaciones. Se leyó además la p. 2 impresa, página 12 del PDF, para §3.2.1–3.2.3. El borrador no afirma que las definiciones de ambas ediciones sean idénticas. La frase sobre requisitos sintetiza las definiciones registradas. E26 se retira de la prosa porque se eliminó su enumeración de recursos; continúa correctamente en la tabla. |
+| E23; B4, segundo párrafo | **Conforme.** Se mantiene «en general» y «objetivo más común», sin convertirlo en objetivo único, tal como figura en el [CT-PT, §1.1, p. 11](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf). El ejemplo de la API y las consecuencias para la selección de medidas son razonamiento propio, no resultados empíricos atribuidos al syllabus. |
+
+**Seguimiento de la ronda 2:**
+
+- **Sugerencia 1, B4:** atendida en lo sustantivo. La v2 de Git ya incorporaba una reformulación posterior a la ronda; v3 la abrevia. El comportamiento temporal incluye tiempos de respuesta y *throughput*, y desaparecen la restricción al cliente y el «solo» objetado. «La carga máxima que admite sin incumplir sus requisitos» mantiene como referencia los requisitos, sin equipararla expresamente al máximo físico. No se reabre como hallazgo bloqueante una aplicación propia que el plan admite.
+- **Correcciones de la ronda 1 ratificadas en la 2:** se mantienen los localizadores de E2 y E9, las filas de comparación de E19 y las atribuciones de la tabla y la figura. El nuevo hallazgo 1 corresponde a la oración condensada, no a un defecto de la transcripción de E2–E4.
+
+**Comprobaciones restantes:**
+
+- **Trazabilidad, respaldo, fuentes y APA 7 (1, 4–6):** las citas visibles conservan IDs existentes, autores y años coherentes. E7 y E8 solo se mencionan en el comentario editorial inicial y ya no se citan en el contenido. Se conservan las siete fuentes y sus entradas en `Referencias.md`; no hay fuentes nuevas que requieran otro examen de inclusión. Las abreviaturas institucionales ya se presentan en la Introducción. No se detectan cifras, casos ni resultados empíricos nuevos sin respaldo. La nota de la Tabla 1 sigue atribuyendo los ejemplos de CPU y memoria a E26, cuyo pasaje se confirmó también en §3.2, nota 1, p. 2 de la norma.
+- **Argumento y selección (7–10):** se cumplen las decisiones expresas de condensación del plan v4: salen los beneficios de DevOps de E7–E8 y la enumeración de recursos en prosa; se preservan CI/CD, las pruebas tempranas y en producción, las tres subcaracterísticas y el ejemplo de API. El alcance se integra una vez, en B3. La selección de medidas y la conexión entre CI y validación previa al despliegue se reconocen como razonamiento del trabajo. Los cinco párrafos tienen entre una y tres citas autor–año; el problema de citas narrativas de B2 se registra aparte.
+- **Metacomentarios y terminología (11 y 13):** no hay metacomentarios visibles sobre IA, skills, auditorías o producción del texto. Los comentarios HTML de control y de descripción de la figura conservan su función editorial. Se respetan los términos del glosario, CI/CD para el conjunto y CI para integración; no aparece CD sola. El término inglés acompaña la primera aparición del pipeline de despliegue.
+- **Tabla y figura (14):** permanecen numeradas, tituladas, mencionadas y atribuidas como en la versión aprobada. La descripción de la figura conserva la advertencia de que no hay correspondencia uno a uno entre las cuatro actividades dibujadas y los cinco niveles, y distingue entre compuerta e información. Las notas conservan E12 y E24–E26; sus textos no cambiaron.
+
+**Extensión:**
+
+| Bloque | Plan v4 | Borrador v3 |
+|---|---|---|
+| B1. Ciclo de vida y niveles de prueba | 130; margen 117–143 | 142; +9,2 % — cumple |
+| B2. DevOps, CI/CD y *quality gates* | 120; margen 108–132 | 129; +7,5 % — cumple |
+| B3. *Shift-left* y *shift-right* | 100; margen 90–110 | 109; +9,0 % — cumple |
+| B4. Subcaracterísticas de la eficiencia de desempeño | 200; margen 180–220 | 207; +3,5 % — cumple |
+| **Total** | **550; margen 495–605** | **587; +6,7 % — cumple** |
+
+Conteo por unidades separadas por espacios de la prosa visible, incluidas las citas autor–año, sin títulos, subtítulos, comentarios HTML ni delimitadores de cursiva. Se excluyen la tabla y los títulos y notas de tabla y figura. La cifra histórica de 886 palabras citada en el plan no se usa como base: esta ronda cuenta directamente la versión actual con el criterio de las anteriores.
+
+**Espacio de tabla y figura:** el encabezado vigente del plan v4 reserva 0,9 páginas en total; su tabla de elementos todavía indica 0,35 por elemento, 0,7 en total, y el párrafo «Presupuesto» conserva cifras del presupuesto anterior. Se toma 550 palabras como presupuesto de prosa por su coincidencia con el encabezado, el esquema y la condensación. La discrepancia de las reservas visuales queda registrada sin modificar el plan. Como la tabla y la figura son idénticas a v2, no hay crecimiento por esta condensación. No se puede confirmar ni descartar un desbordamiento en páginas hasta la maquetación: el Markdown no fija la altura de la tabla y la figura sigue descrita mediante el comentario permitido por la guía. Esta limitación no es el motivo del veredicto; lo es el hallazgo 1.
+
 ## Ronda 2 — 2026-11-07 — Borrador v2 · Evidencia v2
 
 **Veredicto:** Aprobada | **Citas revisadas:** E2, E9 y E19 recotejadas con sus fuentes; E1–E26 revisadas en cuanto a trazabilidad, fidelidad de las formulaciones actuales y reutilización en la Tabla 1 y la Figura 1.
