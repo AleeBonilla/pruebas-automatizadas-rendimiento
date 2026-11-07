@@ -21,7 +21,7 @@
 | **Fase 1: Investigación**         | Investigación teórica y documental                 | 1 Portada, 2 Introducción, 3 Planteamiento del problema, 4 Metodología, 5 Marco teórico, 8 Referencias, anexos de validación de IA | **Alcance definido** (este documento)          |
 | **Fase 2:       Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller                                                                  | **Por definir** mediante discusión de opciones |
 
-La forma de trabajo con IA (skills) se definirá aparte y se incorporará a este documento cuando esté acordada.
+La forma de trabajo con IA está definida en §5.3, en el procedimiento de uso y validación de IA. El detalle operativo está en `Investigación/Workflow.md` y en `Investigación/Guía de redacción.md`.
 
 ## 3. Preguntas de investigación
 
@@ -85,7 +85,15 @@ Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
 - **Cadenas de búsqueda** (ejemplos): `"performance testing" AND ("load testing" OR "stress testing")`, `"load testing" AND (survey OR "state of practice")`, `"performance regression" AND ("continuous integration" OR DevOps)`.
 - **Criterios de inclusión:** 2010–2026 (excepto clásicos), revisado por pares, normas, o documentación oficial; en inglés o español.
 - **Criterios de exclusión:** blogs sin autoría identificable, contenido de marketing sin datos, temas de la columna "Excluir".
-- **Procedimiento de uso y validación de IA:** *por definir* (se trabajará con skills).
+- **Procedimiento de uso y validación de IA:**
+  - **Principio:** un modelo produce y otro, de un proveedor distinto, audita. Claude Code (Opus 5.5) planifica y redacta; Codex (GPT-6.1 Sol) audita. Ninguna sección avanza sin la aprobación humana del plan, y ningún texto se integra al documento sin revisión humana.
+  - **Flujo por sección**, mediante tres skills:
+    1. **Planificador:** define el modo de la sección (ligero o completo), un esquema argumental con la idea central de cada bloque, las afirmaciones que requieren respaldo y las fuentes. Cada fuente se verifica en su página de publicación (título, autores, fecha o versión y enlace) y se clasifica por acceso. El usuario aprueba el plan de forma explícita.
+    2. **Redactor:** lee las fuentes en texto completo, nunca solo el resumen, y redacta con voz propia según la guía de redacción. Registra cada cita del texto en una tabla de evidencia con la cita textual literal, en el idioma original, y su ubicación (sección y página). Cada cita del borrador lleva oculto el ID de su fila de evidencia.
+    3. **Auditor:** el redactor lo ejecuta de forma automática (`codex exec`), en una sesión nueva en cada ronda. Coteja cada cita con su fuente (trazabilidad, literalidad, ubicación y fidelidad), verifica que ningún dato externo aparezca sin cita y revisa la prosa contra la guía. Sus hallazgos son **bloqueantes** (citas infieles o no trazables, datos sin respaldo, metacomentarios) o **sugerencias** (argumento, legibilidad, densidad de citas, extensión). El redactor corrige los bloqueantes y decide sobre las sugerencias, con un máximo de dos rondas por invocación.
+  - **Criterios de redacción:** primero el argumento; la evidencia lo respalda. Se cita lo que proviene de fuentes externas (definiciones, datos, casos, hallazgos) y no el razonamiento propio ni el contenido interno. La densidad de citas depende del modo, y el texto no habla del proceso con que se produjo, salvo en la Metodología y en los anexos.
+  - **Registro:** los planes, la evidencia, los borradores y las auditorías de cada sección se versionan en el repositorio. Los informes de auditoría conservan todas sus rondas. Este material alimenta los anexos A y B.
+  - **Evolución del procedimiento:** la Introducción se produjo primero con una versión de cinco skills que partía de la evidencia: el redactor solo podía parafrasear filas de evidencia ya auditadas. El resultado fue un texto saturado de citas (17 en 880 palabras) y poco desarrollado, en un proceso lento. Esa versión se sustituyó por la actual y la Introducción se reescribió con ella. La comparación entre ambas versiones es un insumo para la reflexión metodológica (§5.6).
 
 ### 5.4 Marco teórico (17 p.)
 
