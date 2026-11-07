@@ -23,12 +23,12 @@ El usuario invoca solo `/planificador` y `/redactor`. El redactor lanza el audit
 
 Una sección de más de unas 2 000 palabras se planifica y redacta por subsecciones o por grupos de subsecciones afines. El Marco teórico se trabaja en cuatro grupos, en este orden:
 
-| Grupo | Subsecciones (`Alcance.md` §5.4) | Páginas | Carpeta |
+| Grupo | Subsecciones (`Alcance.md` §5.4) | Páginas (palabras + tablas/figuras) | Carpeta |
 |---|---|---|---|
-| A. Fundamentos | 5.1 Aseguramiento de la calidad en la fase de implementación · 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 3 | `05 Marco teórico/A Fundamentos (5.1–5.2)` |
-| B. Conceptos y tipos | 5.3 Conceptos y métricas fundamentales · 5.4 Clasificación de las pruebas de rendimiento | 5.5 | `05 Marco teórico/B Conceptos y tipos (5.3–5.4)` |
-| C. Proceso y práctica | 5.5 Proceso · 5.6 Principios, buenas prácticas y antipatrones · 5.7 Automatización e integración en CI/CD | 5.5 | `05 Marco teórico/C Proceso y práctica (5.5–5.7)` |
-| D. Herramientas | 5.8 Catálogo y comparativa de herramientas | 3 | `05 Marco teórico/D Herramientas (5.8)` |
+| A. Fundamentos | 5.1 Aseguramiento de la calidad en la fase de implementación · 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 2.5 (550 + Figura 1 y Tabla 1) | `05 Marco teórico/A Fundamentos (5.1–5.2)` |
+| B. Conceptos y tipos | 5.3 Conceptos y métricas fundamentales · 5.4 Clasificación de las pruebas de rendimiento | 3.5 (850 + una figura y una tabla) | `05 Marco teórico/B Conceptos y tipos (5.3–5.4)` |
+| C. Proceso y práctica | 5.5 Proceso · 5.6 Principios, buenas prácticas y antipatrones · 5.7 Automatización e integración en CI/CD | 2.5 (870) | `05 Marco teórico/C Proceso y práctica (5.5–5.7)` |
+| D. Herramientas | 5.8 Catálogo y comparativa de herramientas | 2 (400 + tabla comparativa) | `05 Marco teórico/D Herramientas (5.8)` |
 
 B fija el vocabulario que usan C y D. D va al final, cerca de la entrega, porque depende de la documentación vigente de cada herramienta.
 

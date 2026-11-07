@@ -11,7 +11,7 @@
 | Fase del ciclo de vida | **Implementación**: validación pre-despliegue del sistema integrado. El *shift-left* (ejecución en CI desde desarrollo) se trata como puente, no como segundo eje. |
 | Objeto bajo prueba | Backend / API REST. |
 | Herramienta del taller | **Gatling**. Los detalles de uso (lenguaje del DSL, forma de ejecución, etc.) se definen en la Fase 2. |
-| Extensión objetivo | **50–55 páginas Word en total, anexos incluidos.** |
+| Extensión objetivo | **30–35 páginas Word en total, con portada, índice, referencias y anexos incluidos.** Se redujo de 50–55 páginas el 2026-11-07; los borradores ya aprobados se condensan conservando todas sus fuentes (§5). |
 | Formato de página asumido | Times New Roman / Calibri 12, interlineado 1.5, márgenes 2.5 cm ≈ **350 palabras por página** de texto corrido (las tablas y figuras cuentan dentro del presupuesto). |
 
 ## 2. Fases del trabajo
@@ -51,34 +51,36 @@ Las preguntas de investigación la descomponen. PI-2 justifica el problema; PI-1
 
 ## 5. Estructura y presupuesto de páginas
 
-Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
+Total estimado: **~33 páginas, todo incluido** (rango aceptable 30–35). Las 2 páginas de margen hasta el tope quedan para el Marco teórico o el taller, si al redactarlos lo necesitan.
+
+**Condensación de lo ya aprobado:** la Introducción, el Planteamiento del problema, la Metodología y el grupo A del Marco teórico se escribieron con el presupuesto anterior y se condensan al nuevo. Se pueden quitar filas de evidencia, pero cada fuente de `Investigación/Referencias.md` debe seguir citada al menos una vez en el documento; las filas que dejen de citarse pasan a «Filas no usadas».
 
 | #   | Sección                                                        | Fase  | Páginas | Palabras aprox.        | PI que responde  |
 | --- | -------------------------------------------------------------- | ----- | ------- | ---------------------- | ---------------- |
 | 1   | Portada + índice general (figuras y tablas en el mismo índice) | 1     | 2       | —                      | —                |
-| 2   | Introducción                                                   | 1     | 2.5     | 875                    | —                |
-| 3   | Planteamiento del problema                                     | 1     | 4.5     | 1 550                  | PI-2             |
-| 4   | Metodología                                                    | 1     | 3.5     | 1 200                  | —                |
-| 5   | Marco teórico                                                  | 1     | 17      | 5 400 + tablas/figuras | PI-1, PI-3, PI-4 |
-| 6   | Propuesta de taller práctico                                   | 2     | 11.5    | por definir            | PI-5             |
-| 7   | Conclusiones                                                   | 2     | 2.5     | 875                    | todas            |
-| 8   | Referencias                                                    | 1     | 3       | 25–35 entradas         | —                |
-| 9   | Anexos                                                         | 1 y 2 | 6.5     | —                      | —                |
+| 2   | Introducción                                                   | 1     | 2       | 700                    | —                |
+| 3   | Planteamiento del problema                                     | 1     | 3       | 1 050                  | PI-2             |
+| 4   | Metodología                                                    | 1     | 2       | 700                    | —                |
+| 5   | Marco teórico                                                  | 1     | 10.5    | 2 670 + tablas/figuras | PI-1, PI-3, PI-4 |
+| 6   | Propuesta de taller práctico                                   | 2     | 6       | por definir            | PI-5             |
+| 7   | Conclusiones                                                   | 2     | 1.5     | 525                    | todas            |
+| 8   | Referencias                                                    | 1     | 2.5     | 25–35 entradas         | —                |
+| 9   | Anexos                                                         | 1 y 2 | 3.5     | —                      | —                |
 
-### 5.1 Introducción (2.5 p.)
+### 5.1 Introducción (2 p.)
 
 - Relevancia del rendimiento como atributo de calidad (impacto en negocio, experiencia de usuario, costos de infraestructura).
 - Ubicación del tema en el ciclo de vida: fase de implementación.
 - Motivación, objetivos y estructura del documento.
 
-### 5.2 Planteamiento del problema (4.5 p.)
+### 5.2 Planteamiento del problema (3 p.)
 
 - **Industria:** pruebas de rendimiento ejecutadas tarde o nunca; entornos de prueba no representativos; costo de herramientas y de infraestructura de carga; falta de integración en CI/CD; resultados ruidosos y difíciles de interpretar.
 - **Academia:** poca presencia en currículos frente a pruebas funcionales; brecha entre investigación (p. ej. detección de regresiones) y práctica.
 - Evidencia empírica obligatoria (estudios de práctica en proyectos open source y encuestas industriales); **ninguna estadística sin fuente verificable**.
 - Cierre: pregunta-problema y justificación del taller.
 
-### 5.3 Metodología (3.5 p.)
+### 5.3 Metodología (2 p.)
 
 - **Enfoque:** investigación teórico-aplicada: revisión de literatura semi-sistemática + estudio experimental (taller).
 - **Tipos de fuente, por orden de preferencia:** normas ISO/IEC, syllabus ISTQB, artículos arbitrados (sobre todo de ACM e IEEE) y documentación oficial de herramientas.
@@ -87,7 +89,7 @@ Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
 - **Registro de búsqueda:** a partir del Marco teórico, cada plan registra sus consultas: fecha, buscador o base, cadena, resultados y fuentes elegidas o descartadas con su motivo. En la Introducción y en el Planteamiento del problema solo se registraron las fuentes verificadas y las descartadas, y la Metodología lo declara así.
 - **Criterios de inclusión:** 2010–2026 (excepto clásicos), revisado por pares, normas, o documentación oficial; en inglés o español.
 - **Criterios de exclusión:** blogs sin autoría identificable, contenido de marketing sin datos, temas de la columna "Excluir".
-- **Procedimiento de uso y validación de IA:**
+- **Procedimiento de uso y validación de IA** (la Metodología lo resume; el detalle de los criterios del auditor, las rondas y la evolución del procedimiento va en el anexo B):
   - **Principio:** un modelo produce y otro, de un proveedor distinto, audita. Claude Code (Opus 5.5) planifica y redacta; Codex (GPT-6.1 Sol) audita. Ninguna sección avanza sin la aprobación humana del plan, y ningún texto se integra al documento sin revisión humana.
   - **Flujo por sección**, mediante tres skills:
     1. **Planificador:** define el modo de la sección (ligero o completo), un esquema argumental con la idea central de cada bloque, las afirmaciones que requieren respaldo y las fuentes. Cada fuente se verifica en su página de publicación (título, autores, fecha o versión y enlace) y se clasifica por acceso. El usuario aprueba el plan de forma explícita.
@@ -97,24 +99,26 @@ Total estimado: **~53 páginas, anexos incluidos** (rango aceptable 50–55).
   - **Registro:** los planes, la evidencia, los borradores y las auditorías de cada sección se versionan en el repositorio. Los informes de auditoría conservan todas sus rondas. Este material alimenta los anexos A y B.
   - **Evolución del procedimiento:** la Introducción se produjo primero con una versión de cinco skills que partía de la evidencia: el redactor solo podía parafrasear filas de evidencia ya auditadas. El resultado fue un texto saturado de citas (17 en 880 palabras) y poco desarrollado, en un proceso lento. Esa versión se sustituyó por la actual y la Introducción se reescribió con ella. La comparación entre ambas versiones es un insumo para la reflexión metodológica (§5.6).
 
-### 5.4 Marco teórico (17 p.)
+### 5.4 Marco teórico (10.5 p.)
 
-| Subsección | Páginas | Contenido clave |
+Las páginas incluyen las tablas y figuras de cada subsección; las palabras son solo de texto corrido.
+
+| Subsección | Páginas (palabras + tablas/figuras) | Contenido clave |
 |---|---|---|
-| 5.1 Aseguramiento de la calidad en la fase de implementación | 2 | Ciclo de vida, modelo en V, CI/CD, *quality gates*, *shift-left* vs *shift-right* |
-| 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 1 | Comportamiento temporal, utilización de recursos, capacidad |
-| 5.3 Conceptos y métricas fundamentales | 3 | Latencia vs. tiempo de respuesta, *throughput*, percentiles (por qué no el promedio), concurrencia, usuarios virtuales, *think time*, ley de Little, modelos de carga abiertos vs. cerrados, *coordinated omission* |
-| 5.4 Clasificación de las pruebas de rendimiento | 2.5 | Carga, estrés, *spike*, *soak*; mención de escalabilidad, volumen y capacidad. Tabla comparativa: objetivo, perfil de carga, duración, qué detecta |
-| 5.5 Proceso de pruebas de rendimiento | 2 | Fases según ISTQB CT-PT: planificación, análisis/diseño (perfil operacional, modelo de carga), implementación (scripts, datos), ejecución, análisis y reporte; requisitos de entorno |
-| 5.6 Principios, buenas prácticas y antipatrones | 2 | Línea base, aislamiento del generador de carga, calentamiento, repetibilidad, datos realistas; antipatrones (promedios, entorno compartido, probar sin objetivos) |
-| 5.7 Automatización e integración en CI/CD | 1.5 | Umbrales como criterio pass/fail, detección de regresiones, frecuencia de ejecución, observabilidad como complemento |
-| 5.8 Catálogo y comparativa de herramientas | 3 | Ver §6 |
+| 5.1 Aseguramiento de la calidad en la fase de implementación | 1.5 (350 palabras + Figura 1) | Ciclo de vida, modelo en V, CI/CD, *quality gates*, *shift-left* vs *shift-right* |
+| 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 1 (200 palabras + Tabla 1) | Comportamiento temporal, utilización de recursos, capacidad |
+| 5.3 Conceptos y métricas fundamentales | 2 (550 palabras + figura de modelos de carga abierto y cerrado) | Latencia vs. tiempo de respuesta, *throughput*, percentiles (por qué no el promedio), concurrencia, usuarios virtuales, *think time*, ley de Little, modelos de carga abiertos vs. cerrados, *coordinated omission* |
+| 5.4 Clasificación de las pruebas de rendimiento | 1.5 (300 palabras + tabla comparativa) | Carga, estrés, *spike*, *soak*; mención de escalabilidad, volumen y capacidad. Tabla comparativa: objetivo, perfil de carga, duración, qué detecta |
+| 5.5 Proceso de pruebas de rendimiento | 0.75 (260 palabras) | Fases según ISTQB CT-PT: planificación, análisis/diseño (perfil operacional, modelo de carga), implementación (scripts, datos), ejecución, análisis y reporte; requisitos de entorno |
+| 5.6 Principios, buenas prácticas y antipatrones | 1 (350 palabras) | Línea base, aislamiento del generador de carga, calentamiento, repetibilidad, datos realistas; antipatrones (promedios, entorno compartido, probar sin objetivos) |
+| 5.7 Automatización e integración en CI/CD | 0.75 (260 palabras) | Umbrales como criterio pass/fail, detección de regresiones, frecuencia de ejecución, observabilidad como complemento |
+| 5.8 Catálogo y comparativa de herramientas | 2 (400 palabras + tabla comparativa de 6 herramientas × 8 criterios) | Ver §6 |
 
-### 5.5 Propuesta de taller práctico (11.5 p.) — Fase 2
+### 5.5 Propuesta de taller práctico (6 p.) — Fase 2
 
 Contenido mínimo exigido por el enunciado: contexto de aplicación, recursos y código, stack tecnológico y guía paso a paso, más el plan de pruebas ejecutable con los compañeros (objetivo específico 5). Las subsecciones y su distribución de páginas se definen en la Fase 2.
 
-### 5.6 Conclusiones (2.5 p.) — Fase 2
+### 5.6 Conclusiones (1.5 p.) — Fase 2
 
 - Hallazgos por pregunta de investigación.
 - Respuesta a la pregunta-problema, a partir de esos hallazgos.
@@ -150,7 +154,7 @@ Esta sección se construirá mediante discusión de opciones. Solo está fijado 
 - **Restricción ética:** solo se prueba contra un entorno propio, nunca contra sistemas de terceros ni sitios públicos.
 - **Integración con CI:** las pruebas se ejecutan en un pipeline de CI (§1 y pregunta-problema).
 - **Regresión a demostrar:** el taller introduce un problema de rendimiento, lo detecta y verifica su corrección (PI-5).
-- **Extensión:** 11.5 páginas en el documento.
+- **Extensión:** 6 páginas en el documento; el código, los resultados completos y la guía extendida van en el repositorio.
 - **Confiabilidad del veredicto:** el taller debe comprobar que la decisión de aprobar o rechazar se mantiene estable entre ejecuciones repetidas. Sin la regresión, todas las repeticiones pasan; con la regresión, todas fallan. Se reporta cuánto varían las métricas entre ejecuciones, y los umbrales se justifican con un margen respecto de esa variación. Origen: la pregunta-problema y el cierre del Planteamiento del problema (§3.4).
 
 **Decisiones pendientes:**
@@ -178,12 +182,12 @@ Esta sección se construirá mediante discusión de opciones. Solo está fijado 
 
 **Meta:** 25–35 referencias en total, con al menos 50 % artículos revisados por pares o normas.
 
-## 9. Anexos previstos (6.5 páginas en total)
+## 9. Anexos previstos (3.5 páginas en total)
 
 El material extenso (código completo, registros íntegros de IA) va en un **repositorio**; los anexos solo contienen el enlace y extractos representativos.
 
 | Anexo | Contenido | Fase | Páginas |
 |---|---|---|---|
-| A | Registro resumido de consultas de IA | 1 | 1.5 |
-| B | Resumen de la validación crítica de los productos de IA y su resolución | 1 | 1.5 |
-| C | Material del taller (código, resultados, capturas); contenido por definir | 2 | 3.5 |
+| A | Registro resumido de consultas de IA | 1 | 1 |
+| B | Resumen de la validación crítica de los productos de IA y su resolución, con el detalle del procedimiento que la Metodología resume | 1 | 1 |
+| C | Material del taller (código, resultados, capturas); contenido por definir | 2 | 1.5 |
