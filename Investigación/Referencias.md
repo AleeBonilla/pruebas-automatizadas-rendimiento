@@ -12,6 +12,8 @@ Brunnert, A., van Hoorn, A., Willnecker, F., Danciu, A., Hasselbring, W., Heger,
 
 Daly, D., Brown, W., Ingo, H., O'Leary, J., & Bradford, D. (2020). The use of change point detection to identify software performance regressions in a continuous integration system. En *Proceedings of the 2020 ACM/SPEC International Conference on Performance Engineering (ICPE '20)* (pp. 67–75). ACM. https://doi.org/10.1145/3358960.3375791
 
+Friedrich, S., Wingerath, W., & Ritter, N. (2017). Coordinated omission in NoSQL database benchmarking. En B. Mitschang et al. (Eds.), *Datenbanksysteme für Business, Technologie und Web (BTW 2017) – Workshopband* (pp. 215–226). Gesellschaft für Informatik. https://dl.gi.de/items/780bef9a-d6df-4776-80e3-e85ae0158e63
+
 Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus areas in software testing. *IEEE Software, 34*(5), 38–45. https://doi.org/10.1109/MS.2017.3641116
 
 Humble, J., & Farley, D. (2010). *Continuous delivery: Reliable software releases through build, test, and deployment automation*. Addison-Wesley.
@@ -24,11 +26,15 @@ International Software Testing Qualifications Board. (2024). *Certified Tester F
 
 Jiang, Z. M., & Hassan, A. E. (2015). A survey on load testing of large-scale software systems. *IEEE Transactions on Software Engineering, 41*(11), 1091–1118. https://doi.org/10.1109/TSE.2015.2445340
 
+Lazowska, E. D., Zahorjan, J., Graham, G. S., & Sevcik, K. C. (1984). *Quantitative system performance: Computer system analysis using queueing network models*. Prentice-Hall. https://homes.cs.washington.edu/~lazowska/qsp/
+
 Leitner, P., & Bezemer, C.-P. (2017). An exploratory study of the state of practice of performance testing in Java-based open source projects. En *Proceedings of the 8th ACM/SPEC International Conference on Performance Engineering (ICPE '17)* (pp. 373–384). ACM. https://doi.org/10.1145/3030207.3030213
 
 Microsoft. (2022, 21 de julio). *Shift right to test in production*. Microsoft Learn. Recuperado el 7 de noviembre de 2026, de https://learn.microsoft.com/en-us/devops/deliver/shift-right-test-production
 
 Nielsen, J. (1993, 1 de enero). *Response times: The 3 important limits*. Nielsen Norman Group. https://www.nngroup.com/articles/response-times-3-important-limits/
+
+Schroeder, B., Wierman, A., & Harchol-Balter, M. (2006). Open versus closed: A cautionary tale. En *Proceedings of the 3rd Symposium on Networked Systems Design and Implementation (NSDI '06)* (pp. 239–252). USENIX Association. https://www.usenix.org/conference/nsdi-06/open-versus-closed-cautionary-tale
 
 Shahin, M., Ali Babar, M., & Zhu, L. (2017). Continuous integration, delivery and deployment: A systematic review on approaches, tools, challenges and practices. *IEEE Access, 5*, 3909–3943. https://doi.org/10.1109/ACCESS.2017.2685629
 

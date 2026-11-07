@@ -37,27 +37,30 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 
 | Término | Inglés | Forma en el texto | Evitar | Definición de trabajo | Define | Usado en |
 |---|---|---|---|---|---|---|
-| Tiempo de respuesta | response time | tiempo de respuesta | — | Se distingue de latencia en 5.3. Provisional. | 5.3 | 02 |
-| Latencia | latency | latencia | — | Provisional; ver tiempo de respuesta. | 5.3 | — |
-| *Throughput* | throughput | *throughput* | rendimiento (choca con *performance*), caudal | Cantidad de trabajo completado por unidad de tiempo. Provisional. | 5.3 | 02 |
-| Tasa de error | error rate | tasa de error | — | Provisional. | 5.3 | — |
-| Percentil | percentile | percentil 95 (p95); después, p95 | — | Provisional. | 5.3 | — |
-| Concurrencia | concurrency | concurrencia | — | Provisional. | 5.3 | — |
-| Usuario virtual | virtual user | usuario virtual | VU sin definir | Provisional. | 5.3 | — |
-| *Think time* | think time | tiempo de espera entre acciones (*think time*); después, *think time* | tiempo de pensamiento | Provisional. | 5.3 | — |
-| Modelo de carga abierto / cerrado | open / closed workload model | modelo de carga abierto, modelo de carga cerrado | sistema abierto/cerrado sin «modelo de carga» | Provisional. | 5.3 | — |
-| *Coordinated omission* | coordinated omission | *coordinated omission* | omisión coordinada sin el término original | Provisional. | 5.3 | — |
-| Ley de Little | Little's law | ley de Little | — | Provisional. | 5.3 | — |
+| Tiempo de respuesta | response time | tiempo de respuesta | latencia, para lo que mide el cliente | Tiempo que el cliente espera la respuesta a una solicitud. Cuando una fuente dice «latency» en ese sentido, se traduce como tiempo de respuesta. Provisional hasta aprobar 5.3. | 5.3 | 02 |
+| Latencia | latency | latencia, solo para la latencia de red | latencia como sinónimo de tiempo de respuesta | Decisión de terminología del trabajo, siguiendo el uso del CT-PT («network latency»). Provisional hasta aprobar 5.3. | 5.3 | — |
+| *Throughput* | throughput | *throughput* | rendimiento (choca con *performance*), caudal | Cantidad de trabajo completado por unidad de tiempo. Provisional hasta aprobar 5.3. | 5.3 | 02 |
+| Tasa de error | error rate | tasa de error | — | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Percentil | percentile | percentil 95 (p95); después, p95 | — | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Promedio | average, mean | promedio | media | Se usa una sola forma para no mezclar términos. | — | — |
+| Concurrencia | concurrency | concurrencia | — | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Usuario virtual | virtual user | usuario virtual | VU sin definir | Provisional hasta aprobar 5.3. | 5.3 | — |
+| *Think time* | think time | tiempo de espera entre acciones (*think time*); después, *think time* | tiempo de pensamiento | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Modelo de carga abierto / cerrado | open / closed workload model | modelo de carga abierto, modelo de carga cerrado | sistema abierto/cerrado sin «modelo de carga» | Provisional hasta aprobar 5.3. | 5.3 | — |
+| *Coordinated omission* | coordinated omission | *coordinated omission* | omisión coordinada sin el término original | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Ley de Little | Little's law | ley de Little | — | Provisional hasta aprobar 5.3. | 5.3 | — |
 
 ## Tipos de prueba
 
 | Término | Inglés | Forma en el texto | Evitar | Definición de trabajo | Define | Usado en |
 |---|---|---|---|---|---|---|
-| Prueba de carga | load testing | prueba de carga | — | Provisional. | 5.4 | 03 |
-| Prueba de estrés | stress testing | prueba de estrés | prueba de esfuerzo | Provisional. | 5.4 | — |
-| Prueba de picos | spike testing | prueba de picos (*spike*) | — | Provisional. | 5.4 | — |
-| Prueba de resistencia | soak / endurance testing | prueba de resistencia (*soak*) | prueba de remojo | Provisional. | 5.4 | — |
-| Prueba de escalabilidad, de volumen, de capacidad | scalability, volume, capacity testing | prueba de escalabilidad, de volumen, de capacidad | — | Solo se mencionan (`Alcance.md` §4). Provisional. | 5.4 | — |
+| Prueba de carga | load testing | prueba de carga | — | Provisional hasta aprobar 5.4. | 5.4 | 03 |
+| Prueba de estrés | stress testing | prueba de estrés | prueba de esfuerzo | Provisional hasta aprobar 5.4. | 5.4 | — |
+| Prueba de picos | spike testing | prueba de picos (*spike*) | — | Provisional hasta aprobar 5.4. | 5.4 | — |
+| Prueba de resistencia | soak / endurance testing | prueba de resistencia (*soak* o *endurance*) | prueba de remojo | El CT-PT usa *endurance*. Provisional hasta aprobar 5.4. | 5.4 | — |
+| Prueba de escalabilidad, de volumen, de capacidad | scalability, volume, capacity testing | prueba de escalabilidad, de volumen, de capacidad | — | Solo se mencionan (`Alcance.md` §4). El volumen se trata como la dimensión de datos de la capacidad: el CT-PT no define una prueba de volumen aparte. Provisional hasta aprobar 5.4. | 5.4 | — |
+| Perfil de carga | load profile | perfil de carga | — | Forma de la carga en el tiempo (rampas, escalones, mesetas, ráfagas). Provisional hasta aprobar 5.4. | 5.4 | — |
+| Rampa de subida / de bajada | ramp-up / ramp-down | rampa de subida (*ramp-up*), rampa de bajada (*ramp-down*) | — | Provisional hasta aprobar 5.4. | 5.4 | — |
 | Prueba comparativa | benchmark | prueba comparativa (*benchmark*); después, prueba comparativa | — | Ejecución repetible que mide el rendimiento para comparar versiones o configuraciones. Provisional. | 5.4 | 02, 03 |
 | *Microbenchmark* | microbenchmark | *microbenchmark* | — | Excluido como tema (`Alcance.md` §4); solo se menciona. | — | 03, 04 |
 
