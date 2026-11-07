@@ -106,3 +106,5 @@ Investigación/
     ├── 03 Borrador.md
     └── 04 Auditoría.md
 ```
+
+**Nombre de las carpetas de sección:** `<NN> <Nombre>`, donde `NN` es el número de la sección en el documento, según la estructura del `Enunciado.md`: `02 Introducción`, `03 Planteamiento del problema`, `04 Metodología`, `05 Marco teórico`, `06 Propuesta de taller práctico` y `07 Conclusiones`. Así coincide con la numeración de los subtítulos de los borradores (3.1, 4.1…). Las secciones que se planifican por subsección usan el número de la subsección del documento: por ejemplo, `05.1 Aseguramiento de la calidad en la fase de implementación`.
