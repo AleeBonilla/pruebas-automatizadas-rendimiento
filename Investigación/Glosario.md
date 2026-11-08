@@ -82,6 +82,7 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 | Criterio de aceptación | acceptance criterion | criterio de aceptación | — | Provisional hasta aprobar 5.6. | 5.6, 5.7 | 03 |
 | Indicador de nivel de servicio (SLI) | service level indicator | indicador de nivel de servicio (SLI); después, SLI | — | Medida cuantitativa de un aspecto del nivel de servicio (Jones et al., 2016). Provisional hasta aprobar 5.7. | 5.7 | — |
 | Objetivo de nivel de servicio (SLO) | service level objective | objetivo de nivel de servicio (SLO); después, SLO | — | Provisional hasta aprobar 5.7. | 5.7 | — |
+| Acuerdo de nivel de servicio (SLA) | service level agreement | acuerdo de nivel de servicio (SLA); después, SLA | — | Agregado por el redactor. | — | 05 |
 | Umbral | threshold | umbral | — | Valor contra el que se compara una métrica para aprobar o rechazar. Provisional hasta aprobar 5.7. | 5.7 | — |
 | Prueba de humo de rendimiento | performance smoke test, guard test | prueba de humo de rendimiento | prueba de guarda | Prueba breve en la etapa de *commit* que vigila puntos críticos conocidos. Provisional hasta aprobar 5.7. | 5.7 | — |
 | Detección de puntos de cambio | change point detection | detección de puntos de cambio | — | Provisional hasta aprobar 5.7. | 5.7 | — |
