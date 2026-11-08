@@ -2,6 +2,8 @@
 
 Amazon Web Services. (s. f.). *Cost optimization: Definition*. En *AWS Well-Architected Framework*. Recuperado el 6 de noviembre de 2026, de https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-def.html
 
+Apache Software Foundation. (2024). *Apache JMeter* (Versión 5.6.3) [Software]. https://jmeter.apache.org/
+
 Bezemer, C.-P., Eismann, S., Ferme, V., Grohmann, J., Heinrich, R., Jamshidi, P., Shang, W., van Hoorn, A., Villavicencio, M., Walter, J., & Willnecker, F. (2019). How is performance addressed in DevOps? A survey on industrial practices. En *Proceedings of the 2019 ACM/SPEC International Conference on Performance Engineering (ICPE '19)* (pp. 45–50). ACM. https://doi.org/10.1145/3297663.3309672
 
 Bondi, A. B., & Xiao, L. (2023). Early progress on enhancing existing software engineering courses to cultivate performance awareness. En *Companion of the 2023 ACM/SPEC International Conference on Performance Engineering (ICPE '23 Companion)* (pp. 345–349). ACM. https://doi.org/10.1145/3578245.3584352
@@ -13,6 +15,14 @@ Daly, D., Brown, W., Ingo, H., O'Leary, J., & Bradford, D. (2020). The use of ch
 Friedrich, S., Wingerath, W., & Ritter, N. (2017). Coordinated omission in NoSQL database benchmarking. En B. Mitschang et al. (Eds.), *Datenbanksysteme für Business, Technologie und Web (BTW 2017) – Workshopband* (pp. 215–226). Gesellschaft für Informatik. https://dl.gi.de/items/780bef9a-d6df-4776-80e3-e85ae0158e63
 
 Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus areas in software testing. *IEEE Software, 34*(5), 38–45. https://doi.org/10.1109/MS.2017.3641116
+
+Gatling Corp. (2026). *Gatling* (Versión 3.16.0) [Software]. https://docs.gatling.io/
+
+Gatling Corp. (s. f.). *Gatling pricing*. Recuperado el 7 de noviembre de 2026, de https://gatling.io/pricing
+
+Grafana Labs. (2026). *Grafana k6* (Versión 2.3.0) [Software]. https://grafana.com/docs/k6/latest/
+
+Grafana Labs. (s. f.). *Pricing*. Recuperado el 7 de noviembre de 2026, de https://grafana.com/pricing/
 
 Humble, J., & Farley, D. (2010). *Continuous delivery: Reliable software releases through build, test, and deployment automation*. Addison-Wesley.
 
@@ -30,9 +40,17 @@ Lazowska, E. D., Zahorjan, J., Graham, G. S., & Sevcik, K. C. (1984). *Quantitat
 
 Leitner, P., & Bezemer, C.-P. (2017). An exploratory study of the state of practice of performance testing in Java-based open source projects. En *Proceedings of the 8th ACM/SPEC International Conference on Performance Engineering (ICPE '17)* (pp. 373–384). ACM. https://doi.org/10.1145/3030207.3030213
 
+Locust. (2026). *Locust* (Versión 2.47.0) [Software]. https://docs.locust.io/en/stable/
+
 Microsoft. (2022, 21 de julio). *Shift right to test in production*. Microsoft Learn. Recuperado el 7 de noviembre de 2026, de https://learn.microsoft.com/en-us/devops/deliver/shift-right-test-production
 
 Nielsen, J. (1993, 1 de enero). *Response times: The 3 important limits*. Nielsen Norman Group. https://www.nngroup.com/articles/response-times-3-important-limits/
+
+OpenText. (2026). *OpenText Professional Performance Engineering* (Versión 26.3) [Software]. https://admhelp.microfocus.com/lr/en/latest/help/WebHelp/Content/WelcomeContent/c_Welcome.htm
+
+Perforce Software. (s. f.-a). *BlazeMeter documentation*. Recuperado el 7 de noviembre de 2026, de https://help.blazemeter.com/
+
+Perforce Software. (s. f.-b). *BlazeMeter pricing*. Recuperado el 7 de noviembre de 2026, de https://www.blazemeter.com/pricing
 
 Schroeder, B., Wierman, A., & Harchol-Balter, M. (2006). Open versus closed: A cautionary tale. En *Proceedings of the 3rd Symposium on Networked Systems Design and Implementation (NSDI '06)* (pp. 239–252). USENIX Association. https://www.usenix.org/conference/nsdi-06/open-versus-closed-cautionary-tale
 
