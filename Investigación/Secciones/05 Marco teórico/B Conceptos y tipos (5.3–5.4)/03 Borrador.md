@@ -1,15 +1,15 @@
 # Marco teórico — 5.3 y 5.4
 
-<!-- Borrador v3 | Plan v3 | Evidencia v2 | 2026-11-07 -->
-<!-- v3: corrige el hallazgo bloqueante 1 y aplica las sugerencias 2 y 3 de la auditoría, ronda 2. v2: aplica las sugerencias 1–4 de la auditoría, ronda 1. -->
+<!-- Borrador v4 | Plan v3 | Evidencia v3 | 2026-11-07 -->
+<!-- v4: define la tasa de error con Jones et al. (2016), fuente ya incluida en las referencias por el grupo C (E31). v3: corrige el hallazgo bloqueante 1 y aplica las sugerencias 2 y 3 de la auditoría, ronda 2. v2: aplica las sugerencias 1–4 de la auditoría, ronda 1. -->
 
 ## 5.3 Conceptos y métricas fundamentales
 
 <!-- B1. Métricas básicas -->
 
-Una prueba de rendimiento observa tres magnitudes. El tiempo de respuesta es lo que espera el usuario; el *throughput*, las transacciones que el sistema procesa por unidad de tiempo, y la utilización de recursos, lo que consume para lograrlo. En general, el primero preocupa al usuario; el segundo, al negocio, y la tercera, al sistema. A ellas se suma la tasa de error. Una transacción fallida es la que no se completó o no se ejecutó, y puede falsear el *throughput*, porque dura mucho menos que una completada (ISTQB, 2018) <!-- E1, E2, E3 -->. Aquí, «latencia» designa solo la latencia de red; lo que mide el cliente es tiempo de respuesta.
+Una prueba de rendimiento observa tres magnitudes. El tiempo de respuesta es lo que espera el usuario; el *throughput*, las transacciones procesadas por unidad de tiempo, y la utilización de recursos, lo que el sistema consume. En general, el primero preocupa al usuario; el segundo, al negocio, y la tercera, al sistema. Una transacción fallida, la que no se completó, dura mucho menos que una completada y puede falsear el *throughput* (ISTQB, 2018) <!-- E1, E2, E3 -->. Por eso se mide aparte la tasa de error, que suele expresarse como fracción de las solicitudes recibidas (Jones et al., 2016) <!-- E31 -->. Aquí, «latencia» designa solo la de red; lo que mide el cliente es tiempo de respuesta.
 
-La carga la generan usuarios virtuales, instancias que repiten las acciones previstas para un tipo de usuario. Su número modela la concurrencia, cuántos usuarios actúan en paralelo, y el tiempo de espera entre acciones (*think time*) imita el ritmo de una persona real. Por eso el número de usuarios no mide bien la carga: falta saber qué hace cada uno y con qué intensidad (ISTQB, 2018) <!-- E4, E5, E6, E7 -->.
+La carga la generan usuarios virtuales, instancias que repiten las acciones de un tipo de usuario. Su número modela la concurrencia, cuántos usuarios actúan en paralelo, y el tiempo de espera entre acciones (*think time*) imita el ritmo humano. Pero el número de usuarios no mide bien la carga: falta saber qué hace cada uno y con qué intensidad (ISTQB, 2018) <!-- E4, E5, E6, E7 -->.
 
 <!-- B2. Percentiles frente al promedio -->
 

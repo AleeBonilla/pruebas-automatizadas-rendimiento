@@ -40,7 +40,7 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 | Tiempo de respuesta | response time | tiempo de respuesta | latencia, para lo que mide el cliente | Tiempo que el cliente espera la respuesta a una solicitud. Cuando una fuente dice «latency» en ese sentido, se traduce como tiempo de respuesta. Provisional hasta aprobar 5.3. | 5.3 | 02 |
 | Latencia | latency | latencia, solo para la latencia de red | latencia como sinónimo de tiempo de respuesta | Decisión de terminología del trabajo, siguiendo el uso del CT-PT («network latency»). Provisional hasta aprobar 5.3. | 5.3 | — |
 | *Throughput* | throughput | *throughput* | rendimiento (choca con *performance*), caudal | Cantidad de trabajo completado por unidad de tiempo. Provisional hasta aprobar 5.3. | 5.3 | 02 |
-| Tasa de error | error rate | tasa de error | — | Provisional hasta aprobar 5.3. | 5.3 | — |
+| Tasa de error | error rate | tasa de error | — | Fracción de las solicitudes que fallan sobre el total recibido (Jones et al., 2016). Provisional hasta aprobar 5.3. | 5.3 | — |
 | Percentil | percentile | percentil 95 (p95); después, p95 | — | Provisional hasta aprobar 5.3. | 5.3 | — |
 | Promedio | average, mean | promedio | media | Se usa una sola forma para no mezclar términos. | — | — |
 | Concurrencia | concurrency | concurrencia | — | Provisional hasta aprobar 5.3. | 5.3 | — |

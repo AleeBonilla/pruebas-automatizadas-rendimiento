@@ -1,7 +1,9 @@
 # Evidencia — Marco teórico, grupo B: Conceptos y tipos (5.3–5.4)
 
-**Plan:** versión 3 | **Versión:** 2 | **Fecha:** 2026-11-07
+**Plan:** versión 3 | **Versión:** 3 | **Fecha:** 2026-11-07
 
+> **Cambios en la versión 3:** se agrega E31 (definición de la tasa de error), de una fuente que el plan no preveía y que ya está en `Referencias.md`.
+>
 > **Cambios en la versión 2:** según la auditoría, ronda 1: E3 incluye qué indica una transacción fallida y E5, la definición de concurrencia.
 >
 > Páginas de F1 según la paginación impresa del syllabus («Page n of 59»). Páginas de F2 según la paginación impresa del capítulo 3. Páginas de F4 según la copia de los autores (1–12); en la versión publicada equivalen a 214 + n. En F2, la transcripción corrige errores de OCR del PDF (por ejemplo, «2» por «Z» y «>» por «)»).
@@ -38,3 +40,4 @@
 | E28 | La prueba de escalabilidad determina si el sistema puede crecer, con más usuarios o más datos almacenados, sin violar los requisitos de rendimiento vigentes. | «The objective of these tests is to determine the system's ability to grow (e.g., with more users, larger amounts of data stored) without violating the currently specified performance requirements or failing.» | F1 | §1.2, apartado «Scalability Testing», p. 12 |
 | E29 | La prueba de capacidad determina cuántos usuarios o transacciones soporta el sistema sin dejar de cumplir sus objetivos, que pueden expresarse también en volúmenes de datos. | «Capacity testing determines how many users and/or transactions a given system will support and still meet the stated performance objectives. These objectives may also be stated with regard to the data volumes resulting from the transactions.» | F1 | §1.2, apartado «Capacity Testing», p. 13 |
 | E30 | El CT-PT no define una prueba de volumen aparte: sus tipos son rendimiento, carga, estrés, escalabilidad, picos, resistencia, concurrencia y capacidad. | Encabezados de los apartados de §1.2: «Performance Testing» · «Load Testing» · «Stress Testing» · «Scalability Testing» · «Spike Testing» · «Endurance Testing» · «Concurrency Testing» · «Capacity Testing» | F1 | §1.2, pp. 12–13 |
+| E31 | La tasa de error suele expresarse como fracción del total de solicitudes recibidas. | «Other common SLIs include the error rate, often expressed as a fraction of all requests received, and system throughput, typically measured in requests per second.» | Nueva: Jones, C., Wilkes, J., Murphy, N., & Smith, C. (2016). Service level objectives. https://sre.google/sre-book/service-level-objectives/ | Apartado «Indicators» |

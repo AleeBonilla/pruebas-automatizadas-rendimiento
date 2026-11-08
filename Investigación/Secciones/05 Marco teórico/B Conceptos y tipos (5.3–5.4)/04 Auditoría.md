@@ -1,5 +1,47 @@
 # Auditoría — 05 Marco teórico / B Conceptos y tipos (5.3–5.4)
 
+## Ronda 4 — 2026-11-07 — Borrador v4 · Evidencia v3
+
+**Veredicto:** Aprobada | **Citas revisadas:** E1–E7, por la condensación de B1, y E31, incorporada en la evidencia v3. Trazabilidad y formato comprobados en E1–E31; las citas sin cambios conservan el cotejo favorable de las rondas anteriores.
+
+Se revisaron el plan v3 aprobado, el borrador v4, la evidencia v3, la ronda 3 y sus antecedentes, la guía de redacción, el glosario, las referencias y los criterios de fuentes de `Alcance.md` §5.3. Los cambios de contenido se limitan a B1 y a la incorporación de E31: B2–B6, la Figura 2, la Tabla 2 y las filas E1–E30 permanecen iguales a las versiones auditadas en la ronda 3. Resultado: **ningún hallazgo bloqueante ni sugerencia nueva**.
+
+**Seguimiento de la ronda 3:**
+
+La ronda anterior no dejó hallazgos abiertos. La recomendación opcional de explicar la tasa de error, procedente de la ronda 1, queda atendida con E31: B1 indica ahora que suele expresarse como fracción de las solicitudes recibidas. La definición tiene su propia fuente e ID y no se atribuye a E3. Se mantiene resuelto el bloqueante de la ronda 2; tampoco se reintroducen los problemas de duplicación y de afirmaciones universales de B5, que no cambió.
+
+**Cotejo de los pasajes afectados:**
+
+| Fuente y filas | Ubicación cotejada | Resultado |
+|---|---|---|
+| [ISTQB (2018)](https://www.istqb.org/wp-content/uploads/2024/11/ISTQB-CT-PT_Syllabus_v1.0_2018.pdf): E1–E3 | §4.1.2, p. 34; §4.2.5, p. 44; §4.4, p. 52 impresas | Las transcripciones conservan literalidad y ubicación. La condensación mantiene la asociación de métricas y preocupaciones, el significado del *throughput* y el efecto de las transacciones fallidas. «La que no se completó» resume fielmente E3; no añade una tasa ni un denominador bajo esa cita. |
+| ISTQB (2018): E4–E7 | §4.2.4, p. 42; §4.2.5, p. 44; §4.2.2, p. 39 impresas | Transcripciones conformes. Las reformulaciones conservan el significado de usuario virtual, concurrencia y *think time*, y la necesidad de conocer las acciones y su intensidad para interpretar el número de usuarios como carga. |
+| [Jones et al. (2016)](https://sre.google/sre-book/service-level-objectives/): E31 | Cap. 4, «Service Level Objectives», apartado «Indicators», segundo párrafo | La transcripción aparece literalmente en el cuerpo, no en un resumen. La fila y B1 conservan el denominador de solicitudes recibidas y el carácter habitual, no exclusivo, de esa expresión. «Por eso se mide aparte» conecta ambas fuentes como razonamiento del autor; no les atribuye una regla adicional. |
+
+**Fuente marcada «Nueva» — criterio 5:** Jones et al. no estaba prevista en el plan de B, pero ya está incorporada en `Referencias.md` por el grupo C. Se verificó igualmente su admisibilidad: es documentación técnica oficial de Google SRE, en inglés, con autoría identificada, publicada en acceso abierto legal y dentro del intervalo 2010–2026. Se admite por ese carácter documental, sin clasificarla como artículo arbitrado. El [capítulo original](https://sre.google/sre-book/service-level-objectives/) identifica a Jones, Wilkes y Murphy con Smith; el [prefacio](https://sre.google/sre-book/preface/) confirma los editores, O'Reilly y la edición de 2016. El aviso de copyright de 2017 del sitio no cambia el año de esa edición. La entrada bibliográfica y la cita «Jones et al., 2016» son coherentes con APA 7. Su ausencia del plan no constituye por sí sola un bloqueo: cumple los requisitos de fuente nueva de la skill y respalda un concepto ya previsto en B1.
+
+**Controles generales:** los treinta y un IDs existen y se usan, incluidas las notas de tabla y figura. La incorporación de E31 no altera las correspondencias autor–año anteriores. La condensación conserva la función argumental de B1 y la concurrencia explícita; la tasa de error concuerda con el glosario. No se detectaron datos externos nuevos sin respaldo, excesos de atribución ni metacomentarios visibles. La densidad de citas se mantiene dentro del modo completo. No se volvieron a cotejar las transcripciones ajenas a B1 ya aprobadas y sin cambios; sigue vigente el cierre bibliográfico de F4 de la ronda 2.
+
+La Figura 2 y la Tabla 2 conservan número, título, mención previa y origen trazable. La descripción oculta de la figura sigue el formato previsto para el borrador; la nota de la tabla distingue el contenido de las fuentes de la síntesis propia.
+
+**Extensión:**
+
+| Bloque | Plan v3 | Borrador v4 |
+|---|---|---|
+| B1. Métricas básicas | 160; margen 144–176 | 175; +9,4 % — cumple |
+| B2. Percentiles frente al promedio | 110; margen 99–121 | 104; −5,5 % — cumple |
+| B3. Ley de Little y modelos de carga | 170; margen 153–187 | 186; +9,4 % — cumple |
+| B4. *Coordinated omission* | 110; margen 99–121 | 118; +7,3 % — cumple |
+| B5. Tipos principales | 200; margen 180–220 | 205; +2,5 % — cumple |
+| B6. Variantes | 100; margen 90–110 | 108; +8,0 % — cumple |
+| **5.3, B1–B4** | **550; margen 495–605** | **583; +6,0 % — cumple** |
+| **5.4, B5–B6** | **300; margen 270–330** | **313; +4,3 % — cumple** |
+| **Total** | **850; margen 765–935** | **896; +5,4 % — cumple** |
+
+Conteo por unidades separadas por espacios de la prosa visible, incluidas las citas autor–año. Se excluyen títulos, subtítulos, comentarios HTML, la tabla y los títulos y notas de tabla y figura, con el mismo criterio de las rondas anteriores. La adición de E31 y los recortes se compensan: B1 conserva las 175 palabras de v3 y todos los bloques cumplen el margen de ±10 %.
+
+**Espacio de tabla y figura:** se mantienen las reservas de 0,4 páginas para la Figura 2 y 0,6 para la Tabla 2. Ambos elementos permanecen sin cambios. Sin maquetación no puede confirmarse que quepan ni declararse un exceso; la comprobación de espacio y legibilidad queda para la integración y no afecta este veredicto.
+
 ## Ronda 3 — 2026-11-07 — Borrador v3 · Evidencia v2
 
 **Veredicto:** Aprobada | **Citas revisadas:** E3, E19 y E20, por los cambios en B1 y B5. Trazabilidad y formato comprobados en E1–E30; las demás citas conservan el cotejo favorable de las rondas anteriores.
