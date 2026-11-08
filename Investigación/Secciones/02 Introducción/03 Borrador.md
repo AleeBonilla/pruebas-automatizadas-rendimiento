@@ -1,7 +1,7 @@
 # Introducción
 
-<!-- Borrador v6 | Plan v8 | Evidencia v6 | 2026-11-07 -->
-<!-- v6: aplica la sugerencia 1 de la auditoría, ronda 6 (división de una oración, sin cambiar la cita; no requiere nueva auditoría). v5: condensación al nuevo presupuesto (700 palabras), según el plan v8. Se conservan las ocho citas y todas sus fuentes. v4: corrige los hallazgos 1–5 de la auditoría, ronda 4. v3: reescrito según la Guía de redacción. Los bloques no llevan subtítulos en el documento; se marcan con comentarios. -->
+<!-- Borrador v7 | Plan v8 | Evidencia v6 | 2026-11-07 -->
+<!-- v7: la cita de AWS pasa de «s. f.-a» a «s. f.», porque se eliminó de las referencias la otra entrada de AWS sin fecha; no cambia el texto citado. v6: aplica la sugerencia 1 de la auditoría, ronda 6 (división de una oración, sin cambiar la cita; no requiere nueva auditoría). v5: condensación al nuevo presupuesto (700 palabras), según el plan v8. Se conservan las ocho citas y todas sus fuentes. v4: corrige los hallazgos 1–5 de la auditoría, ronda 4. v3: reescrito según la Guía de redacción. Los bloques no llevan subtítulos en el documento; se marcan con comentarios. -->
 
 <!-- B1. El rendimiento como atributo de calidad -->
 
@@ -11,7 +11,7 @@ Descuidarlo tiene costos en varios frentes. Para el usuario, Nielsen (1993) <!--
 
 Para la organización, las fallas de los sistemas de gran escala tienden a deberse a su incapacidad de escalar ante la demanda, más que a defectos funcionales, y con frecuencia son catastróficas (Jiang & Hassan, 2015) <!-- E10, E11 -->. HealthCare.gov, el portal de seguros de salud del Gobierno estadounidense, se puso en operación sin la verificación requerida de sus requisitos de desempeño y, cuando abrió la inscripción el 1 de octubre de 2013, muchos usuarios no pudieron usarlo por fallas, errores y tiempos de respuesta lentos (U.S. Government Accountability Office [GAO], 2014) <!-- E12, E14 -->.
 
-En la infraestructura, por último, no saber cuánta carga soporta un sistema invita a aprovisionar recursos de más «por si acaso»; Amazon Web Services (AWS, s. f.-a) <!-- E17 --> advierte que hacerlo, en lugar de medir para encontrar el despliegue de menor costo, puede conducir a despliegues sobreaprovisionados.
+En la infraestructura, por último, no saber cuánta carga soporta un sistema invita a aprovisionar recursos de más «por si acaso»; Amazon Web Services (AWS, s. f.) <!-- E17 --> advierte que hacerlo, en lugar de medir para encontrar el despliegue de menor costo, puede conducir a despliegues sobreaprovisionados.
 
 <!-- B2. Ubicación en el ciclo de vida -->
 

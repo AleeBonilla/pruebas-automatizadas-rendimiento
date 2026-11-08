@@ -69,12 +69,20 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 
 | Término | Inglés | Forma en el texto | Evitar | Definición de trabajo | Define | Usado en |
 |---|---|---|---|---|---|---|
-| Sistema bajo prueba | system under test (SUT) | sistema bajo prueba | SUT sin definir | Provisional. | 5.5 | — |
-| Entorno de prueba | test environment | entorno de prueba | ambiente de pruebas | Provisional. | 5.5 | 03 |
-| Generador de carga | load generator / load driver | generador de carga | inyector, driver | Provisional. | 5.5, 5.8 | 03 |
-| Línea base | baseline | línea base | *baseline* | Provisional. | 5.6 | — |
-| Regresión de rendimiento | performance regression | regresión de rendimiento | degradación (se acepta en prosa como sinónimo) | Cambio que empeora el rendimiento respecto de una versión anterior. Provisional. | 5.7 | 02, 03 |
-| Aserción de rendimiento | performance assertion | aserción de rendimiento | — | Provisional. | 5.7 | 03 |
-| Criterio de aceptación | acceptance criterion | criterio de aceptación | — | Provisional. | 5.6, 5.7 | 03 |
-| Objetivo de nivel de servicio (SLO) | service level objective | objetivo de nivel de servicio (SLO); después, SLO | — | Provisional. | 5.7 | — |
+| Sistema bajo prueba | system under test (SUT) | sistema bajo prueba | SUT sin definir | Provisional hasta aprobar 5.5. | 5.5 | — |
+| Entorno de prueba | test environment | entorno de prueba | ambiente de pruebas | Provisional hasta aprobar 5.5. | 5.5 | 03 |
+| Generador de carga | load generator / load driver | generador de carga | inyector, driver | Provisional hasta aprobar 5.5. | 5.5, 5.8 | 03 |
+| Perfil operacional | operational profile | perfil operacional | — | Patrón de interacción de un tipo de usuario o componente con el sistema; varios se combinan en un perfil de carga. Provisional hasta aprobar 5.5. | 5.5 | — |
+| Línea base | baseline | línea base | *baseline* | Provisional hasta aprobar 5.6. | 5.6 | — |
+| Calentamiento | warm-up | período de calentamiento (*warm-up*) la primera vez; después, calentamiento | — | Período inicial que no se mide, mientras el sistema estabiliza su comportamiento. Provisional hasta aprobar 5.6. | 5.6 | — |
+| Ruido | noise | ruido | — | Variación entre ejecuciones que no se debe al cambio evaluado. Provisional hasta aprobar 5.6. | 5.6 | 03 |
+| Antipatrón | antipattern | antipatrón | — | Provisional hasta aprobar 5.6. | 5.6 | — |
+| Regresión de rendimiento | performance regression | regresión de rendimiento | degradación (se acepta en prosa como sinónimo) | Cambio que empeora el rendimiento respecto de una versión anterior. Provisional hasta aprobar 5.7. | 5.7 | 02, 03 |
+| Aserción de rendimiento | performance assertion | aserción de rendimiento | — | Provisional hasta aprobar 5.7. | 5.7 | 03 |
+| Criterio de aceptación | acceptance criterion | criterio de aceptación | — | Provisional hasta aprobar 5.6. | 5.6, 5.7 | 03 |
+| Indicador de nivel de servicio (SLI) | service level indicator | indicador de nivel de servicio (SLI); después, SLI | — | Medida cuantitativa de un aspecto del nivel de servicio (Jones et al., 2016). Provisional hasta aprobar 5.7. | 5.7 | — |
+| Objetivo de nivel de servicio (SLO) | service level objective | objetivo de nivel de servicio (SLO); después, SLO | — | Provisional hasta aprobar 5.7. | 5.7 | — |
+| Umbral | threshold | umbral | — | Valor contra el que se compara una métrica para aprobar o rechazar. Provisional hasta aprobar 5.7. | 5.7 | — |
+| Prueba de humo de rendimiento | performance smoke test, guard test | prueba de humo de rendimiento | prueba de guarda | Prueba breve en la etapa de *commit* que vigila puntos críticos conocidos. Provisional hasta aprobar 5.7. | 5.7 | — |
+| Detección de puntos de cambio | change point detection | detección de puntos de cambio | — | Provisional hasta aprobar 5.7. | 5.7 | — |
 | Observabilidad / APM | observability / application performance monitoring | observabilidad; monitoreo del rendimiento de aplicaciones (APM) | — | Solo se mencionan (`Alcance.md` §4). | 5.7 | — |

@@ -1,8 +1,6 @@
 # Referencias
 
-Amazon Web Services. (s. f.-a). *Cost optimization: Definition*. En *AWS Well-Architected Framework*. Recuperado el 6 de noviembre de 2026, de https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-def.html
-
-Amazon Web Services. (s. f.-b). *Performance efficiency*. En *AWS Well-Architected Framework*. Recuperado el 6 de noviembre de 2026, de https://docs.aws.amazon.com/wellarchitected/latest/framework/performance-efficiency.html
+Amazon Web Services. (s. f.). *Cost optimization: Definition*. En *AWS Well-Architected Framework*. Recuperado el 6 de noviembre de 2026, de https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-def.html
 
 Bezemer, C.-P., Eismann, S., Ferme, V., Grohmann, J., Heinrich, R., Jamshidi, P., Shang, W., van Hoorn, A., Villavicencio, M., Walter, J., & Willnecker, F. (2019). How is performance addressed in DevOps? A survey on industrial practices. En *Proceedings of the 2019 ACM/SPEC International Conference on Performance Engineering (ICPE '19)* (pp. 45–50). ACM. https://doi.org/10.1145/3297663.3309672
 
@@ -25,6 +23,8 @@ International Software Testing Qualifications Board. (2018). *Certified Tester F
 International Software Testing Qualifications Board. (2024). *Certified Tester Foundation Level syllabus* (Versión 4.0.1). https://www.istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf
 
 Jiang, Z. M., & Hassan, A. E. (2015). A survey on load testing of large-scale software systems. *IEEE Transactions on Software Engineering, 41*(11), 1091–1118. https://doi.org/10.1109/TSE.2015.2445340
+
+Jones, C., Wilkes, J., Murphy, N., & Smith, C. (2016). Service level objectives. En B. Beyer, C. Jones, J. Petoff, & N. R. Murphy (Eds.), *Site reliability engineering: How Google runs production systems* (cap. 4). O'Reilly Media. https://sre.google/sre-book/service-level-objectives/
 
 Lazowska, E. D., Zahorjan, J., Graham, G. S., & Sevcik, K. C. (1984). *Quantitative system performance: Computer system analysis using queueing network models*. Prentice-Hall. https://homes.cs.washington.edu/~lazowska/qsp/
 
