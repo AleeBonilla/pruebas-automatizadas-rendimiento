@@ -35,6 +35,7 @@ Reglas de estilo del documento. Las aplica el redactor al escribir y las verific
 ## 5. Sin metacomentarios
 
 - El texto no habla del proceso con el que se produjo: uso de IA, skills, auditorías ni validación. Eso solo se trata en la Metodología y en los anexos, donde es el tema.
+- Ni siquiera allí se nombran los artefactos ni los pasos del flujo de trabajo (plan, tabla de evidencia, bloque, ronda, skill) antes de que el texto los presente, ni se usa su jerga. Lo que se hizo se describe en términos que el lector entienda sin conocer el flujo. Los detalles operativos, como cadenas de búsqueda, versiones o registros, van a los anexos.
 - No se anuncia lo que hará el texto («en este párrafo se expone…»). La única excepción es la descripción de la estructura del documento en la introducción.
 
 ## 6. Forma

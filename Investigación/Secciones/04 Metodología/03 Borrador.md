@@ -1,7 +1,7 @@
 # Metodología
 
-<!-- Borrador v4 | Plan v3 | Evidencia v2 | 2026-11-07 -->
-<!-- v4: aplica las sugerencias 1 y 2 de la auditoría, ronda 2 (prosa sin citas; no requiere nueva auditoría). v3: condensación al nuevo presupuesto (700 palabras), según el plan v3. Se conservan las dos fuentes; deja de citarse E5. v2: aplica las sugerencias 1 y 2 de la auditoría, ronda 1. -->
+<!-- Borrador v5 | Plan v3 | Evidencia v2 | 2026-11-07 -->
+<!-- v5: reescribe el segundo párrafo de 4.2 a pedido del usuario, sin referencias internas al flujo de trabajo (prosa sin citas). Si en el Marco teórico se usan bases bibliográficas además del buscador web, hay que nombrarlas en ese párrafo. v4: aplica las sugerencias 1 y 2 de la auditoría, ronda 2 (prosa sin citas; no requiere nueva auditoría). v3: condensación al nuevo presupuesto (700 palabras), según el plan v3. Se conservan las dos fuentes; deja de citarse E5. v2: aplica las sugerencias 1 y 2 de la auditoría, ronda 1. -->
 <!-- Las cifras de 4.3 tienen fecha de corte 2026-11-07 y deben actualizarse al terminar la Fase 1. -->
 
 ## 4.1 Enfoque metodológico
@@ -14,7 +14,7 @@ La revisión es semisistemática. Snyder (2019) <!-- E1, E2, E3 --> describe est
 
 Las fuentes se eligieron por su cercanía al origen de cada afirmación. Se prefirieron, en este orden, las normas y los syllabus del ISTQB; los artículos revisados por pares, sobre todo de ACM e IEEE, y la documentación oficial de las herramientas. Se incluyeron trabajos de 2010 a 2026, en inglés o en español, salvo algunos clásicos anteriores, y se excluyeron los blogs sin autoría identificable, el contenido comercial sin datos y los temas que el alcance deja fuera.
 
-Las consultas se dirigieron a las afirmaciones que el plan de cada sección formula como preguntas acotadas. En la Introducción y en el Planteamiento del problema, las consultas se hicieron en un buscador web y no se registraron; solo quedaron documentadas las fuentes verificadas y las descartadas, con su motivo. A partir del Marco teórico, cada consulta se registra en el plan de su sección con la fecha, el buscador o la base bibliográfica, la cadena exacta, los resultados revisados y las fuentes elegidas o descartadas; por ejemplo, `"coordinated omission" latency measurement load generator open-loop peer-reviewed paper`.
+Las búsquedas fueron dirigidas: cada una buscó respaldo para una afirmación concreta que la sección necesitaba, y se hicieron en un buscador web. A partir del Marco teórico, cada consulta se registró con su fecha, el buscador, la cadena de búsqueda y las fuentes elegidas o descartadas. Las consultas de la Introducción y del Planteamiento del problema no se registraron; de esas secciones solo consta qué fuentes se verificaron y cuáles se descartaron, con su motivo.
 
 Los datos bibliográficos se comprobaron en la página de publicación o en la propia copia consultada, y el DOI en Crossref cuando lo había; cada fuente se leyó en texto completo. Se usaron copias abiertas y legales, como las actas que publica SPEC, arXiv, copias de autor o repositorios institucionales, y las fuentes cerradas se consultaron en copias locales. La búsqueda no pretende ser exhaustiva: busca la fuente más directa para cada afirmación y deja constancia de por qué se eligió. El anexo A resume las consultas y las fuentes descartadas.
 
