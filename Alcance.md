@@ -105,7 +105,7 @@ Las páginas incluyen las tablas y figuras de cada subsección; las palabras son
 
 | Subsección | Páginas (palabras + tablas/figuras) | Contenido clave |
 |---|---|---|
-| 5.1 Aseguramiento de la calidad en la fase de implementación | 1.5 (350 palabras + Figura 1) | Ciclo de vida, modelo en V, CI/CD, *quality gates*, *shift-left* vs *shift-right* |
+| 5.1 Aseguramiento de la calidad en la fase de implementación | 1.5 (350 palabras + Figura 2) | Ciclo de vida, modelo en V, CI/CD, *quality gates*, *shift-left* vs *shift-right* |
 | 5.2 Eficiencia de desempeño en ISO/IEC 25010 | 1 (200 palabras + Tabla 1) | Comportamiento temporal, utilización de recursos, capacidad |
 | 5.3 Conceptos y métricas fundamentales | 2 (550 palabras + figura de modelos de carga abierto y cerrado) | Latencia vs. tiempo de respuesta, *throughput*, percentiles (por qué no el promedio), concurrencia, usuarios virtuales, *think time*, ley de Little, modelos de carga abiertos vs. cerrados, *coordinated omission* |
 | 5.4 Clasificación de las pruebas de rendimiento | 1.5 (300 palabras + tabla comparativa) | Carga, estrés, *spike*, *soak*; mención de escalabilidad, volumen y capacidad. Tabla comparativa: objetivo, perfil de carga, duración, qué detecta |
