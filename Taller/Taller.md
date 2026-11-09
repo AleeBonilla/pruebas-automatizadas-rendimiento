@@ -404,7 +404,7 @@ Las tareas siguen las fases de la sección 9 y se reparten en dos líneas de tra
 - **Persona 1, sistema bajo prueba:** entorno, datos, API, pruebas funcionales y observabilidad.
 - **Persona 2, carga y automatización:** Gatling, scripts, resultados, calibración en CI y workflows.
 
-Cada persona integra sus propios *pull requests*. Las convenciones de ramas y nombres están en [`CONTRIBUIR.md`](CONTRIBUIR.md).
+Cada persona sube sus cambios directamente a `main`, sin *pull requests*. El flujo y las convenciones de nombres están en [`CONTRIBUIR.md`](CONTRIBUIR.md).
 
 ### Acuerdos entre las dos líneas
 

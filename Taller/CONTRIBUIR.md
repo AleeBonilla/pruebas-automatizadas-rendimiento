@@ -1,22 +1,18 @@
 # Reglas de Git del taller
 
-Estas convenciones de nombres y ramas se aplican a los cambios en `Taller/` y `.github/`. El documento de investigación sigue su propio flujo.
+Estas convenciones se aplican a los cambios en `Taller/` y `.github/`. El documento de investigación sigue su propio flujo.
 
-## Ramas
+## Flujo de trabajo
 
-- Cada tarea de [`Taller.md`](Taller.md) §11 se trabaja en una rama propia, creada desde `main`:
+- Se trabaja directamente sobre `main`, sin ramas ni *pull requests*: cada persona confirma sus cambios y los sube con `git push`.
+- Antes de subir, `git pull --rebase` trae lo de la otra persona sin commits de *merge*. Si hay un conflicto, lo resuelve quien sube.
+- Nunca se reescribe la historia de `main` (`git push --force`, `git rebase` sobre commits ya subidos).
+- Cada persona toca sus propios archivos (`Taller.md` §11). Si un cambio toca los de la otra o los compartidos (`compose.yaml`, `config/` o los acuerdos de §11), se le avisa antes de subirlo.
+- La compuerta corre en cada *push* a `main`. Si queda en rojo, quien subió el cambio lo arregla o lo revierte con `git revert` antes de seguir.
+- Para probar algo que podría romper la compuerta, se puede usar una rama `prueba/<descripcion>` y correr la compuerta sobre ella con `gh workflow run compuerta.yml --ref prueba/<descripcion>`. Cuando funciona, se lleva a `main` y se borra la rama.
+- Las únicas ramas con *pull request* son `demo/regresion` y `demo/corregida`, porque la demostración de la compuerta las necesita (`Taller.md` §8). Esos *pull requests* no se integran.
 
-  ```text
-  <tipo>/<tarea>-<descripcion>
-  feat/t3-variantes-api · fix/t4-prueba-concurrencia · docs/t9-guia
-  ```
-
-  En minúsculas, con guiones y sin tildes ni ñ. Si el cambio no corresponde a una tarea, se omite el ID: `fix/healthcheck-postgres`.
-- Una tarea grande se puede repartir en varias ramas: `feat/t5-proyecto-gatling` y `build/t5-servicio-gatling`.
-- Los cambios entran a `main` por *pull request* con *squash merge*. Cada persona integra los suyos sin esperar aprobación. Si el cambio toca archivos de la otra persona o compartidos (`compose.yaml`, `config/` o los acuerdos de §11), se la menciona en la descripción.
-- `demo/regresion` y `demo/corregida` existen solo para los *pull requests* de demostración de la compuerta (`Taller.md` §8). Esos *pull requests* no se integran.
-
-## Commits y *pull requests*
+## Commits
 
 ```text
 <tipo>(<ámbito>): <descripción>
@@ -27,7 +23,7 @@ Tarea: T3
 ```
 
 - **Descripción:** en español, en infinitivo, con minúscula inicial, sin punto final y con un máximo de 72 caracteres. Ejemplo: `feat(api): agregar la variante corregida con UPDATE atómico`.
-- El título del *pull request* usa el mismo formato, porque el *squash* lo convierte en el commit de `main`.
+- La línea `Tarea:` se omite si el cambio no corresponde a una tarea.
 
 | Tipo       | Uso                                                                        |
 | ---------- | -------------------------------------------------------------------------- |
