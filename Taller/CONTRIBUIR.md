@@ -47,4 +47,4 @@ Tarea: T3
 ## Archivos
 
 - `resultados/`, `target/`, las cachés y los entornos virtuales no se versionan (ver `.gitignore`). Los perfiles `config/perfiles/*.env` sí, porque no contienen secretos.
-- `.gitattributes` fuerza LF en `*.sh` y `mvnw`. Con CRLF, esos scripts fallan en los contenedores y en el *runner* de Linux.
+- `.gitattributes` fuerza LF en `*.sh`, `mvnw` y los archivos que leen los contenedores (`*.py`, `*.sql`, `*.csv`, YAML, JSON, Dockerfile, etc.). Con CRLF, esos archivos fallan o cambian de contenido en los contenedores y en el *runner* de Linux. `*.ps1` y `*.cmd` van con CRLF.
