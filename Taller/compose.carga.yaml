@@ -1,0 +1,30 @@
+# Servicios de la línea de carga y automatización. Los scripts taller.ps1 y
+# taller.sh lo combinan con compose.yaml (sistema bajo prueba):
+#   docker compose -f compose.yaml -f compose.carga.yaml ...
+# Los dos servicios están en el perfil "carga": "up" no los levanta y
+# "run" los ejecuta bajo demanda.
+
+services:
+  gatling:
+    build: ./rendimiento
+    image: taller-gatling:local
+    profiles: ["carga"]
+    # Más recursos que la API, para que el generador no sea el cuello de botella (Taller.md §5.2).
+    cpus: 2
+    mem_limit: 2g
+    volumes:
+      # Se monta la carpeta, no el archivo: si productos.csv faltara, Docker
+      # crearía una carpeta con ese nombre en lugar de fallar.
+      - ./base-datos:/datos:ro
+      - ./resultados:/resultados
+
+  herramientas:
+    image: python:3.14.10-slim-trixie
+    profiles: ["carga"]
+    # Solo lee y escribe archivos de resultados: no necesita red.
+    network_mode: none
+    working_dir: /herramientas
+    entrypoint: ["python", "-I"]
+    volumes:
+      - ./herramientas:/herramientas:ro
+      - ./resultados:/resultados

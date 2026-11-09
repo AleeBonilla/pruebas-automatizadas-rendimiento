@@ -367,7 +367,8 @@ Taller/
 ├── observabilidad/       Prometheus y paneles de Grafana
 ├── config/               perfiles (local.env, ci.env) y reglas de calibración
 ├── herramientas/         extracción y agregación de resultados
-├── compose.yaml
+├── compose.yaml          sistema bajo prueba y observabilidad
+├── compose.carga.yaml    Gatling y herramientas
 ├── taller.ps1 · taller.sh
 ├── docs/                 GUIA.md, PLAN-DE-PRUEBAS.md, INTERPRETACION.md
 └── resultados/           generados por cada ejecución, fuera del control de versiones
@@ -412,8 +413,10 @@ Estos acuerdos se fijan en T1, así ninguna línea espera a que la otra termine 
 | Acuerdo | Valor |
 |---|---|
 | Contrato de la API | El de 4.1 |
-| Servicios de Compose | `api` en el puerto 8000, `postgres`, `gatling`, `prometheus` y `grafana` |
-| Selección de variante | Variable de entorno `VARIANTE` (`regresion`, `corregida` o `sana`) |
+| Servicios de Compose | `api` en el puerto 8000, `postgres`, `prometheus` y `grafana` en `compose.yaml` (persona 1); `gatling` y `herramientas`, con el perfil `carga`, en `compose.carga.yaml` (persona 2). Los scripts usan los dos archivos |
+| Selección de variante | Variable de entorno `VARIANTE` (`regresion`, `corregida` o `sana`). La variante activa está en `config/variante.env` y `compose.yaml` la recibe como `${VARIANTE:-corregida}` |
+| Salud de la API | *Healthcheck* de `api` sobre `/salud`. Los scripts exigen el estado `healthy` antes de medir |
+| Restablecimiento | `base-datos/restablecer.sql`, que los scripts ejecutan con `psql` dentro de `postgres`. Requiere `base-datos/` montada en `/base-datos` y `POSTGRES_USER` y `POSTGRES_DB` definidas |
 | Identificadores para Gatling | `base-datos/productos.csv`, con encabezado `id` y valores de 1 a 10 000 |
 | Pruebas funcionales | `docker compose run --rm api pytest` |
 | Perfiles | Claves de 6.2 en `config/perfiles/<perfil>.env` |
