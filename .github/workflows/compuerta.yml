@@ -1,0 +1,105 @@
+# Compuerta de rendimiento (Taller.md §8): pruebas funcionales y carga breve
+# sobre la variante activa (Taller/config/variante.env) con el perfil ci.
+# Falla si la prueba de carga rechaza la variante o si hay un error de
+# infraestructura; el resumen del job distingue ambas causas.
+name: Compuerta
+
+on:
+  push:
+    branches: [main]
+    paths: ["Taller/**", ".github/workflows/**"]
+  pull_request:
+    paths: ["Taller/**", ".github/workflows/**"]
+  # Ejecución manual, para explorar el runner antes de calibrar (T13).
+  workflow_dispatch:
+    inputs:
+      variante:
+        description: Variante (configurada = la de config/variante.env)
+        type: choice
+        options: [configurada, regresion, corregida, sana]
+        default: configurada
+      perfil:
+        description: Perfil de config/perfiles/
+        type: string
+        default: ci
+      tasa:
+        description: Tasa en llegadas por segundo (vacío = la del perfil)
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+# Una sola medición por rama a la vez: dos jobs no comparten el runner, pero
+# así una ejecución nueva reemplaza a la anterior.
+concurrency:
+  group: compuerta-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rendimiento:
+    name: Compuerta de rendimiento
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: Taller
+    steps:
+      - uses: actions/checkout@v7
+
+      # Hasta que exista el sistema bajo prueba (T1), la compuerta se omite
+      # con un aviso, en lugar de fallar en todos los pull requests.
+      - name: Comprobar el sistema bajo prueba
+        id: sut
+        run: |
+          if [ -f compose.yaml ]; then
+            echo "listo=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "listo=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Taller/compose.yaml todavía no existe (T1): se omiten las pruebas."
+            printf '### ⏭️ Compuerta omitida\n\nTaller/compose.yaml todavía no existe (T1).\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Registrar el runner
+        if: steps.sut.outputs.listo == 'true'
+        run: |
+          echo "CPU: $(nproc)"; free -h; lscpu | grep -E 'Model name|^CPU\(s\)'
+          docker version --format 'Docker {{.Server.Version}}'; docker compose version
+
+      - name: Preparar el entorno
+        if: steps.sut.outputs.listo == 'true'
+        run: ./taller.sh preparar
+
+      - name: Pruebas funcionales
+        if: steps.sut.outputs.listo == 'true'
+        run: ./taller.sh funcionales
+
+      - name: Prueba de carga
+        if: steps.sut.outputs.listo == 'true'
+        # Las entradas manuales llegan por variables de entorno, nunca
+        # interpoladas en el script.
+        env:
+          PERFIL: ${{ inputs.perfil || 'ci' }}
+          VARIANTE_MANUAL: ${{ inputs.variante }}
+          TASA_MANUAL: ${{ inputs.tasa }}
+        run: |
+          set -- --tipo carga --perfil "$PERFIL"
+          if [ -n "$VARIANTE_MANUAL" ] && [ "$VARIANTE_MANUAL" != configurada ]; then
+            set -- "$@" --variante "$VARIANTE_MANUAL"
+          fi
+          if [ -n "$TASA_MANUAL" ]; then set -- "$@" --tasa "$TASA_MANUAL"; fi
+          ./taller.sh ejecutar "$@"
+
+      - name: Detener el entorno
+        if: always() && steps.sut.outputs.listo == 'true'
+        run: ./taller.sh detener --borrar-datos
+
+      # Conserva el informe aunque la prueba falle.
+      - name: Guardar resultados
+        if: always() && steps.sut.outputs.listo == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: resultados-${{ github.run_id }}-${{ github.run_attempt }}
+          path: Taller/resultados/
+          if-no-files-found: warn
+          retention-days: 30
