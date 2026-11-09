@@ -6,8 +6,9 @@ Adjuntos/Local
 # Herramienta personal de conversion de PDF
 /convertir-pdf.cmd
 /convertir-pdf.ps1
-/PDF-A-MARKDOWN.md
+PDF-A-MARKDOWN.md
 /scripts/pdf_a_md.py
 /scripts/verificar_pdf_a_md.py
 /scripts/requirements-pdf.txt
 /scripts/__pycache__/
+scripts/
