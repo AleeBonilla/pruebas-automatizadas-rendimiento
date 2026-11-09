@@ -4,13 +4,14 @@ Estas convenciones se aplican a los cambios en `Taller/` y `.github/`. El docume
 
 ## Flujo de trabajo
 
-- Se trabaja directamente sobre `main`, sin ramas ni *pull requests*: cada persona confirma sus cambios y los sube con `git push`.
+- Por defecto se trabaja directamente sobre `main`: cada persona confirma sus cambios y los sube con `git push`.
+- Cuando hace falta, se usa una rama y un *pull request*: por ejemplo, para que la compuerta corra antes de integrar o para que la otra persona vea un cambio en archivos compartidos. La rama se llama `<tipo>/<tarea>-<descripcion>` (`feat/t10-estres-picos`), el *pull request* se integra con *squash merge* y su título sigue el formato de los commits.
 - Antes de subir, `git pull --rebase` trae lo de la otra persona sin commits de *merge*. Si hay un conflicto, lo resuelve quien sube.
 - Nunca se reescribe la historia de `main` (`git push --force`, `git rebase` sobre commits ya subidos).
 - Cada persona toca sus propios archivos (`Taller.md` §11). Si un cambio toca los de la otra o los compartidos (`compose.yaml`, `config/` o los acuerdos de §11), se le avisa antes de subirlo.
 - La compuerta corre en cada *push* a `main`. Si queda en rojo, quien subió el cambio lo arregla o lo revierte con `git revert` antes de seguir.
 - Para probar algo que podría romper la compuerta, se puede usar una rama `prueba/<descripcion>` y correr la compuerta sobre ella con `gh workflow run compuerta.yml --ref prueba/<descripcion>`. Cuando funciona, se lleva a `main` y se borra la rama.
-- Las únicas ramas con *pull request* son `demo/regresion` y `demo/corregida`, porque la demostración de la compuerta las necesita (`Taller.md` §8). Esos *pull requests* no se integran.
+- `demo/regresion` y `demo/corregida` siempre van con *pull request*, porque la demostración de la compuerta los necesita (`Taller.md` §8). Esos *pull requests* no se integran.
 
 ## Commits
 
