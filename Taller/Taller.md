@@ -422,17 +422,17 @@ Con estos acuerdos, la persona 2 escribe la simulación contra `/salud` y con un
 
 ### Fase 1. Núcleo
 
-| ID | Tarea | Depende de | Resultado esperado | Responsable |
-|---|---|---|---|---|
-| T1 | Estructura de `Taller/`, acuerdos de esta sección y `compose.yaml` con PostgreSQL y un esqueleto de la API que responde `/salud`; *healthchecks*, límites de 5.2 y versiones de 5.1 | — | Una preparación limpia levanta los servicios sanos | 1 |
-| T2 | Esquema SQL, generador de datos con semilla, CSV de identificadores y restablecimiento del estado | T1 | Datos idénticos en cada preparación | 1 |
-| T3 | API con Flask, Gunicorn y psycopg-pool: `/productos/{id}`, las tres variantes por configuración y `/metrics` | T2 | Las tres variantes responden según el contrato | 1 |
-| T4 | Pruebas con pytest: contrato, `404`, reversión ante fallos y concurrencia sobre el mismo producto y sobre productos distintos | T3 | Ambas variantes del contador aprueban, y un leer-sumar-escribir sin candado falla la prueba de concurrencia | 1 |
-| T5 | Proyecto Gatling: Maven Wrapper, `pom.xml`, Dockerfile y `CargaSimulation` | T1 | La simulación corre contra la API y falla con un umbral inalcanzable | 2 |
-| T6 | Perfiles `.env` y scripts `taller.ps1` y `taller.sh`: preparar, funcionales, ejecutar, exportar y detener; carpeta de resultados con sus metadatos | T5 | Cada operación se ejecuta con un comando y deja su resultado | 2 |
-| T7 | Piloto: carga sobre `regresion` y `corregida`, y ajuste de los valores de 5.2 | T3, T6 | Hay separación entre las variantes y el generador sostiene la tasa | 1 |
-| T8 | Workflow de la compuerta y los dos *pull requests* de demostración | T4, T6 | El de `regresion` falla, el de `corregida` aprueba y quedan los artefactos | 2 |
-| T9 | `docs/GUIA.md` con el procedimiento local y la compuerta | T7, T8 | La práctica se completa siguiendo solo la guía | 1 |
+| ID  | Tarea                                                                                                                                                                               | Depende de | Resultado esperado                                                                                          | Responsable |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------- | ----------- |
+| T1  | Estructura de `Taller/`, acuerdos de esta sección y `compose.yaml` con PostgreSQL y un esqueleto de la API que responde `/salud`; *healthchecks*, límites de 5.2 y versiones de 5.1 | —          | Una preparación limpia levanta los servicios sanos                                                          | 1           |
+| T2  | Esquema SQL, generador de datos con semilla, CSV de identificadores y restablecimiento del estado                                                                                   | T1         | Datos idénticos en cada preparación                                                                         | 1           |
+| T3  | API con Flask, Gunicorn y psycopg-pool: `/productos/{id}`, las tres variantes por configuración y `/metrics`                                                                        | T2         | Las tres variantes responden según el contrato                                                              | 1           |
+| T4  | Pruebas con pytest: contrato, `404`, reversión ante fallos y concurrencia sobre el mismo producto y sobre productos distintos                                                       | T3         | Ambas variantes del contador aprueban, y un leer-sumar-escribir sin candado falla la prueba de concurrencia | 1           |
+| T5  | Proyecto Gatling: Maven Wrapper, `pom.xml`, Dockerfile y `CargaSimulation`                                                                                                          | T1         | La simulación corre contra la API y falla con un umbral inalcanzable                                        | 2           |
+| T6  | Perfiles `.env` y scripts `taller.ps1` y `taller.sh`: preparar, funcionales, ejecutar, exportar y detener; carpeta de resultados con sus metadatos                                  | T5         | Cada operación se ejecuta con un comando y deja su resultado                                                | 2           |
+| T7  | Piloto: carga sobre `regresion` y `corregida`, y ajuste de los valores de 5.2                                                                                                       | T3, T6     | Hay separación entre las variantes y el generador sostiene la tasa                                          | 1           |
+| T8  | Workflow de la compuerta y los dos *pull requests* de demostración                                                                                                                  | T4, T6     | El de `regresion` falla, el de `corregida` aprueba y quedan los artefactos                                  | 2           |
+| T9  | `docs/GUIA.md` con el procedimiento local y la compuerta                                                                                                                            | T7, T8     | La práctica se completa siguiendo solo la guía                                                              | 1           |
 
 ### Fase 2. Rigor
 
@@ -447,13 +447,13 @@ Con estos acuerdos, la persona 2 escribe la simulación contra `/salud` y con un
 
 ### Fase 3. Observabilidad y alcance
 
-| ID | Tarea | Depende de | Resultado esperado | Responsable |
-|---|---|---|---|---|
-| T16 | Prometheus y paneles de Grafana provisionados (6.5) | T3 | Los paneles aparecen al levantar el entorno y muestran la espera del candado | 1 |
-| T17 | Workflows manuales y programados: escenarios, calibración y validación | T8, T13 | Cada uno conserva su informe como artefacto | 2 |
-| T18 | Ejecución en Linux o macOS; en Windows sirve WSL2 | T6 | El procedimiento funciona igual que en Windows | 1 |
-| T19 | `docs/INTERPRETACION.md`: lectura del informe de Gatling y de los paneles | T14, T16 | Cada panel y métrica del informe tiene su interpretación | 1 |
-| T20 | Reproducción externa | T9, T19 | Una persona ajena al desarrollo completa la práctica y se corrigen los problemas encontrados | 1 y 2 |
+| ID  | Tarea                                                                     | Depende de | Resultado esperado                                                                           | Responsable |
+| --- | ------------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------- | ----------- |
+| T16 | Prometheus y paneles de Grafana provisionados (6.5)                       | T3         | Los paneles aparecen al levantar el entorno y muestran la espera del candado                 | 1           |
+| T17 | Workflows manuales y programados: escenarios, calibración y validación    | T8, T13    | Cada uno conserva su informe como artefacto                                                  | 2           |
+| T18 | Ejecución en Linux o macOS; en Windows sirve WSL2                         | T6         | El procedimiento funciona igual que en Windows                                               | 1           |
+| T19 | `docs/INTERPRETACION.md`: lectura del informe de Gatling y de los paneles | T14, T16   | Cada panel y métrica del informe tiene su interpretación                                     | 1           |
+| T20 | Reproducción externa                                                      | T9, T19    | Una persona ajena al desarrollo completa la práctica y se corrigen los problemas encontrados | 1 y 2       |
 
 T16 pertenece a la fase 3, pero se hace antes de calibrar. Así Prometheus está activo desde la primera campaña, la recolección forma parte de las condiciones medidas y no hay que repetir la validación.
 
