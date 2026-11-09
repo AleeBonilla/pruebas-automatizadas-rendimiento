@@ -1,0 +1,17 @@
+# STUB TEMPORAL para validar la compuerta en el runner. No se integra.
+services:
+  api:
+    image: python:3.14.10-slim-trixie
+    environment:
+      VARIANTE: ${VARIANTE:-corregida}
+    volumes:
+      - ./stub:/stub:ro
+    # "pytest" (pruebas funcionales) solo imprime un aviso; cualquier otro comando sirve la API.
+    entrypoint: ["/bin/sh", "-c", 'if [ "$$1" = pytest ]; then echo "stub: sin pruebas funcionales"; exit 0; fi; exec python /stub/servidor.py', "stub"]
+    command: ["servir"]
+    ports: ["8000:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/salud')"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
