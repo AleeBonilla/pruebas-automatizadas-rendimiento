@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** diseño definido; implementación y validación pendientes.
+**Estado:** fase 1 en construcción. T1–T6 y T16 están terminadas, T8 tiene el workflow pero le faltan los *pull requests* de demostración, y el piloto (T7) ya fijó la configuración de 5.2. Calibración y validación pendientes.
 
 ## 1. Propósito
 
@@ -27,6 +27,7 @@ El taller se presenta en y cada participante puede reproducirlo en su computador
 | Flask | *Framework* ligero de Python para construir APIs web | Implementa `GET /productos/{id}` y sus variantes |
 | Gunicorn | Servidor de aplicaciones para Python; reemplaza al servidor de desarrollo de Flask, que no es apto para medir | Atiende las solicitudes con un proceso y varios hilos |
 | PostgreSQL y Psycopg | Base de datos relacional y su controlador para Python | Guarda productos y visitas, y maneja las transacciones |
+| `tc netem` | Herramienta de Linux que retrasa los paquetes de una interfaz de red | Da a PostgreSQL la latencia de un servidor aparte (5.2) |
 | pytest | Herramienta de pruebas de Python | Pruebas funcionales y de concurrencia |
 | Gatling Community | Generador de carga: simula usuarios que llaman a la API y mide sus respuestas | Pruebas de carga, estrés y picos; decide el veredicto |
 | Maven Wrapper | Script (`mvnw`) que descarga una versión fija de Maven para compilar proyectos Java | Compila y ejecuta las simulaciones de Gatling |
@@ -146,7 +147,7 @@ taller.ps1 / taller.sh ──> preparar, ejecutar, exportar, detener
 Todos los servicios se definen en `compose.yaml`. La práctica local requiere Git y Docker con Compose. El entorno controla:
 
 - versiones exactas de dependencias e imágenes (5.1), sin la etiqueta `latest`;
-- la misma configuración para todas las variantes: hilos de Gunicorn, conexiones a PostgreSQL y límites de CPU y memoria de cada contenedor;
+- la misma configuración para todas las variantes: hilos de Gunicorn, conexiones a PostgreSQL, núcleos y memoria de cada contenedor y latencia de red hacia PostgreSQL;
 - esquema y datos semilla, restablecidos antes de cada repetición;
 - *healthchecks* antes de medir;
 - ejecución secuencial de variantes, pruebas y repeticiones, para evitar el antipatrón del entorno compartido (5.6);
@@ -163,7 +164,7 @@ Reproducir significa repetir el mismo código, datos, procedimiento y condicione
 | Psycopg · psycopg-pool | 3.3.8 (`psycopg[binary]`) · 3.3.3 | PyPI |
 | prometheus-client | 0.26.0 | PyPI |
 | pytest · requests | 9.2.0 · 2.34.2 | PyPI |
-| PostgreSQL | 18.6 | Imagen `postgres:18.6-alpine` |
+| PostgreSQL · iproute2-tc | 18.6 · 7.0.0-r0 | Imagen `postgres:18.6-alpine`, con `tc` agregado en `base-datos/Dockerfile` |
 | Java | Temurin 25.0.5 (LTS) | Imagen `eclipse-temurin:25.0.5_8-jdk-noble` |
 | Maven · Maven Wrapper | 3.9.16 · 3.3.4 | Maven Central |
 | Gatling · gatling-maven-plugin | 3.16.0 · 4.21.12 | Maven Central |
@@ -173,18 +174,40 @@ Reproducir significa repetir el mismo código, datos, procedimiento y condicione
 
 Son las versiones estables vigentes al 8 de noviembre de 2026. Las dependencias de Python se fijan en `requirements.txt` y las de Java en `pom.xml`. Solo se actualizan entre campañas, porque cambiar una versión cambia el sistema medido e invalida la calibración (5.6).
 
-### 5.2 Configuración inicial
+### 5.2 Configuración
 
-| Parámetro | Valor inicial |
+| Parámetro | Valor |
 |---|---|
 | Gunicorn | 1 proceso `gthread` con 8 hilos |
 | Conexiones a PostgreSQL | *Pool* fijo de 8, una por hilo |
-| Límites de la API | 1 CPU y 512 MB |
-| Límites de PostgreSQL | 1 CPU y 512 MB |
+| Recursos de la API | Núcleo 2 fijo (`cpuset`) y 512 MB |
+| Recursos de PostgreSQL | Núcleo 3 fijo (`cpuset`) y 512 MB |
+| Latencia de red de PostgreSQL | 2 ms en cada ida y vuelta (`tc netem`, `LATENCIA_BD_MS`) |
 | Límites de Gatling | 2 CPU y 2 GB |
 | Límites de Prometheus y Grafana | 0,5 CPU y 512 MB cada uno |
 
-Por el *GIL*, un proceso de Python ejecuta código en un solo núcleo a la vez, así que 1 CPU no limita artificialmente a la API. Con tantas conexiones como hilos, ninguna solicitud espera una conexión libre, y la única espera que distingue a las variantes es la del candado. Gatling recibe más recursos que la API para que el generador no sea el cuello de botella. Estos valores se ajustan en el piloto y quedan fijos en el perfil; la pila completa reserva unas 5 CPU y 5,5 GB, que deben estar disponibles para Docker.
+Por el *GIL*, un proceso de Python ejecuta código en un solo núcleo a la vez, así que un núcleo no limita artificialmente a la API. Con tantas conexiones como hilos, ninguna solicitud espera una conexión libre, y la única espera que distingue a las variantes es la del candado. Gatling recibe más recursos que la API para que el generador no sea el cuello de botella. La pila completa ocupa unas 5 CPU y 5,5 GB, que deben estar disponibles para Docker, y necesita al menos 4 núcleos, porque la API y PostgreSQL usan el 2 y el 3.
+
+Dos valores salieron del piloto (T7). En la primera configuración, con un límite de 1 CPU por contenedor y PostgreSQL en la misma máquina, las variantes no se separaban: a 300 solicitudes por segundo, `regresion` aprobó con un p95 de 88 ms y `corregida` fue rechazada con 482 ms.
+
+- **Núcleo fijo en lugar de cuota.** Con `cpus: 1`, el kernel detiene el contenedor hasta el final del período de 100 ms cada vez que un pico agota la cuota. En una medición de 60 s, la API quedó detenida 9,4 s en total, repartidos en 102 de 886 períodos. Mientras tanto, el histograma del servidor marcaba un p95 de 12 a 22 ms. Esas pausas forman la cola que mide Gatling y son ajenas a las variantes. Con `cpuset`, el contenedor usa un núcleo entero sin cuota, y la cola desaparece: `corregida` mantiene un p95 de unos 10 ms hasta 300 solicitudes por segundo.
+- **Latencia de red de PostgreSQL.** Con la base de datos local, cada ida y vuelta tardaba menos de un milisegundo. El candado se retenía tan poco que la API se saturaba por CPU antes que por la fila del candado. En producción, la base de datos suele estar en otro servidor, y cada ida y vuelta cuesta uno o dos milisegundos. Con 2 ms, cada visita de `regresion` retiene el candado durante cuatro idas y vueltas (BEGIN, SELECT, UPDATE y COMMIT), unos 10 ms. Eso limita su capacidad a unas 100 visitas por segundo, mientras `corregida` sigue atendiendo en paralelo con sus 8 hilos.
+
+La latencia es una condición del entorno, aplicada por igual a todas las variantes, y no una pausa en el código: el defecto sigue siendo solo el candado. `LATENCIA_BD_MS` forma parte de la configuración medida y queda registrada en cada ejecución.
+
+| Tasa (sol./s) | `corregida` p95 | `regresion` p95 | `regresion` errores |
+|---:|---:|---:|---:|
+| 25 | — | 17 ms | 0 % |
+| 50 | 12 ms | 15 ms | 0 % |
+| 75 | — | 14 ms | 0 % |
+| 100 | 11 ms | 8 027 ms | 0 % |
+| 150 | 10 ms | 35 777 ms | 4,8 % |
+| 200 | 9 ms | 54 915 ms | 25,5 % |
+| 300 | 10 ms | 47 352 ms | 50,1 % |
+
+*Piloto con la configuración final: una ejecución por punto, 20 s de calentamiento y 60 s de medición (perfil `piloto`). Por encima de 100 sol./s, los errores de `regresion` son* timeouts *de 60 s de Gatling. Estos valores orientan la calibración, pero no la reemplazan (7.1).*
+
+`regresion` no se degrada de forma gradual: entre 75 y 100 solicitudes por segundo pasa de cumplir holgadamente a colapsar, porque la tasa de llegada supera la capacidad del candado y la fila crece sin límite. Para la compuerta conviene una tasa claramente por encima de ese punto y por debajo del límite del generador (7.1), donde `corregida` todavía tiene holgura. La elección final se hace en la calibración, con repeticiones.
 
 ## 6. Plan de pruebas
 
@@ -288,7 +311,7 @@ Cada computadora es distinta, así que un umbral fijo de antemano no sirve para 
 
 Antes de recoger datos se fijan las repeticiones, las duraciones y el margen mínimo aceptable.
 
-1. **Comprobar el generador.** Se aplica la carga a `GET /salud` y se verifica que Gatling sostiene la tasa prevista; durante esa prueba, `docker stats` muestra si el contenedor de Gatling se acerca a su límite de CPU.
+1. **Comprobar el generador.** Se aplica la carga a `GET /salud` y se verifica que Gatling sostiene la tasa prevista; durante esa prueba, `docker stats` muestra si el contenedor de Gatling se acerca a su límite de CPU. Cada usuario virtual abre su propia conexión TCP, y las conexiones cerradas ocupan un puerto mientras están en TIME_WAIT. En el piloto, Gatling sostuvo 350 solicitudes por segundo sin errores, pero a 500 se quedó sin puertos efímeros (`Cannot assign requested address`). Esa ejecución es inválida, no un rechazo de la API.
 2. **Explorar.** Se ejecutan mesetas de estrés sobre las variantes para ubicar dónde se degrada cada una.
 3. **Elegir la tasa.** `corregida` debe cumplir con holgura y `regresion` ya debe degradarse.
 4. **Elegir el umbral.** Se repite la carga en ambas variantes del contador y el umbral de p95 se ubica entre sus rangos, con el margen fijado.
@@ -355,7 +378,7 @@ La construcción avanza en tres fases. Cada una deja un resultado demostrable, y
 | | Workflows manuales y programados | Cada uno conserva su informe como artefacto |
 | | Reproducción externa | Una persona ajena al desarrollo completa la práctica con la guía |
 
-**Parámetros por definir durante la construcción:** los valores definitivos de 5.2, que salen del piloto; duraciones, repeticiones y margen, que se fijan antes de calibrar, y la forma de exportar las métricas del informe de Gatling.
+**Parámetros por definir durante la construcción:** la tasa y el umbral de cada perfil, que salen de la calibración; duraciones, repeticiones y margen, que se fijan antes de calibrar, y la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto.
 
 ```text
 Taller/
