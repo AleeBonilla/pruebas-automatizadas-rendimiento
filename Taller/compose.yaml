@@ -4,6 +4,10 @@
 #   docker compose run --rm api pytest      pruebas funcionales y de concurrencia
 #   docker compose down -v                  detiene todo y borra los datos
 #
+# Restablecer datos y contadores antes de cada repetición, y comprobar el estado:
+#   docker compose exec -T postgres psql -U taller -d tienda -f /base-datos/restablecer.sql
+#   docker compose exec -T postgres psql -U taller -d tienda -c "SELECT * FROM resumen_datos"
+#
 # La variante se elige con VARIANTE (regresion, corregida o sana); por defecto, corregida.
 # Los servicios gatling y herramientas están en compose.carga.yaml (persona 2).
 
@@ -25,9 +29,12 @@ services:
       POSTGRES_PASSWORD: taller
     volumes:
       - datos-postgres:/var/lib/postgresql
+      - ./base-datos/esquema.sql:/docker-entrypoint-initdb.d/01-esquema.sql:ro
+      # Semilla y restablecer.sql, que ejecutan los scripts del taller (Taller.md §11).
+      - ./base-datos:/base-datos:ro
     healthcheck:
       # Por TCP: durante la inicialización PostgreSQL solo escucha en el socket local,
-      # así que el servicio no aparece sano hasta que termina de inicializarse.
+      # así que el servicio no aparece sano hasta que los datos están cargados.
       test: ["CMD", "pg_isready", "--host=127.0.0.1", "--username=taller", "--dbname=tienda"]
       interval: 2s
       timeout: 3s
