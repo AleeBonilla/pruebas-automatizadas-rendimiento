@@ -19,7 +19,7 @@
 | Fase                              | Contenido                                          | Secciones del documento                                                                                                            | Estado                                         |
 | --------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | **Fase 1: Investigación**         | Investigación teórica y documental                 | 1 Portada, 2 Introducción, 3 Planteamiento del problema, 4 Metodología, 5 Marco teórico, 8 Referencias, anexos de validación de IA | **Alcance definido** (este documento)          |
-| **Fase 2:       Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller                                                                  | **Por definir** mediante discusión de opciones |
+| **Fase 2: Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller | **Diseño definido** en `Taller/Taller.md`; implementación, validación y cierre pendientes |
 
 La forma de trabajo con IA está definida en §5.3, en el procedimiento de uso y validación de IA. El detalle operativo está en `Investigación/Workflow.md` y en `Investigación/Guía de redacción.md`.
 
@@ -42,7 +42,7 @@ Las preguntas de investigación la descomponen. PI-2 justifica el problema; PI-1
 | Incluir (a fondo) | Mencionar (≤ 1 párrafo) | Excluir explícitamente |
 |---|---|---|
 | Tipos: carga, estrés, picos (*spike*), resistencia (*soak*) | Escalabilidad, volumen y capacidad como variantes | Rendimiento de frontend (Lighthouse, Core Web Vitals) |
-| Métricas: tiempo de respuesta p50/p95/p99, *throughput*, tasa de error, concurrencia, usuarios virtuales | Observabilidad/APM (Prometheus, Grafana) como complemento | Microbenchmarks y *profiling* de código (JMH, perf, async-profiler) |
+| Métricas: tiempo de respuesta p50/p95/p99, *throughput*, tasa de error, concurrencia, usuarios virtuales | Observabilidad/APM como complemento teórico; Prometheus y Grafana se implementan en el taller para interpretar las pruebas | Microbenchmarks y *profiling* de código (JMH, perf, async-profiler) |
 | ISO/IEC 25010 → eficiencia de desempeño | Generación de carga distribuida / en la nube | Ingeniería del caos |
 | Proceso de pruebas de rendimiento (ISTQB CT-PT) | Ley de Little y nociones básicas de colas | Teoría de colas formal y modelado analítico de capacidad |
 | Modelos de carga abiertos vs. cerrados; *coordinated omission* | *Shift-right* (pruebas en producción, *canary*) | Tuning de bases de datos, JVM o infraestructura como tema propio |
@@ -145,27 +145,30 @@ Contenido mínimo exigido por el enunciado: contexto de aplicación, recursos y 
 
 Toda afirmación sobre una herramienta debe verificarse contra su **documentación oficial vigente**, indicando la versión consultada y la fecha de acceso.
 
-## 7. Taller práctico — Fase 2 (por definir)
+## 7. Taller práctico — Fase 2
 
-Esta sección se construirá mediante discusión de opciones. Solo está fijado lo siguiente:
+**Decisiones actualizadas el 2026-11-08, aprobadas por el usuario.** El diseño operativo se desarrolla en `Taller/Taller.md`; la implementación y la validación experimental están pendientes.
 
-- **Herramienta:** Gatling.
-- **Objeto bajo prueba:** una API REST.
-- **Restricción ética:** solo se prueba contra un entorno propio, nunca contra sistemas de terceros ni sitios públicos.
-- **Integración con CI:** las pruebas se ejecutan en un pipeline de CI (§1 y pregunta-problema).
-- **Regresión a demostrar:** el taller introduce un problema de rendimiento, lo detecta y verifica su corrección (PI-5).
-- **Extensión:** 6 páginas en el documento; el código, los resultados completos y la guía extendida van en el repositorio.
-- **Confiabilidad del veredicto:** el taller debe comprobar que la decisión de aprobar o rechazar se mantiene estable entre ejecuciones repetidas. Sin la regresión, todas las repeticiones pasan; con la regresión, todas fallan. Se reporta cuánto varían las métricas entre ejecuciones, y los umbrales se justifican con un margen respecto de esa variación. Origen: la pregunta-problema y el cierre del Planteamiento del problema (§3.4).
+- **Modalidad:** el equipo presenta y aplica el taller en clase; los compañeros pueden clonar el repositorio y ejecutar las pruebas en sus computadoras mediante una guía reproducible.
+- **Sistema bajo prueba:** API REST propia de productos, construida con Flask, Gunicorn y PostgreSQL.
+- **Problema a demostrar:** contención por un candado global al incorporar un contador de visitas. La comparación principal es entre la implementación con regresión y la corregida, ambas con la misma funcionalidad; la versión sin contador es una referencia adicional.
+- **Herramienta:** Gatling Community con DSL de Java y Maven Wrapper, ejecutado en un contenedor.
+- **Entorno:** Docker Compose para API, base de datos, generador y observabilidad. La práctica local requiere Git y Docker con Compose; no requiere una cuenta de GitHub. Las plataformas y requisitos mínimos se comprobarán durante la implementación.
+- **Observabilidad:** Prometheus y Grafana se incluyen en el entorno reproducible para interpretar las pruebas, con métricas de aplicación y consumo frente a los límites de CPU y memoria de los contenedores. Gatling determina el veredicto automático. Su incorporación práctica, aprobada por el usuario, no convierte la observabilidad en un segundo eje del Marco teórico.
+- **Integración con CI:** GitHub Actions reutiliza el procedimiento local y ejecuta pruebas funcionales y carga ante cambios relevantes; estrés, picos y campañas completas disponen de ejecución manual.
+- **Confiabilidad del veredicto:** calibrar por entorno, congelar los parámetros y validarlos con ejecuciones nuevas. Se espera que todas las repeticiones válidas de la implementación corregida aprueben y las de la regresión sean rechazadas por rendimiento. Se reportan variación, márgenes y ejecuciones inválidas; no se ajusta el umbral sobre los mismos datos usados para validar.
+- **Reproducibilidad:** conservar código, dependencias, datos y procedimiento; calibrar perfiles distintos para cada equipo y para CI. No se exige igualdad de tiempos entre computadoras diferentes.
+- **Restricción ética:** solo se prueba contra el entorno propio, nunca contra sistemas de terceros ni sitios públicos.
+- **Extensión:** 6 páginas en el documento; código, paneles, resultados completos y guía extendida en el repositorio.
 
-**Decisiones pendientes:**
+**Pendientes de implementación y medición:**
 
-- [ ] Sistema bajo prueba: qué API, qué lenguaje o framework, si se construye desde cero o se reutiliza una existente
-- [ ] Problema de rendimiento a demostrar: qué regresión se introduce y cómo se evidencia
-- [ ] Forma de uso de Gatling (lenguaje del DSL, herramienta de build, ejecución)
-- [ ] Entorno de ejecución y reproducibilidad para los compañeros
-- [ ] Plataforma de CI
-- [ ] Escenarios de prueba y criterios de aceptación (SLO), incluido el número de repeticiones necesario para la confiabilidad del veredicto
-- [ ] Estructura del plan de pruebas y de la guía paso a paso
+- [ ] Ubicación del repositorio, versiones exactas y plataformas soportadas.
+- [ ] Recursos mínimos, configuración del servidor, conexiones y límites de contenedores.
+- [ ] Perfiles, duraciones, repeticiones, reglas de calibración y márgenes, fijados antes de recoger los datos correspondientes.
+- [ ] Instrumentación, extracción de métricas y exportación de evidencias.
+- [ ] Validación independiente por entorno y reproducción en otro equipo.
+- [ ] Comprobación de la guía y ajuste de la presentación al tiempo asignado por el curso.
 
 ## 8. Fuentes ancla (verificar existencia antes de usar)
 
