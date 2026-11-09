@@ -360,6 +360,7 @@ La construcción avanza en tres fases. Cada una deja un resultado demostrable, y
 ```text
 Taller/
 ├── Taller.md             este documento
+├── CONTRIBUIR.md         reglas de Git
 ├── api/                  Flask, variantes, métricas, pruebas y Dockerfile
 ├── base-datos/           esquema y datos sintéticos
 ├── rendimiento/          simulaciones Gatling, Maven Wrapper y Dockerfile
@@ -397,47 +398,77 @@ El anexo C contiene el enlace al repositorio, extractos de la simulación y del 
 
 ## 11. Tareas
 
-Las tareas siguen las fases de la sección 9. Las que no dependen entre sí avanzan en paralelo: por ejemplo, la simulación de Gatling (T5) puede escribirse mientras se implementa la API (T3).
+Las tareas siguen las fases de la sección 9 y se reparten en dos líneas de trabajo que avanzan en paralelo:
+
+- **Persona 1, sistema bajo prueba:** entorno, datos, API, pruebas funcionales y observabilidad.
+- **Persona 2, carga y automatización:** Gatling, scripts, resultados, calibración en CI y workflows.
+
+Cada persona revisa los *pull requests* de la otra ([`CONTRIBUIR.md`](CONTRIBUIR.md)).
+
+### Acuerdos entre las dos líneas
+
+Estos acuerdos se fijan en T1, así ninguna línea espera a que la otra termine para empezar a escribir código:
+
+| Acuerdo | Valor |
+|---|---|
+| Contrato de la API | El de 4.1 |
+| Servicios de Compose | `api` en el puerto 8000, `postgres`, `gatling`, `prometheus` y `grafana` |
+| Selección de variante | Variable de entorno `VARIANTE` (`regresion`, `corregida` o `sana`) |
+| Identificadores para Gatling | `base-datos/productos.csv`, con encabezado `id` y valores de 1 a 10 000 |
+| Pruebas funcionales | `docker compose run --rm api pytest` |
+| Perfiles | Claves de 6.2 en `config/perfiles/<perfil>.env` |
+
+Con estos acuerdos, la persona 2 escribe la simulación contra `/salud` y con un CSV provisional mientras la persona 1 implementa la API.
 
 ### Fase 1. Núcleo
 
 | ID | Tarea | Depende de | Resultado esperado | Responsable |
 |---|---|---|---|---|
-| T1 | Estructura de `Taller/` y `compose.yaml` con la API y PostgreSQL, *healthchecks*, límites de 5.2 y versiones de 5.1 | — | Una preparación limpia levanta los servicios sanos | |
-| T2 | Esquema SQL, generador de datos con semilla, CSV de identificadores y restablecimiento del estado | T1 | Datos idénticos en cada preparación | |
-| T3 | API con Flask, Gunicorn y psycopg-pool: `/productos/{id}`, `/salud`, las tres variantes por configuración y `/metrics` | T2 | Las tres variantes responden según el contrato | |
-| T4 | Pruebas con pytest: contrato, `404`, reversión ante fallos y concurrencia sobre el mismo producto y sobre productos distintos | T3 | Ambas variantes del contador aprueban, y un leer-sumar-escribir sin candado falla la prueba de concurrencia | |
-| T5 | Proyecto Gatling: Maven Wrapper, `pom.xml`, Dockerfile y `CargaSimulation` | T1 | La simulación corre contra la API y falla con un umbral inalcanzable | |
-| T6 | Perfiles `.env` y scripts `taller.ps1` y `taller.sh`: preparar, funcionales, ejecutar, exportar y detener; carpeta de resultados con sus metadatos | T4, T5 | Cada operación se ejecuta con un comando y deja su resultado | |
-| T7 | Piloto: carga sobre `regresion` y `corregida`, y ajuste de los valores de 5.2 | T6 | Hay separación entre las variantes y el generador sostiene la tasa | |
-| T8 | Workflow de la compuerta y los dos *pull requests* de demostración | T6 | El de `regresion` falla, el de `corregida` aprueba y quedan los artefactos | |
-| T9 | `docs/GUIA.md` con el procedimiento local y la compuerta | T7, T8 | La práctica se completa siguiendo solo la guía | |
+| T1 | Estructura de `Taller/`, acuerdos de esta sección y `compose.yaml` con PostgreSQL y un esqueleto de la API que responde `/salud`; *healthchecks*, límites de 5.2 y versiones de 5.1 | — | Una preparación limpia levanta los servicios sanos | 1 |
+| T2 | Esquema SQL, generador de datos con semilla, CSV de identificadores y restablecimiento del estado | T1 | Datos idénticos en cada preparación | 1 |
+| T3 | API con Flask, Gunicorn y psycopg-pool: `/productos/{id}`, las tres variantes por configuración y `/metrics` | T2 | Las tres variantes responden según el contrato | 1 |
+| T4 | Pruebas con pytest: contrato, `404`, reversión ante fallos y concurrencia sobre el mismo producto y sobre productos distintos | T3 | Ambas variantes del contador aprueban, y un leer-sumar-escribir sin candado falla la prueba de concurrencia | 1 |
+| T5 | Proyecto Gatling: Maven Wrapper, `pom.xml`, Dockerfile y `CargaSimulation` | T1 | La simulación corre contra la API y falla con un umbral inalcanzable | 2 |
+| T6 | Perfiles `.env` y scripts `taller.ps1` y `taller.sh`: preparar, funcionales, ejecutar, exportar y detener; carpeta de resultados con sus metadatos | T5 | Cada operación se ejecuta con un comando y deja su resultado | 2 |
+| T7 | Piloto: carga sobre `regresion` y `corregida`, y ajuste de los valores de 5.2 | T3, T6 | Hay separación entre las variantes y el generador sostiene la tasa | 1 |
+| T8 | Workflow de la compuerta y los dos *pull requests* de demostración | T4, T6 | El de `regresion` falla, el de `corregida` aprueba y quedan los artefactos | 2 |
+| T9 | `docs/GUIA.md` con el procedimiento local y la compuerta | T7, T8 | La práctica se completa siguiendo solo la guía | 1 |
 
 ### Fase 2. Rigor
 
 | ID | Tarea | Depende de | Resultado esperado | Responsable |
 |---|---|---|---|---|
-| T10 | Simulaciones de estrés, una meseta por ejecución, y de picos, con su ventana de recuperación | T5 | Informes que muestran la degradación y la recuperación | |
-| T11 | Extracción de resultados: p50, p95, p99, conteos, tasa lograda y resumen por campaña | T6 | Un archivo de resultados por ejecución y uno por campaña | |
-| T12 | Detección de ejecuciones inválidas | T11 | Una ejecución con tasa no alcanzada, datos incompletos o configuración distinta queda marcada como inválida | |
-| T13 | Calibración local y `ci` (7.1) | T10, T12 | Perfiles congelados con sus márgenes | |
-| T14 | Validación local y `ci` (7.2) | T13 | Veredictos esperados en todas las repeticiones válidas | |
-| T15 | `docs/PLAN-DE-PRUEBAS.md` | T13 | Objetivos, escenario, criterios y perfiles documentados | |
+| T10 | Simulaciones de estrés, una meseta por ejecución, y de picos, con su ventana de recuperación | T5 | Informes que muestran la degradación y la recuperación | 2 |
+| T11 | Extracción de resultados: p50, p95, p99, conteos, tasa lograda y resumen por campaña | T6 | Un archivo de resultados por ejecución y uno por campaña | 2 |
+| T12 | Detección de ejecuciones inválidas | T11 | Una ejecución con tasa no alcanzada, datos incompletos o configuración distinta queda marcada como inválida | 2 |
+| T13 | Calibración local y `ci` (7.1) | T10, T12, T16 | Perfiles congelados con sus márgenes | 1: local · 2: `ci` |
+| T14 | Validación local y `ci` (7.2) | T13 | Veredictos esperados en todas las repeticiones válidas | 1: local · 2: `ci` |
+| T15 | `docs/PLAN-DE-PRUEBAS.md` | T13 | Objetivos, escenario, criterios y perfiles documentados | 2 |
 
 ### Fase 3. Observabilidad y alcance
 
 | ID | Tarea | Depende de | Resultado esperado | Responsable |
 |---|---|---|---|---|
-| T16 | Prometheus y paneles de Grafana provisionados (6.5) | T3 | Los paneles aparecen al levantar el entorno y muestran la espera del candado | |
-| T17 | Workflows manuales y programados: escenarios, calibración y validación | T8, T13 | Cada uno conserva su informe como artefacto | |
-| T18 | Ejecución en Linux o macOS | T6 | El procedimiento funciona igual que en Windows | |
-| T19 | `docs/INTERPRETACION.md`: lectura del informe de Gatling y de los paneles | T14, T16 | Cada panel y métrica del informe tiene su interpretación | |
-| T20 | Reproducción externa | T9, T19 | Una persona ajena al desarrollo completa la práctica y se corrigen los problemas encontrados | |
+| T16 | Prometheus y paneles de Grafana provisionados (6.5) | T3 | Los paneles aparecen al levantar el entorno y muestran la espera del candado | 1 |
+| T17 | Workflows manuales y programados: escenarios, calibración y validación | T8, T13 | Cada uno conserva su informe como artefacto | 2 |
+| T18 | Ejecución en Linux o macOS; en Windows sirve WSL2 | T6 | El procedimiento funciona igual que en Windows | 1 |
+| T19 | `docs/INTERPRETACION.md`: lectura del informe de Gatling y de los paneles | T14, T16 | Cada panel y métrica del informe tiene su interpretación | 1 |
+| T20 | Reproducción externa | T9, T19 | Una persona ajena al desarrollo completa la práctica y se corrigen los problemas encontrados | 1 y 2 |
 
-Si T16 termina después de la calibración, la validación (T14) se repite con Prometheus activo, porque la recolección forma parte de las condiciones medidas.
+T16 pertenece a la fase 3, pero se hace antes de calibrar. Así Prometheus está activo desde la primera campaña, la recolección forma parte de las condiciones medidas y no hay que repetir la validación.
 
 ### Documento
 
 | ID | Tarea | Depende de | Resultado esperado | Responsable |
 |---|---|---|---|---|
-| T21 | Sección 6 y anexo C, según la sección 10 | T14, T16 | Sección de 6 páginas con los resultados de la validación | |
+| T21 | Sección 6 y anexo C, según la sección 10 | T14, T16 | Sección de 6 páginas con los resultados de la validación | 1: 6.1, 6.3, 6.6 y 6.7 · 2: 6.2, 6.4, 6.5 y anexo C |
+
+### Secuencia
+
+| Persona | Orden |
+|---|---|
+| 1 | T1 → T2 → T3 → T4 → T16 → T7 → T9 → T18 → T13 y T14 local → T19 |
+| 2 | T5 → T6 → T8 → T10 → T11 → T12 → T13 y T14 `ci` → T15 → T17 |
+| Ambas | T20 → T21 |
+
+La persona 2 empieza T5 el mismo día que la persona 1 empieza T1: el proyecto de Gatling compila sin la API, y cuando T1 está integrado ya se puede ejecutar contra `/salud`. Mientras la persona 1 termina T4 y T16, la persona 2 ya tiene T6 listo para el piloto (T7). Cuando la persona 1 llega a la calibración, la persona 2 ya terminó T10 y T12. La sección 6 se reparte en 3 páginas para cada una.
