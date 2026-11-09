@@ -1,0 +1,65 @@
+# Entorno del taller (Taller.md 5). Versiones de 5.1 y límites de 5.2.
+#
+#   docker compose up -d --build --wait     levanta los servicios y espera a que estén sanos
+#   docker compose run --rm api pytest      pruebas funcionales y de concurrencia
+#   docker compose down -v                  detiene todo y borra los datos
+#
+# La variante se elige con VARIANTE (regresion, corregida o sana); por defecto, corregida.
+# Los servicios gatling y herramientas están en compose.carga.yaml (persona 2).
+
+name: taller-rendimiento
+
+x-postgres-conexion: &postgres-conexion
+  PGHOST: postgres
+  PGPORT: "5432"
+  PGDATABASE: tienda
+  PGUSER: taller
+  PGPASSWORD: taller
+
+services:
+  postgres:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_DB: tienda
+      POSTGRES_USER: taller
+      POSTGRES_PASSWORD: taller
+    volumes:
+      - datos-postgres:/var/lib/postgresql
+    healthcheck:
+      # Por TCP: durante la inicialización PostgreSQL solo escucha en el socket local,
+      # así que el servicio no aparece sano hasta que termina de inicializarse.
+      test: ["CMD", "pg_isready", "--host=127.0.0.1", "--username=taller", "--dbname=tienda"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 60s
+      start_interval: 1s
+    deploy:
+      resources:
+        limits: { cpus: "1", memory: 512M }
+
+  api:
+    build: ./api
+    image: taller-api:local
+    environment:
+      <<: *postgres-conexion
+      VARIANTE: ${VARIANTE:-corregida}
+      HILOS: "8"
+      POOL_CONEXIONES: "8"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/salud', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+      start_interval: 1s
+    deploy:
+      resources:
+        limits: { cpus: "1", memory: 512M }
+
+volumes:
+  datos-postgres:
