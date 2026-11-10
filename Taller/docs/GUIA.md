@@ -72,7 +72,7 @@ Este es el punto de partida del taller: si solo existieran estas pruebas, `regre
 
 La prueba de carga envía solicitudes a un ritmo fijo, sin esperar las respuestas, como llegan los clientes de un servicio real. Primero hay un calentamiento de 60 s que no se evalúa y después 180 s de medición, sobre los que se calculan el p95 (el tiempo que no supera el 95 % de las solicitudes) y el porcentaje de errores.
 
-El ritmo y el umbral salen de un perfil en `config/perfiles/`. El perfil `local` todavía tiene valores provisionales, demasiado bajos para separar las variantes, así que esta guía usa el perfil `ci`: 150 solicitudes por segundo, p95 menor que 3 000 ms y como máximo 1 % de errores. Esa tasa separa las variantes en cualquier computadora que cumpla los requisitos, porque el límite de `regresion` no depende del procesador: con el candado, cada visita retiene a las demás mientras espera a la base de datos, y eso limita la API a menos de 100 visitas por segundo. La sección 9 explica cómo calibrar un perfil propio.
+El ritmo y el umbral salen de un perfil en `config/perfiles/`. El perfil `local` se calibró en la computadora de desarrollo y no vale para otra sin calibrarlo de nuevo, así que esta guía usa el perfil `ci`: 150 solicitudes por segundo, p95 menor que 3 000 ms y como máximo 1 % de errores. Esa tasa separa las variantes en cualquier computadora que cumpla los requisitos, porque el límite de `regresion` no depende del procesador: con el candado, cada visita retiene a las demás mientras espera a la base de datos, y eso limita la API a menos de 100 visitas por segundo. La sección 9 explica cómo calibrar un perfil propio.
 
 ### 5.1 `corregida`
 

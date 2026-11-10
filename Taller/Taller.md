@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T10, T11 y T12 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` está calibrado y congelado en la etiqueta `perfil-ci-v1` (7.1); faltan su validación y la calibración local.
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T10, T11 y T12 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` está calibrado, congelado en la etiqueta `perfil-ci-v1` (7.1) y validado (7.2). El perfil `local` está calibrado y congelado en `perfil-local-v1`; falta su validación.
 
 ## 1. Propósito
 
@@ -387,9 +387,49 @@ Lo que más condiciona el umbral es la variación de `corregida`. Su p95 cambió
 
 El perfil quedó congelado en la etiqueta `perfil-ci-v1`: 150 solicitudes por segundo, umbral de p95 de 3 000 ms, hasta 1 % de errores, 60 s de calentamiento y 180 s de medición, con los datos y los recursos de 5.2.
 
+#### Perfil `local`
+
+Se fijaron las mismas reglas que en `ci`: tres repeticiones por variante en orden alternado, las duraciones del perfil y un margen de 3 veces. La computadora de desarrollo tiene un Intel Core i7-13620H, y Docker Desktop 29.8 dispone de 12 núcleos y 11,7 GB.
+
+Con el perfil `piloto` se comprobó primero el generador: contra `/salud`, Gatling sostuvo 150 y 300 solicitudes por segundo sin errores. La serie de estrés ubicó el quiebre de `regresion` en el mismo lugar que en el *runner*: a 50 y 75 solicitudes por segundo cumplió con un p95 de 15 ms, y a 100 subió a 14,0 s, con unas 80 respuestas correctas por segundo. `corregida` se mantuvo en 10 ms a 150 y a 300. La tasa elegida fue 150, por las mismas razones que en `ci`.
+
+| Orden | Variante | p50 | p95 | p99 | Errores |
+|---:|---|---:|---:|---:|---:|
+| 1 | `corregida` | 9 ms | 10 ms | 12 ms | 0 % |
+| 2 | `regresion` | 29,2 s | 60 s | 60 s | 33,1 % |
+| 3 | `regresion` | 29,3 s | 60 s | 60 s | 32,9 % |
+| 4 | `corregida` | 9 ms | 10 ms | 12 ms | 0 % |
+| — | `corregida` | — | — | — | — |
+| 5 | `corregida` | 9 ms | 10 ms | 12 ms | 0 % |
+| 6 | `regresion` | 29,0 s | 60 s | 60 s | 32,7 % |
+
+*Campaña `calibracion-local`, a 150 sol./s, el 10 de noviembre de 2026. La fila sin datos es una ejecución que se interrumpió a la mitad porque el sistema se quedó sin memoria; quedó marcada como inválida por falta de `fases.json` y se repitió.*
+
+En local no apareció el ruido del *runner*: el p95 de `corregida` fue de 10 ms en las tres corridas. El de `regresion` quedó en el límite del *timeout* en las tres, con un tercio de errores, casi todos conexiones que la API no aceptó en 10 s. Con el margen de 3 veces, el umbral podía ir de 30 ms a 20 s. Con la misma regla que en `ci`, el punto medio en escala logarítmica es de unos 775 ms, y se eligió 1 000 ms: queda a 100 veces del peor `corregida` y a 60 del mejor `regresion`. La calibración es satisfactoria.
+
+El perfil quedó congelado en la etiqueta `perfil-local-v1`: 150 solicitudes por segundo, umbral de p95 de 1 000 ms, hasta 1 % de errores, 60 s de calentamiento y 180 s de medición. Vale para esa computadora; en otra, se calibra de nuevo.
+
 ### 7.2 Validación
 
 Con el perfil congelado se ejecuta una campaña nueva. Se espera que todas las repeticiones válidas de `corregida` aprueben y que todas las de `regresion` sean rechazadas. El orden de las variantes se alterna y queda registrado, y en CI las campañas se reparten en momentos distintos. Se informan todas las ejecuciones, incluidas las inválidas y su causa. Si el resultado esperado no se mantiene, la validación falla, y el umbral no se ajusta sobre esos datos: se abre una nueva calibración.
+
+#### Perfil `ci`
+
+La validación de `perfil-ci-v1` se ejecutó el mismo día de la calibración, unas once horas después, con el orden invertido respecto de ella: `regresion`, `corregida`, `corregida`, `regresion`, `regresion` y `corregida`. Una séptima corrida, de `corregida`, se lanzó por duplicado al retomar la campaña después de una interrupción; no se eligió a la vista de los resultados, así que se informa con las demás.
+
+| Orden | Variante | p50 | p95 | p99 | Errores | Resultado |
+|---:|---|---:|---:|---:|---:|---|
+| 1 | `regresion` | 24,1 s | 58,4 s | 60 s | 19,0 % | Rechazado |
+| 2 | `corregida` | 8 ms | 114 ms | 244 ms | 0 % | Aprobado |
+| 3 | `corregida` | 8 ms | 9 ms | 10 ms | 0 % | Aprobado |
+| 4 | `regresion` | 24,9 s | 58,6 s | 60 s | 21,2 % | Rechazado |
+| 5 | `regresion` | 24,6 s | 58,9 s | 60 s | 23,0 % | Rechazado |
+| 6 | `corregida` | 7 ms | 9 ms | 12 ms | 0 % | Aprobado |
+| 7 | `corregida` | 7 ms | 8 ms | 11 ms | 0 % | Aprobado |
+
+*Campaña `validacion-ci-1`: corridas manuales de `compuerta.yml` de la 42864280483 a la 42872648414, en la revisión `ad7dcc4`, que agrega T10 sin cambiar la simulación de carga ni el perfil.*
+
+Las siete ejecuciones son válidas y todas dieron el resultado esperado: la validación pasa. El ruido de `corregida` volvió a aparecer en una corrida, con un p95 de 114 ms, 26 veces por debajo del umbral.
 
 ## 8. Integración en CI
 
@@ -445,7 +485,7 @@ La construcción avanza en tres fases. Cada una deja un resultado demostrable, y
 | | Workflows manuales y programados | Cada uno conserva su informe como artefacto |
 | | Reproducción externa | Una persona ajena al desarrollo completa la práctica con la guía |
 
-**Parámetros por definir durante la construcción:** la tasa y el umbral del perfil `local`, que salen de su calibración, y la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto, y el perfil `ci` quedó congelado en `perfil-ci-v1` después de su calibración (7.1).
+**Parámetros por definir durante la construcción:** la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto, y los perfiles quedaron congelados después de su calibración (7.1): `ci` en `perfil-ci-v1` y `local` en `perfil-local-v1`.
 
 ```text
 Taller/
