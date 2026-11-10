@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T10, T11 y T12 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` está calibrado, congelado en la etiqueta `perfil-ci-v1` (7.1) y validado (7.2). El perfil `local` está calibrado y congelado en `perfil-local-v1`; falta su validación.
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, de T10 a T14 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2). Falta el plan de pruebas (T15).
 
 ## 1. Propósito
 
@@ -12,7 +12,7 @@ El caso es una API REST de productos de una tienda, a la que se agrega un contad
 
 Las dos versiones del contador cumplen las mismas pruebas funcionales; la diferencia solo aparece bajo carga. Es lo que plantean 5.1 y 5.2 del Marco teórico: el rendimiento es un atributo de calidad propio, la eficiencia de desempeño de ISO/IEC 25010, y requiere pruebas propias. El defecto, además, es realista: no se fabrica con pausas artificiales.
 
-El taller se presenta en y cada participante puede reproducirlo en su computadora con la guía del repositorio. Al completarlo, el participante puede:
+El taller se presenta y cada participante puede reproducirlo en su computadora con la guía del repositorio. Al completarlo, el participante puede:
 
 1. Levantar un entorno reproducible con Docker Compose.
 2. Ejecutar pruebas funcionales y pruebas de carga, estrés y picos con Gatling.
@@ -430,6 +430,23 @@ La validación de `perfil-ci-v1` se ejecutó el mismo día de la calibración, u
 *Campaña `validacion-ci-1`: corridas manuales de `compuerta.yml` de la 42864280483 a la 42872648414, en la revisión `ad7dcc4`, que agrega T10 sin cambiar la simulación de carga ni el perfil.*
 
 Las siete ejecuciones son válidas y todas dieron el resultado esperado: la validación pasa. El ruido de `corregida` volvió a aparecer en una corrida, con un p95 de 114 ms, 26 veces por debajo del umbral.
+
+#### Perfil `local`
+
+La validación de `perfil-local-v1` se ejecutó en la misma computadora, a continuación de la calibración y con el orden invertido respecto de ella.
+
+| Orden | Variante | p50 | p95 | p99 | Errores | Resultado |
+|---:|---|---:|---:|---:|---:|---|
+| 1 | `regresion` | 28,8 s | 60 s | 60 s | 31,6 % | Rechazado |
+| 2 | `corregida` | 9 ms | 10 ms | 13 ms | 0 % | Aprobado |
+| 3 | `corregida` | 9 ms | 10 ms | 13 ms | 0 % | Aprobado |
+| 4 | `regresion` | 29,3 s | 60 s | 60 s | 33,0 % | Rechazado |
+| 5 | `regresion` | 28,8 s | 60 s | 60 s | 32,8 % | Rechazado |
+| 6 | `corregida` | 9 ms | 10 ms | 12 ms | 0 % | Aprobado |
+
+*Campaña `validacion-local`, a 150 sol./s, el 10 de noviembre de 2026, en la revisión `f66ee01`.*
+
+Las seis ejecuciones son válidas y todas dieron el resultado esperado: la validación pasa. Los valores repiten los de la calibración: `corregida` no mostró pausas, y `regresion` volvió a quedar en el límite del *timeout*, con unas 81 respuestas correctas por segundo, el techo del candado.
 
 ## 8. Integración en CI
 
