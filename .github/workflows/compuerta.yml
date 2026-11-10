@@ -1,7 +1,7 @@
 # Compuerta de rendimiento (Taller.md §8): pruebas funcionales y carga breve
 # sobre la variante activa (Taller/config/variante.env) con el perfil ci.
-# Falla si la prueba de carga rechaza la variante o si hay un error de
-# infraestructura; el resumen del job distingue ambas causas.
+# Falla si la prueba de carga rechaza la variante o si la ejecución es
+# inválida (no se pudo medir); el resumen del job distingue ambos casos.
 name: Compuerta
 
 on:
@@ -73,6 +73,13 @@ jobs:
       - name: Pruebas funcionales
         if: steps.sut.outputs.listo == 'true'
         run: ./taller.sh funcionales
+
+      # Reglas del veredicto y de la validez sobre ejecuciones sintéticas (T12).
+      - name: Pruebas de las herramientas
+        if: steps.sut.outputs.listo == 'true'
+        run: >-
+          docker compose -f compose.yaml -f compose.carga.yaml --profile carga
+          run --rm --no-deps -T herramientas -m unittest discover -s /herramientas -p "prueba_*.py"
 
       - name: Prueba de carga
         if: steps.sut.outputs.listo == 'true'
