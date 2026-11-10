@@ -205,7 +205,7 @@ La latencia es una condición del entorno, aplicada por igual a todas las varian
 | 200 | 9 ms | 54 915 ms | 25,5 % |
 | 300 | 10 ms | 47 352 ms | 50,1 % |
 
-*Piloto con la configuración final: una ejecución por punto, 20 s de calentamiento y 60 s de medición (perfil `piloto`). Por encima de 100 sol./s, los errores de `regresion` son* timeouts *de 60 s de Gatling. Estos valores orientan la calibración, pero no la reemplazan (7.1).*
+*Piloto con la configuración final: una ejecución por punto, 20 s de calentamiento y 60 s de medición (perfil `piloto`). Por encima de 100 sol./s, los errores de `regresion` son casi todos conexiones que la API no aceptó en los 10 s que espera Gatling, porque todos sus hilos estaban ocupados; a 300 sol./s aparecen también conexiones cerradas antes de responder (13 %) y solicitudes sin respuesta a los 60 s (4 %). Estos valores orientan la calibración, pero no la reemplazan (7.1).*
 
 `regresion` no se degrada de forma gradual: entre 75 y 100 solicitudes por segundo pasa de cumplir holgadamente a colapsar, porque la tasa de llegada supera la capacidad del candado y la fila crece sin límite. Para la compuerta conviene una tasa claramente por encima de ese punto y por debajo del límite del generador (7.1), donde `corregida` todavía tiene holgura. La elección final se hace en la calibración, con repeticiones.
 
