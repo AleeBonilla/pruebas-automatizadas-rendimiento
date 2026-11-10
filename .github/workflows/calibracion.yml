@@ -1,0 +1,63 @@
+# Calibración (Taller.md §7.1, T17): campaña de carga con tres repeticiones
+# por variante en orden alternado, cada una en un runner nuevo y una detrás de
+# otra. El resumen propone un perfil para revisión: nunca cambia
+# config/perfiles/ por su cuenta. La comprobación del generador y la
+# exploración con estrés se hacen antes, con el workflow Escenarios.
+name: Calibración
+
+on:
+  workflow_dispatch:
+    inputs:
+      perfil:
+        description: Perfil base, con las duraciones de la campaña
+        type: string
+        default: ci
+      tasa:
+        description: Tasa elegida tras la exploración (vacío = la del perfil)
+        type: string
+        default: ""
+      margen:
+        description: Margen mínimo a cada lado del umbral, fijado antes de medir
+        type: string
+        default: "3"
+
+permissions:
+  contents: read
+
+# Una campaña a la vez: dos campañas simultáneas se reparten los mismos servidores.
+concurrency:
+  group: campanas-rendimiento
+  cancel-in-progress: false
+
+jobs:
+  medir:
+    name: ${{ matrix.orden }}
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        # Orden alternado de Taller.md §7.1 y del plan de pruebas §8.
+        include:
+          - { orden: 1, variante: corregida }
+          - { orden: 2, variante: regresion }
+          - { orden: 3, variante: regresion }
+          - { orden: 4, variante: corregida }
+          - { orden: 5, variante: corregida }
+          - { orden: 6, variante: regresion }
+    uses: ./.github/workflows/medicion.yml
+    with:
+      nombre: ${{ matrix.orden }}-${{ matrix.variante }}
+      tipo: carga
+      perfil: ${{ inputs.perfil }}
+      variante: ${{ matrix.variante }}
+      tasa: ${{ inputs.tasa }}
+      estricto: false
+
+  resumir:
+    needs: medir
+    if: always()
+    uses: ./.github/workflows/campana.yml
+    with:
+      modo: calibracion
+      nombre: calibracion-${{ inputs.perfil }}-${{ github.run_id }}
+      margen: ${{ inputs.margen }}

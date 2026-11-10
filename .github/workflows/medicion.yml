@@ -1,0 +1,124 @@
+# Una medición en un runner nuevo (Taller.md §8, T17). La reutilizan los
+# workflows manuales: Escenarios, Calibración y Validación. Prepara el entorno,
+# ejecuta una prueba con taller.sh y guarda la carpeta de resultados como
+# artefacto, apruebe o no.
+#
+# Con estricto = true, el job falla si la prueba rechaza la variante o si la
+# ejecución es inválida, como la compuerta. Con estricto = false, el job
+# termina bien y deja el código en la salida "codigo": en una campaña, el
+# rechazo de regresion es lo esperado, y quien decide es el job que la resume.
+name: Medición
+
+on:
+  workflow_call:
+    inputs:
+      nombre:
+        description: Sufijo del artefacto, único dentro de la ejecución del workflow
+        type: string
+        required: true
+      tipo:
+        type: string
+        default: carga
+      perfil:
+        type: string
+        default: ci
+      variante:
+        description: Variante (vacío = la de config/variante.env)
+        type: string
+        default: ""
+      ruta:
+        type: string
+        default: productos
+      tasa:
+        type: string
+        default: ""
+      tasas:
+        type: string
+        default: ""
+      pico:
+        type: string
+        default: ""
+      duracion_pico:
+        type: string
+        default: ""
+      funcionales:
+        description: Correr las pruebas funcionales antes de medir
+        type: boolean
+        default: false
+      estricto:
+        type: boolean
+        default: true
+    outputs:
+      codigo:
+        description: 0 aprobado o informativo, 1 rechazado, 2 inválido
+        value: ${{ jobs.medir.outputs.codigo }}
+
+permissions:
+  contents: read
+
+jobs:
+  medir:
+    name: ${{ inputs.tipo }} · ${{ inputs.variante || 'configurada' }}
+    runs-on: ubuntu-24.04
+    # Una serie de estrés corre varios niveles en el mismo job.
+    timeout-minutes: 120
+    outputs:
+      codigo: ${{ steps.prueba.outputs.codigo }}
+    defaults:
+      run:
+        working-directory: Taller
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Registrar el runner
+        run: |
+          echo "CPU: $(nproc)"; free -h; lscpu | grep -E 'Model name|^CPU\(s\)'
+          docker version --format 'Docker {{.Server.Version}}'; docker compose version
+
+      - name: Preparar el entorno
+        run: ./taller.sh preparar
+
+      - name: Pruebas funcionales
+        if: inputs.funcionales
+        run: ./taller.sh funcionales
+
+      - name: Prueba
+        id: prueba
+        # Las entradas llegan por variables de entorno, nunca interpoladas en el script.
+        env:
+          TIPO: ${{ inputs.tipo }}
+          PERFIL: ${{ inputs.perfil }}
+          VARIANTE_PEDIDA: ${{ inputs.variante }}
+          RUTA: ${{ inputs.ruta }}
+          TASA: ${{ inputs.tasa }}
+          TASAS: ${{ inputs.tasas }}
+          PICO: ${{ inputs.pico }}
+          DURACION_PICO: ${{ inputs.duracion_pico }}
+          ESTRICTO: ${{ inputs.estricto }}
+        run: |
+          set -- --tipo "$TIPO" --perfil "$PERFIL" --ruta "$RUTA"
+          if [ -n "$VARIANTE_PEDIDA" ]; then set -- "$@" --variante "$VARIANTE_PEDIDA"; fi
+          if [ -n "$TASA" ]; then set -- "$@" --tasa "$TASA"; fi
+          if [ -n "$TASAS" ]; then set -- "$@" --tasas "$TASAS"; fi
+          if [ -n "$PICO" ]; then set -- "$@" --pico "$PICO"; fi
+          if [ -n "$DURACION_PICO" ]; then set -- "$@" --duracion-pico "$DURACION_PICO"; fi
+          codigo=0
+          ./taller.sh ejecutar "$@" || codigo=$?
+          echo "codigo=$codigo" >> "$GITHUB_OUTPUT"
+          if [ "$ESTRICTO" = true ]; then exit "$codigo"; fi
+          if [ "$codigo" -eq 2 ]; then
+            echo "::warning::La ejecución es inválida: el resumen de la campaña la informa con su motivo."
+          fi
+
+      - name: Detener el entorno
+        if: always()
+        run: ./taller.sh detener --borrar-datos
+
+      - name: Guardar resultados
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: resultados-${{ github.run_id }}-${{ github.run_attempt }}-${{ inputs.nombre }}
+          path: Taller/resultados/
+          if-no-files-found: warn
+          retention-days: 30

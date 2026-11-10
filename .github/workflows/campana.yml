@@ -1,0 +1,84 @@
+# Resumen y decisión de una campaña (Taller.md §7, T17). Lo reutilizan
+# Calibración y Validación después de sus mediciones: descarga los artefactos
+# de la ejecución del workflow, los resume con campana.py y decide con
+# decision.py. Falla si la campaña no es satisfactoria o si está incompleta.
+name: Campaña
+
+on:
+  workflow_call:
+    inputs:
+      modo:
+        description: calibracion o validacion
+        type: string
+        required: true
+      nombre:
+        description: Nombre de la campaña
+        type: string
+        required: true
+      margen:
+        type: string
+        default: "3"
+      repeticiones:
+        type: string
+        default: "3"
+
+permissions:
+  contents: read
+
+jobs:
+  resumir:
+    name: Resumen de la campaña
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Taller
+    env:
+      MODO: ${{ inputs.modo }}
+      NOMBRE: ${{ inputs.nombre }}
+      MARGEN: ${{ inputs.margen }}
+      REPETICIONES: ${{ inputs.repeticiones }}
+      HERRAMIENTAS: >-
+        docker compose -f compose.yaml -f compose.carga.yaml --profile carga
+        run --rm --no-deps -T herramientas
+    steps:
+      - uses: actions/checkout@v7
+
+      # Antes de que la monte un contenedor, para que no quede como root.
+      - name: Crear la carpeta de resultados
+        run: mkdir -p resultados
+
+      - name: Descargar las ejecuciones
+        uses: actions/download-artifact@v8
+        with:
+          pattern: resultados-${{ github.run_id }}-*
+          path: Taller/resultados/
+
+      - name: Resumir la campaña
+        run: $HERRAMIENTAS campana.py --nombre "$NOMBRE" --margen "$MARGEN" /resultados
+
+      - name: Decidir
+        run: |
+          codigo=0
+          $HERRAMIENTAS decision.py --modo "$MODO" --campana "$NOMBRE" --repeticiones "$REPETICIONES" /resultados || codigo=$?
+          cat "resultados/decision-$NOMBRE.md" >> "$GITHUB_STEP_SUMMARY" || true
+          printf '\n' >> "$GITHUB_STEP_SUMMARY"
+          cat "resultados/campana-$NOMBRE.md" >> "$GITHUB_STEP_SUMMARY" || true
+          if [ -f "resultados/perfil-propuesto-$NOMBRE.env" ]; then
+            printf '\n### Perfil propuesto\n\n```ini\n' >> "$GITHUB_STEP_SUMMARY"
+            cat "resultados/perfil-propuesto-$NOMBRE.env" >> "$GITHUB_STEP_SUMMARY"
+            printf '```\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$codigo"
+
+      - name: Guardar el resumen
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: campana-${{ inputs.nombre }}
+          path: |
+            Taller/resultados/campana-*
+            Taller/resultados/decision-*
+            Taller/resultados/perfil-propuesto-*
+          if-no-files-found: warn
+          retention-days: 90

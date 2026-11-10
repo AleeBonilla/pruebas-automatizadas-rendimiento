@@ -1,0 +1,63 @@
+# Escenarios (Taller.md §8, T17): una prueba de carga, una serie de estrés o un
+# pico sobre una variante, a mano y en un runner nuevo. Es lo mismo que
+# "taller.sh ejecutar" en una computadora propia, con el resultado como
+# artefacto. La carga falla si la variante es rechazada; estrés y picos son
+# informativos y solo fallan si la ejecución es inválida.
+name: Escenarios
+
+on:
+  workflow_dispatch:
+    inputs:
+      tipo:
+        description: Tipo de prueba
+        type: choice
+        options: [carga, estres, picos]
+        default: carga
+      variante:
+        description: Variante
+        type: choice
+        options: [corregida, regresion, sana]
+        default: corregida
+      perfil:
+        description: Perfil de config/perfiles/ (piloto, ci)
+        type: string
+        default: ci
+      tasa:
+        description: Tasa en llegadas por segundo (vacío = la del perfil; en picos, la base)
+        type: string
+        default: ""
+      tasas:
+        description: Solo estrés, un nivel por tasa (ej. 50,75,100,150)
+        type: string
+        default: ""
+      pico:
+        description: Solo picos, tasa del pico (ej. 150)
+        type: string
+        default: ""
+      duracion_pico:
+        description: Solo picos, duración del pico en segundos (vacío = 30)
+        type: string
+        default: ""
+      ruta:
+        description: Ruta medida (salud comprueba el generador)
+        type: choice
+        options: [productos, salud]
+        default: productos
+
+permissions:
+  contents: read
+
+jobs:
+  escenario:
+    uses: ./.github/workflows/medicion.yml
+    with:
+      nombre: ${{ inputs.tipo }}-${{ inputs.variante }}
+      tipo: ${{ inputs.tipo }}
+      perfil: ${{ inputs.perfil }}
+      variante: ${{ inputs.variante }}
+      ruta: ${{ inputs.ruta }}
+      tasa: ${{ inputs.tasa }}
+      tasas: ${{ inputs.tasas }}
+      pico: ${{ inputs.pico }}
+      duracion_pico: ${{ inputs.duracion_pico }}
+      estricto: true

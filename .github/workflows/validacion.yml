@@ -1,0 +1,57 @@
+# Validación (Taller.md §7.2, T17): campaña nueva con el perfil congelado,
+# tres repeticiones por variante en el orden inverso al de la calibración,
+# cada una en un runner nuevo. Pasa si todas las ejecuciones válidas de
+# corregida aprueban y todas las de regresion son rechazadas. Si falla, el
+# umbral no se ajusta con estos datos: se abre una calibración nueva.
+# La ejecución programada repite la validación una vez por semana, en otro
+# momento del día que las anteriores, para seguir poniendo a prueba el ruido
+# del runner.
+name: Validación
+
+on:
+  workflow_dispatch:
+    inputs:
+      perfil:
+        description: Perfil congelado
+        type: string
+        default: ci
+  schedule:
+    # Lunes a las 09:17 UTC.
+    - cron: "17 9 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: campanas-rendimiento
+  cancel-in-progress: false
+
+jobs:
+  medir:
+    name: ${{ matrix.orden }}
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        include:
+          - { orden: 1, variante: regresion }
+          - { orden: 2, variante: corregida }
+          - { orden: 3, variante: corregida }
+          - { orden: 4, variante: regresion }
+          - { orden: 5, variante: regresion }
+          - { orden: 6, variante: corregida }
+    uses: ./.github/workflows/medicion.yml
+    with:
+      nombre: ${{ matrix.orden }}-${{ matrix.variante }}
+      tipo: carga
+      perfil: ${{ inputs.perfil || 'ci' }}
+      variante: ${{ matrix.variante }}
+      estricto: false
+
+  resumir:
+    needs: medir
+    if: always()
+    uses: ./.github/workflows/campana.yml
+    with:
+      modo: validacion
+      nombre: validacion-${{ inputs.perfil || 'ci' }}-${{ github.run_id }}
