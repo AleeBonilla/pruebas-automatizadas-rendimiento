@@ -108,6 +108,9 @@ def calibracion(datos: dict, resultados: Path, repeticiones: int) -> tuple[int, 
         f"La propuesta está en `perfil-propuesto-{datos['campana']}.env`. Se revisa antes de copiarla a "
         f"`config/perfiles/{perfil}.env` y congelarla con una etiqueta nueva, y después se valida con una campaña nueva.",
     ]
+    if perfil == "piloto":
+        lineas.append("El perfil `piloto` es de exploración, con mediciones cortas: esta campaña sirve para practicar "
+                      "el procedimiento, no para congelar un perfil (Taller.md §7.1).")
     env = "\n".join([
         f"# Propuesta de perfil {perfil} de la campaña {datos['campana']} (Taller.md §7.1).",
         f"# Umbral admisible con un margen de {datos['margen_exigido']:g} veces: de {desde:.0f} a {hasta:.0f} ms.",
