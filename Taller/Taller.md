@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. El perfil `ci` tiene una calibración preliminar (7.1); faltan la calibración local y la validación.
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T11 y T12 están terminadas: cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` tiene una calibración preliminar (7.1); faltan la calibración local y la validación.
 
 ## 1. Propósito
 
@@ -283,6 +283,19 @@ Cada medición registra p50, p95 y p99; solicitudes iniciadas, completadas y fal
 | Rechazado por rendimiento | Medición válida que incumple alguna aserción; incluye los errores HTTP y *timeouts* de la API bajo carga |
 | Inválido | Preparación fallida o medición no interpretable: generador saturado, datos incompletos, configuración distinta de la prevista o pérdida de métricas exigidas |
 
+Cada ejecución deja `metricas.json`, con los conteos, la tasa lograda, el *throughput* y los percentiles de cada fase. Los conteos y los intervalos los registra la propia simulación en `fases.json`; los percentiles salen del informe de Gatling, porque son los valores con que Gatling evalúa las aserciones. Una campaña se resume con la operación `campana` de los scripts, que escribe `campana-<nombre>.md` con todas las ejecuciones, el rango, la mediana y el coeficiente de variación del p95 por variante, y los márgenes de 7.1.
+
+La validez se comprueba antes que las aserciones, con estas reglas:
+
+| Comprobación | La ejecución es inválida si |
+|---|---|
+| Preparación | La API no estaba sana antes de medir, el estado no se restableció, la API se detuvo durante la medición o Gatling falló antes de evaluar las aserciones |
+| Configuración | Los parámetros que usó la simulación no son los que pidió el script, o la API atendía otra variante (la simulación se lo pregunta a `/salud` antes de empezar) |
+| Generador | Hay errores del propio generador, como quedarse sin puertos; las solicitudes iniciadas se apartan más de un 0,5 % de las previstas, o la tasa lograda queda por debajo del 98 % de la prevista |
+| Datos y métricas | Faltan `fases.json`, sus conteos o el informe; alguna solicitud iniciada no terminó, o el informe no registra todas las iniciadas |
+
+Los errores de la API bajo carga, incluidos los *timeouts*, no invalidan una ejecución: son justamente lo que la prueba debe rechazar. Las tolerancias son amplias para una inyección que, mientras el generador da abasto, es exacta.
+
 En los picos, la ventana de observación y la condición de recuperación se fijan antes de medir. Si no hay recuperación dentro de la ventana, se informa ese límite. Los picos no bloquean la integración.
 
 ### 6.5 Observabilidad
@@ -346,7 +359,7 @@ Con ese margen, el umbral podía ir de 750 ms a 15,6 s. Se eligió 3 000 ms, que
 
 Lo que más condiciona el umbral es la variación de `corregida`. Su p95 cambió 28 veces entre corridas idénticas, mientras el p50 se mantuvo entre 7 y 9 ms: casi todas las solicitudes respondieron igual, pero en algunas corridas aparecieron pausas de 200 ms a 1 s repartidas por toda la medición. La causa no está identificada. Las candidatas son la latencia irregular del disco del *runner* al escribir el WAL de PostgreSQL y la competencia con otras máquinas virtuales del mismo servidor. Tres repeticiones no descartan una corrida con pausas más largas, que haría rechazar una variante correcta; eso lo pone a prueba la validación.
 
-La calibración es preliminar porque todavía no existe la detección de ejecuciones inválidas (T12), de la que depende T13: nada comprueba aún, por ejemplo, que el generador sostuviera la tasa en las seis corridas. Cuando T12 esté lista, se revisan con ella, se congela el perfil con la etiqueta `perfil-ci-v1` y se ejecuta la validación.
+La calibración es preliminar porque se hizo antes de la detección de ejecuciones inválidas (T12), de la que depende T13. Con T12 lista, las seis corridas se revisaron con las reglas de 6.4 que no necesitan los registros nuevos de la simulación: la API estaba sana y el estado restablecido, se usaron los parámetros pedidos, no hubo errores del generador y el informe registra las 27 000 solicitudes previstas en cada una. Dos reglas no se pueden aplicar, porque esas corridas son anteriores a lo que necesitan: la tasa lograda y la variante que atendía la API. Antes de congelar el perfil con la etiqueta `perfil-ci-v1` y ejecutar la validación, falta decidir si basta esa revisión o si se repiten las seis corridas con la simulación actual.
 
 ### 7.2 Validación
 
@@ -384,7 +397,7 @@ jobs:
         with: { name: resultados, path: Taller/resultados/ }
 ```
 
-La compuerta falla tanto por rendimiento como por errores de infraestructura, y el resumen distingue ambas causas. Cada medición usa su propio entorno; dos *jobs* que comparten servicios no se ejecutan en paralelo. Las características del runner quedan registradas, porque fijar `ubuntu-24.04` no fija el hardware asignado.
+La compuerta falla tanto si la variante es rechazada como si la ejecución es inválida, y el resumen distingue ambos casos. Cada medición usa su propio entorno; dos *jobs* que comparten servicios no se ejecutan en paralelo. Las características del runner quedan registradas, porque fijar `ubuntu-24.04` no fija el hardware asignado.
 
 ## 9. Construcción
 

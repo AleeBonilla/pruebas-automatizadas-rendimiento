@@ -121,8 +121,9 @@ Cada ejecución deja una carpeta `resultados/<fecha UTC>-carga-<variante>/`:
 
 | Archivo | Contenido |
 |---|---|
-| `resumen.md` | Veredicto, motivo y valor actual de cada aserción |
-| `veredicto.json` | Lo mismo, para leerlo desde un programa |
+| `resumen.md` | Veredicto y motivo, percentiles, errores, tasa lograda y valor actual de cada aserción |
+| `veredicto.json` | El veredicto, para leerlo desde un programa |
+| `metricas.json` | Conteos, tasa lograda, *throughput* y percentiles de cada fase |
 | `gatling/cargasimulation-*/index.html` | Informe HTML de Gatling |
 | `fases.json` | Inicio y fin UTC del calentamiento y de la medición |
 | `ejecucion.env` · `perfil.env` | Parámetros usados, revisión del código y equipo |
@@ -134,7 +135,7 @@ Cada ejecución deja una carpeta `resultados/<fecha UTC>-carga-<variante>/`:
 |---:|---|---|
 | 0 | Aprobado | La medición cumple todas las aserciones |
 | 1 | Rechazado por rendimiento | La medición incumple el p95 o el límite de errores |
-| 2 | Error de infraestructura | No se pudo medir: la API no estaba sana, Gatling falló o falta el informe. No dice nada de la variante |
+| 2 | Inválido | La medición no se puede interpretar: la API no estaba sana, el generador no sostuvo la tasa, la configuración no era la pedida o faltan datos. No dice nada de la variante |
 
 ### Informe de Gatling
 
@@ -192,11 +193,23 @@ El perfil `ci` se calibró en el *runner* de GitHub Actions. Para tener uno de l
    .\taller.ps1 ejecutar -Perfil local -Variante corregida -Tasa 150
    ```
 
-5. **Elegir el umbral.** Debe quedar al menos 3 veces por encima del peor p95 de `corregida` y 3 veces por debajo del mejor de `regresion`. Si no cabe, la calibración no es satisfactoria: hay que revisar la tasa o el entorno, no estirar el margen.
+   `campana` reúne las seis ejecuciones en `resultados/campana-<nombre>.md`: todas en orden, incluidas las inválidas y su motivo, y por variante el rango, la mediana y el coeficiente de variación del p95. Recibe los nombres de las carpetas de `resultados/`:
+
+   ```powershell
+   .\taller.ps1 campana -Nombre calibracion-local 20261110T043246Z-carga-corregida 20261110T043705Z-carga-regresion ...
+   ```
+
+   ```sh
+   ./taller.sh campana --nombre calibracion-local 20261110T043246Z-carga-corregida 20261110T043705Z-carga-regresion ...
+   ```
+
+   Las ejecuciones inválidas no cuentan para los rangos. Si hay alguna, se repite hasta tener tres válidas por variante.
+
+5. **Elegir el umbral.** Debe quedar al menos 3 veces por encima del peor p95 de `corregida` y 3 veces por debajo del mejor de `regresion`. El resumen de la campaña ya calcula ese intervalo. Si no cabe, la calibración no es satisfactoria: hay que revisar la tasa o el entorno, no estirar el margen.
 
 6. **Escribir el perfil** en `config/perfiles/local.env` con la tasa y el umbral elegidos.
 
-7. **Validar.** Una campaña nueva de 3 ejecuciones por variante con el perfil ya escrito: todas las de `corregida` deben aprobar y todas las de `regresion` deben ser rechazadas. Si alguna no lo hace, se vuelve a calibrar; el umbral no se ajusta con los datos de la validación, porque así cualquier umbral parecería funcionar.
+7. **Validar.** Una campaña nueva de 3 ejecuciones por variante con el perfil ya escrito: todas las de `corregida` deben aprobar y todas las de `regresion` deben ser rechazadas. La columna «Veredictos esperados» del resumen de `campana` lo indica. Si alguna no lo hace, se vuelve a calibrar; el umbral no se ajusta con los datos de la validación, porque así cualquier umbral parecería funcionar.
 
 Cada ejecución completa dura entre 4 y 6 minutos, así que la calibración y la validación llevan cerca de una hora entre las dos. Un perfil calibrado sirve para esa computadora: en otra, el procedimiento se repite.
 
@@ -261,7 +274,7 @@ Los resultados de `resultados/` se conservan en ambos casos. Para guardar o envi
 | PowerShell no ejecuta `taller.ps1` | La política de ejecución lo impide: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` |
 | `preparar` falla con `Requested CPUs are not available` | Docker tiene menos de 4 núcleos disponibles. Aumentarlos en la configuración de Docker Desktop o usar una computadora con más núcleos |
 | Un servicio no arranca porque el puerto está en uso | Otro programa ocupa el 8000, el 3000 o el 9090. Cerrarlo antes de preparar |
-| Resultado 2 (error de infraestructura) | No se pudo medir. El motivo está en `resumen.md`; muchas veces basta con volver a `preparar` |
+| Resultado 2 (inválido) | El motivo está en `resumen.md`. Si es de preparación, basta con volver a `preparar`; si el generador no sostuvo la tasa, cerrar otros programas o bajar la tasa |
 | `Cannot assign requested address` en `gatling.log` | La tasa supera lo que el generador sostiene, unas 350 por segundo. La ejecución no sirve: bajar la tasa |
 | `corregida` rechazada | La computadora estaba ocupada, o el perfil no corresponde a este entorno. Repetir con la computadora libre y, si se mantiene, calibrar un perfil propio (sección 8) |
 | Grafana no muestra datos | El intervalo de tiempo no cubre la ejecución. Ajustarlo con las horas de `fases.json` |
