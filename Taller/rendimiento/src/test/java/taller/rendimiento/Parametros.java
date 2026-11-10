@@ -24,6 +24,16 @@ public final class Parametros {
   public static final int CALENTAMIENTO_S = entero("calentamientoS", 60);
   public static final int MEDICION_S = entero("medicionS", 180);
 
+  /**
+   * Picos (Taller.md §6.3): llegadas por segundo y duración del pico. La base y
+   * la recuperación usan TASA; 0 significa que no se indicó.
+   */
+  public static final double PICO_TASA = decimal("picoTasa", 0);
+  public static final int PICO_S = entero("picoS", 30);
+
+  /** Duración de los bloques de la serie de tiempos de fases.json (Taller.md §6.4). */
+  public static final int BLOQUE_S = entero("bloqueS", 5);
+
   /** Carpeta donde la simulación escribe fases.json. */
   public static final String SALIDA = texto("salida", "target/ejecucion");
 

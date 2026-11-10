@@ -3,8 +3,10 @@ Operaciones del taller (Taller.md §5). Equivale a taller.sh.
 
   .\taller.ps1 preparar    [-Variante V]
   .\taller.ps1 funcionales [argumentos de pytest]
-  .\taller.ps1 ejecutar    [-Tipo carga] [-Perfil local|ci] [-Variante V]
-                           [-Ruta productos|salud] [-Tasa N] [-Umbral MS]
+  .\taller.ps1 ejecutar    [-Tipo carga|estres|picos] [-Perfil local|ci|piloto]
+                           [-Variante V] [-Ruta productos|salud] [-Tasa N]
+                           [-Umbral MS] [-Tasas N,N,...] [-Pico N]
+                           [-DuracionPico S]
   .\taller.ps1 campana     -Nombre NOMBRE [-Margen M] ID...
   .\taller.ps1 exportar    [-Ejecucion ID]
   .\taller.ps1 detener     [-BorrarDatos]
@@ -12,6 +14,9 @@ Operaciones del taller (Taller.md §5). Equivale a taller.sh.
 ejecutar termina con 0 (aprobado), 1 (rechazado por rendimiento) o
 2 (inválido: no se pudo medir), para que la compuerta de CI falle en los dos
 últimos casos y el resumen distinga la causa (Taller.md §8).
+Estrés y picos son informativos: terminan con 0, o con 2 si alguna
+ejecución es inválida. Con -Tasas, estrés corre un nivel por tasa y
+resume la serie con campana (Taller.md §6.3).
 campana resume varias ejecuciones de resultados/ (Taller.md §7).
 
 Funciona con Windows PowerShell 5.1 y con PowerShell 7.
@@ -29,6 +34,9 @@ param(
     [string]$Ruta = 'productos',
     [string]$Tasa = '',
     [string]$Umbral = '',
+    [string[]]$Tasas = @(),
+    [string]$Pico = '',
+    [string]$DuracionPico = '',
     [string]$Ejecucion = '',
     [string]$Nombre = '',
     [string]$Margen = '3',
@@ -156,20 +164,66 @@ function Invoke-Funcionales {
     exit (Invoke-Docker ($Compose + @('run', '--rm', 'api', 'pytest') + $Resto))
 }
 
+function Assert-Numero([string]$Nombre, [string]$Valor) {
+    if ($Valor -notmatch '^[0-9]+(\.[0-9]+)?$') { Stop-Taller "$Nombre debe ser un número positivo: $Valor" }
+}
+
 function Invoke-Ejecutar {
     switch ($Tipo) {
         'carga' { $simulacion = 'taller.rendimiento.CargaSimulation' }
-        default { Stop-Taller "el tipo $Tipo todavía no está disponible (T10)" }
+        'estres' { $simulacion = 'taller.rendimiento.EstresSimulation' }
+        'picos' { $simulacion = 'taller.rendimiento.PicosSimulation' }
     }
+    if ($Tasas) {
+        if ($Tipo -ne 'estres') { Stop-Taller '-Tasas solo sirve con -Tipo estres' }
+        if ($Tasa) { Stop-Taller 'usa -Tasa o -Tasas, no las dos' }
+    }
+    if (($Pico -or $DuracionPico) -and $Tipo -ne 'picos') { Stop-Taller '-Pico y -DuracionPico solo sirven con -Tipo picos' }
 
     # 1. Perfil y variante. Los argumentos tienen prioridad sobre los archivos.
-    $archivoPerfil = "config/perfiles/$Perfil.env"
-    Import-Env $archivoPerfil
+    $script:ArchivoPerfil = "config/perfiles/$Perfil.env"
+    Import-Env $script:ArchivoPerfil
     Import-Env 'config/variante.env'
     if ($Variante) { $env:VARIANTE = $Variante }
     if ($Tasa) { $env:TASA = $Tasa }
     if ($Umbral) { $env:UMBRAL_MS = $Umbral }
     Assert-Variante $env:VARIANTE
+    Assert-Numero 'la tasa' $env:TASA
+    if ($Tipo -eq 'picos') {
+        if ($Pico) { $env:PICO_TASA = $Pico }
+        if ($DuracionPico) { $env:PICO_S = $DuracionPico }
+        if (-not $env:PICO_TASA) { Stop-Taller 'falta la tasa del pico: -Pico N o PICO_TASA en el perfil' }
+        if (-not $env:PICO_S) { $env:PICO_S = '30' }
+        Assert-Numero 'la tasa del pico' $env:PICO_TASA
+        Assert-Numero 'la duración del pico' $env:PICO_S
+    }
+
+    if (-not $Tasas) {
+        exit (Invoke-EjecucionUna $simulacion)
+    }
+
+    # Estrés: una ejecución por nivel (Taller.md §6.3) y un resumen de la serie.
+    $niveles = @($Tasas | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+    foreach ($nivel in $niveles) { Assert-Numero 'cada tasa de -Tasas' $nivel }
+    $rutas = New-Object System.Collections.Generic.List[string]
+    $peor = 0
+    foreach ($nivel in $niveles) {
+        $env:TASA = $nivel
+        $codigo = Invoke-EjecucionUna $simulacion
+        $rutas.Add("/resultados/$($script:UltimoId)")
+        if ($codigo -eq 2) { $peor = 2 }
+    }
+    $nombreSerie = 'estres-{0}-{1}' -f $env:VARIANTE, (Get-Date).ToUniversalTime().ToString("yyyyMMdd'T'HHmmss'Z'")
+    $codigo = Invoke-Docker ($Compose + @('--profile', 'carga', 'run', '--rm', '--no-deps', '-T', 'herramientas',
+            'campana.py', '--nombre', $nombreSerie) + $rutas.ToArray())
+    if ($codigo -ne 0) { $peor = 2 }
+    Write-Host "Resumen de la serie en resultados/campana-$nombreSerie.md"
+    exit $peor
+}
+
+# Una ejecución con la configuración ya cargada. Deja su identificador en
+# $script:UltimoId y devuelve el código del veredicto.
+function Invoke-EjecucionUna([string]$Simulacion) {
     $v = $env:VARIANTE
 
     # 2. API con la variante pedida y estado inicial.
@@ -180,11 +234,12 @@ function Invoke-Ejecutar {
     # 3. Carpeta de la ejecución.
     $id = '{0}-{1}-{2}' -f (Get-Date).ToUniversalTime().ToString("yyyyMMdd'T'HHmmss'Z'"), $Tipo, $v
     if ($Ruta -eq 'salud') { $id = "$id-salud" }
+    $script:UltimoId = $id
     $dir = "resultados/$id"
     $null = New-Item -ItemType Directory -Force -Path $dir
 
     # 4. Entorno y configuración efectiva.
-    Copy-Item -LiteralPath $archivoPerfil -Destination "$dir/perfil.env"
+    Copy-Item -LiteralPath $script:ArchivoPerfil -Destination "$dir/perfil.env"
     Write-Utf8 "$dir/compose-config.yaml" (Get-Docker ($Compose + @('config')))
     Write-Utf8 "$dir/docker-info.json" (Get-Docker @('info', '--format', '{{json .}}'))
     Write-Utf8 "$dir/imagenes.json" (Get-Docker ($Compose + @('--profile', 'carga', 'images', '--format', 'json')))
@@ -192,18 +247,25 @@ function Invoke-Ejecutar {
     $inicio = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
     # 5. Gatling.
-    Write-Host "Ejecutando $simulacion a $($env:TASA)/s ($Ruta)..."
-    $codigoGatling = Invoke-Docker -Log "$dir/gatling.log" -Argumentos ($Compose + @(
-            '--profile', 'carga', 'run', '--rm', '--no-deps', '-T', 'gatling',
-            "-Dgatling.simulationClass=$simulacion",
-            "-Druta=$Ruta",
-            "-Dtasa=$($env:TASA)",
-            "-DumbralMs=$($env:UMBRAL_MS)",
-            "-DerroresMaxPct=$($env:ERRORES_MAX_PCT)",
-            "-DcalentamientoS=$($env:CALENTAMIENTO_S)",
-            "-DmedicionS=$($env:MEDICION_S)",
-            "-Dresultados=/resultados/$id/gatling",
-            "-Dsalida=/resultados/$id"))
+    $argumentos = $Compose + @(
+        '--profile', 'carga', 'run', '--rm', '--no-deps', '-T', 'gatling',
+        "-Dgatling.simulationClass=$Simulacion",
+        "-Druta=$Ruta",
+        "-Dtasa=$($env:TASA)",
+        "-DumbralMs=$($env:UMBRAL_MS)",
+        "-DerroresMaxPct=$($env:ERRORES_MAX_PCT)",
+        "-DcalentamientoS=$($env:CALENTAMIENTO_S)",
+        "-DmedicionS=$($env:MEDICION_S)",
+        "-Dresultados=/resultados/$id/gatling",
+        "-Dsalida=/resultados/$id")
+    if ($Tipo -eq 'picos') {
+        $argumentos += @("-DpicoTasa=$($env:PICO_TASA)", "-DpicoS=$($env:PICO_S)")
+        Write-Host "Ejecutando $Simulacion`: base de $($env:TASA)/s y pico de $($env:PICO_TASA)/s durante $($env:PICO_S) s ($Ruta)..."
+    }
+    else {
+        Write-Host "Ejecutando $Simulacion a $($env:TASA)/s ($Ruta)..."
+    }
+    $codigoGatling = Invoke-Docker -Log "$dir/gatling.log" -Argumentos $argumentos
     $fin = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     $saludDespues = Get-SaludApi
 
@@ -215,29 +277,31 @@ function Invoke-Ejecutar {
     $cambios = if (git status --porcelain 2>$null) { 'si' } else { 'no' }
     $so = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription
     $arquitectura = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
-    Write-Utf8 "$dir/ejecucion.env" (@(
-            "TIPO=$Tipo"
-            "PERFIL=$Perfil"
-            "VARIANTE=$v"
-            "RUTA=$Ruta"
-            "SIMULACION=$simulacion"
-            "TASA=$($env:TASA)"
-            "UMBRAL_MS=$($env:UMBRAL_MS)"
-            "CALENTAMIENTO_S=$($env:CALENTAMIENTO_S)"
-            "MEDICION_S=$($env:MEDICION_S)"
-            "ERRORES_MAX_PCT=$($env:ERRORES_MAX_PCT)"
-            "REVISION=$revision"
-            "CAMBIOS_SIN_CONFIRMAR=$cambios"
-            "SO=$so"
-            "ARQUITECTURA=$arquitectura"
-            "PROCESADOR=$(Get-Procesador)"
-            "INICIO_UTC=$inicio"
-            "FIN_UTC=$fin"
-            "RESTABLECIDO=$restablecido"
-            "SALUD_ANTES=$saludAntes"
-            "SALUD_DESPUES=$saludDespues"
-            "CODIGO_GATLING=$codigoGatling"
-        ) -join "`n")
+    $lineas = @(
+        "TIPO=$Tipo"
+        "PERFIL=$Perfil"
+        "VARIANTE=$v"
+        "RUTA=$Ruta"
+        "SIMULACION=$Simulacion"
+        "TASA=$($env:TASA)"
+        "UMBRAL_MS=$($env:UMBRAL_MS)"
+        "CALENTAMIENTO_S=$($env:CALENTAMIENTO_S)"
+        "MEDICION_S=$($env:MEDICION_S)"
+        "ERRORES_MAX_PCT=$($env:ERRORES_MAX_PCT)"
+        "REVISION=$revision"
+        "CAMBIOS_SIN_CONFIRMAR=$cambios"
+        "SO=$so"
+        "ARQUITECTURA=$arquitectura"
+        "PROCESADOR=$(Get-Procesador)"
+        "INICIO_UTC=$inicio"
+        "FIN_UTC=$fin"
+        "RESTABLECIDO=$restablecido"
+        "SALUD_ANTES=$saludAntes"
+        "SALUD_DESPUES=$saludDespues"
+        "CODIGO_GATLING=$codigoGatling"
+    )
+    if ($Tipo -eq 'picos') { $lineas += @("PICO_TASA=$($env:PICO_TASA)", "PICO_S=$($env:PICO_S)") }
+    Write-Utf8 "$dir/ejecucion.env" ($lineas -join "`n")
 
     # 7. Veredicto.
     $resultado = Invoke-Docker ($Compose + @('--profile', 'carga', 'run', '--rm', '--no-deps', '-T', 'herramientas', 'veredicto.py', "/resultados/$id"))
@@ -251,7 +315,7 @@ function Invoke-Ejecutar {
         [System.IO.File]::AppendAllText($env:GITHUB_STEP_SUMMARY, [System.IO.File]::ReadAllText((Join-Path $PSScriptRoot "$dir/resumen.md")), $Utf8)
     }
     Write-Host "Resultados en $dir"
-    exit $resultado
+    return $resultado
 }
 
 function Invoke-Campana {
@@ -292,5 +356,5 @@ switch ($Operacion) {
     'campana' { Invoke-Campana }
     'exportar' { Invoke-Exportar }
     'detener' { Invoke-Detener }
-    'ayuda' { (Get-Content -LiteralPath $PSCommandPath -Encoding UTF8 | Select-Object -Skip 1 -First 17) -join "`n" | Write-Host }
+    'ayuda' { (Get-Content -LiteralPath $PSCommandPath -Encoding UTF8 | Select-Object -Skip 1 -First 21) -join "`n" | Write-Host }
 }

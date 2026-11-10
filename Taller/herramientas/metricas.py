@@ -115,6 +115,9 @@ def tiempos(columna: dict) -> dict:
 def fase(nombre: str, intervalo: dict | None, estadisticas: dict | None, tasa: float | None, duracion: float | None) -> dict:
     """Resultados de una fase. Los campos que no se pueden calcular quedan en None."""
     intervalo = intervalo or {}
+    # Desde T10, la simulación registra la tasa y la duración de cada fase.
+    tasa = intervalo.get("tasa_prevista", tasa)
+    duracion = intervalo.get("duracion_prevista_s", duracion)
     iniciadas = intervalo.get("iniciadas")
     inyeccion = intervalo.get("inyeccion_s")
     duracion_real = intervalo.get("duracion_s")
@@ -135,6 +138,7 @@ def fase(nombre: str, intervalo: dict | None, estadisticas: dict | None, tasa: f
         "fallidas": ko,
         "errores_pct": 100.0 * ko / total if total else None,
         "tasa_prevista": tasa,
+        "duracion_prevista_s": duracion,
         # Entre la primera y la última llegada hay iniciadas - 1 intervalos.
         "tasa_lograda": (iniciadas - 1) / inyeccion if iniciadas and iniciadas > 1 and inyeccion else None,
         "inyeccion_s": inyeccion,
@@ -143,6 +147,46 @@ def fase(nombre: str, intervalo: dict | None, estadisticas: dict | None, tasa: f
         "tiempos_ms": tiempos(estadisticas["columnas"]["total"]) if estadisticas else None,
         "tiempos_correctas_ms": tiempos(estadisticas["columnas"]["ok"]) if estadisticas else None,
         "errores": estadisticas["errores"] if estadisticas else [],
+        # Serie por bloques de la simulación: tiempos medidos por ella, no por Gatling.
+        "bloques": intervalo.get("bloques"),
+    }
+
+
+def cumple(p95: float | None, errores_pct: float | None, umbral: float | None, errores_max: float | None) -> bool | None:
+    """Criterio del perfil, igual que las aserciones: p95 < umbral y errores <= máximo."""
+    if None in (p95, errores_pct, umbral, errores_max):
+        return None
+    return p95 < umbral and errores_pct <= errores_max
+
+
+def recuperacion(fases: dict, umbral: float | None, errores_max: float | None, bloque_s: float | None) -> dict | None:
+    """Recuperación después de un pico (Taller.md §6.4).
+
+    La recuperación se cuenta desde el primer bloque de la ventana a partir del
+    cual todos los bloques cumplen el criterio del perfil hasta el final de la
+    ventana. Si el último bloque no cumple, no hubo recuperación en la ventana.
+    """
+    if not {"base", "pico", "recuperacion"} <= fases.keys():
+        return None
+    base, pico, ventana = fases["base"], fases["pico"], fases["recuperacion"]
+    bloques = ventana.get("bloques") or []
+
+    def cumple_bloque(b: dict) -> bool:
+        return bool(b["solicitudes"]) and bool(cumple(b["p95_ms"], 100 * b["fallidas"] / b["solicitudes"], umbral, errores_max))
+
+    desde = len(bloques)
+    while desde and cumple_bloque(bloques[desde - 1]):
+        desde -= 1
+    recuperada = desde < len(bloques) if bloques and umbral is not None and errores_max is not None else None
+    return {
+        "bloque_s": bloque_s,
+        "ventana_s": ventana["duracion_prevista_s"],
+        "base_cumple": cumple((base["tiempos_ms"] or {}).get("p95"), base["errores_pct"], umbral, errores_max),
+        "pico_cumple": cumple((pico["tiempos_ms"] or {}).get("p95"), pico["errores_pct"], umbral, errores_max),
+        "recuperada": recuperada,
+        "recuperacion_s": bloques[desde]["desde_s"] if recuperada else None,
+        "bloques_que_incumplen": sum(not cumple_bloque(b) for b in bloques),
+        "bloques": len(bloques),
     }
 
 
@@ -151,9 +195,19 @@ def extraer(carpeta: Path) -> dict:
     ejecucion = leer_env(carpeta / "ejecucion.env")
     fases_json = leer_json(carpeta / "fases.json") or {}
     intervalos = fases_json.get("fases") or {}
+    parametros = fases_json.get("parametros") or {}
     informe = informe_gatling(carpeta)
     tasa = numero(ejecucion.get("TASA"))
+    umbral = numero(ejecucion.get("UMBRAL_MS"))
+    errores_max = numero(ejecucion.get("ERRORES_MAX_PCT"))
+    # Las ejecuciones anteriores a T10 no registran la tasa ni la duración de cada fase.
     duraciones = {"calentamiento": numero(ejecucion.get("CALENTAMIENTO_S")), "medicion": numero(ejecucion.get("MEDICION_S"))}
+    fases = {
+        nombre: fase(nombre, intervalos.get(nombre),
+                     estadisticas_solicitud(informe, nombre) if informe else None,
+                     tasa, duraciones.get(nombre))
+        for nombre in (list(intervalos) or ["calentamiento", "medicion"])
+    }
     return {
         "ejecucion": carpeta.name,
         "tipo": ejecucion.get("TIPO"),
@@ -162,14 +216,12 @@ def extraer(carpeta: Path) -> dict:
         "variante_api": fases_json.get("variante_api"),
         "ruta": ejecucion.get("RUTA"),
         "tasa": tasa,
-        "umbral_ms": numero(ejecucion.get("UMBRAL_MS")),
-        "errores_max_pct": numero(ejecucion.get("ERRORES_MAX_PCT")),
+        "pico_tasa": numero(ejecucion.get("PICO_TASA")),
+        "umbral_ms": umbral,
+        "errores_max_pct": errores_max,
+        "bloque_s": parametros.get("bloqueS"),
         "revision": ejecucion.get("REVISION"),
         "inicio_utc": ejecucion.get("INICIO_UTC"),
-        "fases": {
-            nombre: fase(nombre, intervalos.get(nombre),
-                         estadisticas_solicitud(informe, nombre) if informe else None,
-                         tasa, duraciones[nombre])
-            for nombre in ("calentamiento", "medicion")
-        },
+        "fases": fases,
+        "recuperacion": recuperacion(fases, umbral, errores_max, parametros.get("bloqueS")),
     }

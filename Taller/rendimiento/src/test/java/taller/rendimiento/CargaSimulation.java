@@ -14,11 +14,13 @@ public class CargaSimulation extends Simulation {
 
   {
     setUp(
-        Escenarios.consulta("calentamiento", fases.fase("calentamiento"))
+        Escenarios.consulta("calentamiento", fases.fase("calentamiento", Parametros.TASA, Parametros.CALENTAMIENTO_S))
             .injectOpen(constantUsersPerSec(Parametros.TASA).during(Parametros.CALENTAMIENTO_S))
             // andThen: la medición empieza cuando terminan los usuarios del calentamiento.
+            // Con una variante saturada, eso deja un hueco sin llegadas en el que la
+            // fila se vacía; se mantiene mientras rija perfil-ci-v1 (Taller.md §6.3).
             .andThen(
-                Escenarios.consulta("medicion", fases.fase("medicion"))
+                Escenarios.consulta("medicion", fases.fase("medicion", Parametros.TASA, Parametros.MEDICION_S))
                     .injectOpen(constantUsersPerSec(Parametros.TASA).during(Parametros.MEDICION_S))))
         .protocols(Escenarios.protocolo())
         .assertions(

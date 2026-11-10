@@ -11,6 +11,9 @@ import io.gatling.javaapi.http.HttpRequestActionBuilder;
 /** Piezas comunes a las simulaciones del taller. */
 public final class Escenarios {
 
+  /** Atributo de sesión con el instante en que salió la solicitud. */
+  private static final String INICIO = "inicioSolicitud";
+
   private Escenarios() {}
 
   /**
@@ -27,13 +30,11 @@ public final class Escenarios {
    * así las aserciones se aplican solo a la medición con details(nombre).
    */
   public static ScenarioBuilder consulta(String nombre, Fases.Fase fase) {
-    ChainBuilder solicitud = exec(session -> {
-          fase.marcarInicio();
-          return session;
-        })
+    ChainBuilder solicitud = exec(session -> session.set(INICIO, fase.marcarInicio()))
         .exec(Parametros.consultaProductos() ? producto(nombre) : salud(nombre))
         .exec(session -> {
-          fase.marcarFin();
+          // Cada usuario hace una sola solicitud: si la sesión falló, falló esa.
+          fase.marcarFin(session.getLong(INICIO), session.isFailed());
           return session;
         });
 

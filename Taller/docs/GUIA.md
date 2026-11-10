@@ -72,7 +72,7 @@ Este es el punto de partida del taller: si solo existieran estas pruebas, `regre
 
 La prueba de carga envía solicitudes a un ritmo fijo, sin esperar las respuestas, como llegan los clientes de un servicio real. Primero hay un calentamiento de 60 s que no se evalúa y después 180 s de medición, sobre los que se calculan el p95 (el tiempo que no supera el 95 % de las solicitudes) y el porcentaje de errores.
 
-El ritmo y el umbral salen de un perfil en `config/perfiles/`. El perfil `local` todavía tiene valores provisionales, demasiado bajos para separar las variantes, así que esta guía usa el perfil `ci`: 150 solicitudes por segundo, p95 menor que 3 000 ms y como máximo 1 % de errores. Esa tasa separa las variantes en cualquier computadora que cumpla los requisitos, porque el límite de `regresion` no depende del procesador: con el candado, cada visita retiene a las demás mientras espera a la base de datos, y eso limita la API a menos de 100 visitas por segundo. La sección 8 explica cómo calibrar un perfil propio.
+El ritmo y el umbral salen de un perfil en `config/perfiles/`. El perfil `local` todavía tiene valores provisionales, demasiado bajos para separar las variantes, así que esta guía usa el perfil `ci`: 150 solicitudes por segundo, p95 menor que 3 000 ms y como máximo 1 % de errores. Esa tasa separa las variantes en cualquier computadora que cumpla los requisitos, porque el límite de `regresion` no depende del procesador: con el candado, cada visita retiene a las demás mientras espera a la base de datos, y eso limita la API a menos de 100 visitas por segundo. La sección 9 explica cómo calibrar un perfil propio.
 
 ### 5.1 `corregida`
 
@@ -117,7 +117,7 @@ Las dos variantes devolvieron los mismos productos y contaron bien las visitas. 
 
 ## 6. Leer los resultados
 
-Cada ejecución deja una carpeta `resultados/<fecha UTC>-carga-<variante>/`:
+Cada ejecución deja una carpeta `resultados/<fecha UTC>-<tipo>-<variante>/`:
 
 | Archivo | Contenido |
 |---|---|
@@ -136,6 +136,8 @@ Cada ejecución deja una carpeta `resultados/<fecha UTC>-carga-<variante>/`:
 | 0 | Aprobado | La medición cumple todas las aserciones |
 | 1 | Rechazado por rendimiento | La medición incumple el p95 o el límite de errores |
 | 2 | Inválido | La medición no se puede interpretar: la API no estaba sana, el generador no sostuvo la tasa, la configuración no era la pedida o faltan datos. No dice nada de la variante |
+
+Estrés y picos no aprueban ni rechazan: su resultado es informativo y terminan con 0, o con 2 si la medición es inválida (sección 8).
 
 ### Informe de Gatling
 
@@ -166,7 +168,37 @@ Gatling mide desde afuera y decide el veredicto; Grafana muestra por qué. Los t
 
 Repetir es la forma de ver el ruido. El p95 de una misma variante cambia de una ejecución a otra; lo que importa es que la distancia entre las variantes sea mucho mayor que esa variación.
 
-## 8. Calibrar un perfil propio
+## 8. Estrés y picos
+
+La prueba de carga responde si la API cumple a una tasa fija. Las otras dos preguntan otra cosa, y su resultado es informativo: no aprueban ni rechazan.
+
+**Estrés: ¿dónde empieza la degradación?** Cada nivel es una ejecución aparte, con el calentamiento y la medición del perfil, y dice si a esa tasa se cumple el criterio. `-Tasas` (o `--tasas`) corre un nivel por tasa y resume la serie en `resultados/campana-estres-<variante>-<fecha>.md`:
+
+```powershell
+.\taller.ps1 ejecutar -Tipo estres -Perfil piloto -Variante regresion -Tasas 50,75,100,150
+```
+
+```sh
+./taller.sh ejecutar --tipo estres --perfil piloto --variante regresion --tasas 50,75,100,150
+```
+
+Con el perfil `piloto`, cada nivel dura menos de 2 minutos. En la computadora de desarrollo, `regresion` cumple a 75 por segundo, con un p95 de 15 ms, y a 100 ya no: el p95 sube a 14,6 s y las respuestas correctas se quedan en unas 80 por segundo, el límite del candado. La columna «Correctas/s» del resumen muestra ese techo.
+
+**Picos: ¿cómo responde a una ráfaga y cuánto tarda en recuperarse?** La carga sube de golpe de la tasa del perfil a la del pico, la mantiene `-DuracionPico` segundos (30 si no se indica) y vuelve a la base. La base dura lo que el calentamiento del perfil, y la vuelta, lo que la medición: esa es la ventana en la que se espera la recuperación.
+
+```powershell
+.\taller.ps1 ejecutar -Tipo picos -Perfil local -Variante regresion -Tasa 50 -Pico 150
+```
+
+```sh
+./taller.sh ejecutar --tipo picos --perfil local --variante regresion --tasa 50 --pico 150
+```
+
+El resumen da el p95 de la base, del pico y de la ventana, y dice si la API se recuperó y cuándo. La simulación agrupa las solicitudes en bloques de 5 s y considera recuperada la API desde el bloque a partir del cual todos cumplen el criterio del perfil hasta el final de la ventana. La serie de bloques está en `fases.json`, y el gráfico de tiempos del informe de Gatling muestra la misma curva. Con `regresion`, a 50 por segundo la API va holgada, pero durante el pico la fila crece: el p95 sube unos 3,7 s cada 5 s, y al volver a la base baja unos 2 s cada 5 s. Con la ventana de 60 s del perfil `piloto` no alcanza a recuperarse; con la de 180 s del perfil `local`, se recupera 55 s después del pico. `corregida` atraviesa un pico de 150 a 300 por segundo sin cambiar su p95.
+
+La tasa del pico no debe pasar de lo que sostiene el generador, unas 350 por segundo: si no la sostiene, la ejecución es inválida.
+
+## 9. Calibrar un perfil propio
 
 El perfil `ci` se calibró en el *runner* de GitHub Actions. Para tener uno de la propia computadora se sigue el procedimiento de [`Taller.md`](../Taller.md) §7.1. Antes de medir se decide cuántas repeticiones se harán y qué margen mínimo se exigirá; aquí, 3 repeticiones por variante y un umbral al menos 3 veces lejos de cada variante.
 
@@ -178,11 +210,11 @@ El perfil `ci` se calibró en el *runner* de GitHub Actions. Para tener uno de l
 
    Por encima de unas 350 solicitudes por segundo, Gatling se queda sin puertos (`Cannot assign requested address`) y la medición no vale.
 
-2. **Explorar.** Con el perfil `piloto`, de 20 s de calentamiento y 60 s de medición, se busca la tasa en la que `regresion` deja de cumplir. Una ejecución por tasa basta:
+2. **Explorar.** Con una serie de estrés y el perfil `piloto`, de 20 s de calentamiento y 60 s de medición, se busca la tasa en la que `regresion` deja de cumplir (sección 8). Una ejecución por tasa basta:
 
    ```powershell
-   foreach ($t in 50, 75, 100, 150) { .\taller.ps1 ejecutar -Perfil piloto -Variante regresion -Tasa $t }
-   .\taller.ps1 ejecutar -Perfil piloto -Variante corregida -Tasa 300
+   .\taller.ps1 ejecutar -Tipo estres -Perfil piloto -Variante regresion -Tasas 50,75,100,150
+   .\taller.ps1 ejecutar -Tipo estres -Perfil piloto -Variante corregida -Tasas 150,300
    ```
 
 3. **Elegir la tasa.** Bien por encima del punto donde `regresion` colapsa y con `corregida` todavía holgada. En la computadora de desarrollo y en el *runner*, `regresion` colapsó entre 75 y 100, y se eligió 150.
@@ -213,7 +245,7 @@ El perfil `ci` se calibró en el *runner* de GitHub Actions. Para tener uno de l
 
 Cada ejecución completa dura entre 4 y 6 minutos, así que la calibración y la validación llevan cerca de una hora entre las dos. Un perfil calibrado sirve para esa computadora: en otra, el procedimiento se repite.
 
-## 9. La compuerta en GitHub Actions
+## 10. La compuerta en GitHub Actions
 
 En el repositorio, el workflow `Compuerta` (`.github/workflows/compuerta.yml`) corre en cada *push* y en cada *pull request* que toca `Taller/`. Prepara el entorno en una máquina nueva de GitHub, ejecuta las pruebas funcionales y la prueba de carga con el perfil `ci`, y falla si la variante es rechazada o si no se pudo medir. El *pull request* queda marcado en rojo o en verde, y el informe se guarda como artefacto de la ejecución.
 
@@ -253,7 +285,7 @@ Para reproducirlos en una cuenta propia:
 
 Estos *pull requests* no se integran: existen para mostrar la compuerta. Y el perfil `ci` está calibrado para las máquinas de GitHub, que no son las de la computadora local, así que sus milisegundos no se comparan con los de la sección 5.
 
-## 10. Detener
+## 11. Detener
 
 ```powershell
 .\taller.ps1 detener                # detiene los servicios y conserva los datos
@@ -267,7 +299,7 @@ Estos *pull requests* no se integran: existen para mostrar la compuerta. Y el pe
 
 Los resultados de `resultados/` se conservan en ambos casos. Para guardar o enviar una ejecución, `exportar` la empaqueta en un `.tar.gz` (la última, o la que se indique con `-Ejecucion` o `--ejecucion`).
 
-## 11. Problemas frecuentes
+## 12. Problemas frecuentes
 
 | Síntoma | Causa y solución |
 |---|---|
@@ -276,5 +308,5 @@ Los resultados de `resultados/` se conservan en ambos casos. Para guardar o envi
 | Un servicio no arranca porque el puerto está en uso | Otro programa ocupa el 8000, el 3000 o el 9090. Cerrarlo antes de preparar |
 | Resultado 2 (inválido) | El motivo está en `resumen.md`. Si es de preparación, basta con volver a `preparar`; si el generador no sostuvo la tasa, cerrar otros programas o bajar la tasa |
 | `Cannot assign requested address` en `gatling.log` | La tasa supera lo que el generador sostiene, unas 350 por segundo. La ejecución no sirve: bajar la tasa |
-| `corregida` rechazada | La computadora estaba ocupada, o el perfil no corresponde a este entorno. Repetir con la computadora libre y, si se mantiene, calibrar un perfil propio (sección 8) |
+| `corregida` rechazada | La computadora estaba ocupada, o el perfil no corresponde a este entorno. Repetir con la computadora libre y, si se mantiene, calibrar un perfil propio (sección 9) |
 | Grafana no muestra datos | El intervalo de tiempo no cubre la ejecución. Ajustarlo con las horas de `fases.json` |

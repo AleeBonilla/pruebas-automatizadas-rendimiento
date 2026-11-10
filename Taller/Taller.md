@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T11 y T12 están terminadas: cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` está calibrado y congelado en la etiqueta `perfil-ci-v1` (7.1); faltan su validación y la calibración local.
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, T10, T11 y T12 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). El perfil `ci` está calibrado y congelado en la etiqueta `perfil-ci-v1` (7.1); faltan su validación y la calibración local.
 
 ## 1. Propósito
 
@@ -273,6 +273,12 @@ La resistencia queda fuera: una ejecución breve no demuestra estabilidad prolon
 
 Cada nivel de estrés se ejecuta por separado. En una única ejecución escalonada, las solicitudes lentas de un nivel se mezclan con las del siguiente y el p95 global no describe ninguno; con una ejecución por nivel, el informe de Gatling da el p95 de cada uno. Los percentiles de distintas ejecuciones se informan por separado y nunca se promedian.
 
+Un nivel de estrés tiene el calentamiento y la medición de la carga, con las duraciones y el criterio del perfil, pero las llegadas no se interrumpen entre las dos fases. En la prueba de carga, `andThen` espera a que terminen todas las solicitudes del calentamiento, y con una variante saturada eso deja hasta 60 s sin llegadas en los que la fila se vacía: la medición empieza con el servidor descansado. En estrés, la medición empieza a la hora prevista y hereda la fila que ya se formó. La carga mantiene `andThen` porque `perfil-ci-v1` se calibró así; el cambio queda para la próxima calibración. Cada nivel informa si cumple el criterio del perfil. `ejecutar --tipo estres --tasas 50,75,100` corre un nivel por tasa y resume la serie con `campana`, que añade las respuestas correctas por segundo.
+
+Un pico tiene tres fases seguidas, sin pausas entre ellas: la base, a la tasa del perfil durante el calentamiento; el pico, que sube de golpe a `PICO_TASA` durante `PICO_S` (30 s si no se indica), y la recuperación, que vuelve a la tasa del perfil durante la medición. Esa última fase es la ventana de observación. La tasa del pico se indica con `--pico` o con `PICO_TASA` en el perfil.
+
+Con el perfil `piloto`, en local, un pico de 50 a 150 solicitudes por segundo durante 30 s sobre `regresion` muestra cómo se forma y se vacía la fila. Durante el pico, el p95 de cada bloque de 5 s sube unos 3,7 s, porque llegan 150 solicitudes por segundo y el candado atiende unas 85. Al volver a 50, baja unos 2 s por bloque, y en el último bloque de la ventana de 60 s todavía es de 842 ms: no se recupera dentro de la ventana. Con la ventana de 180 s del perfil `local`, el mismo pico se recupera 55 s después de terminar. En las mismas condiciones, un pico de 150 a 300 solicitudes por segundo durante 10 s no afecta a `corregida`: su p95 se mantiene en 12 ms.
+
 ### 6.4 Métricas y resultados
 
 Cada medición registra p50, p95 y p99; solicitudes iniciadas, completadas y fallidas; *throughput* de respuestas correctas y tasa de error. Una ejecución que no alcanza la tasa prevista no puede aprobar.
@@ -281,6 +287,7 @@ Cada medición registra p50, p95 y p99; solicitudes iniciadas, completadas y fal
 |---|---|
 | Aprobado | Medición válida que cumple las aserciones |
 | Rechazado por rendimiento | Medición válida que incumple alguna aserción; incluye los errores HTTP y *timeouts* de la API bajo carga |
+| Informativo | Medición válida de estrés o de picos: describe si el nivel cumple el criterio del perfil o cómo se recupera la API, sin aprobar ni rechazar |
 | Inválido | Preparación fallida o medición no interpretable: generador saturado, datos incompletos, configuración distinta de la prevista o pérdida de métricas exigidas |
 
 Cada ejecución deja `metricas.json`, con los conteos, la tasa lograda, el *throughput* y los percentiles de cada fase. Los conteos y los intervalos los registra la propia simulación en `fases.json`; los percentiles salen del informe de Gatling, porque son los valores con que Gatling evalúa las aserciones. Una campaña se resume con la operación `campana` de los scripts, que escribe `campana-<nombre>.md` con todas las ejecuciones, el rango, la mediana y el coeficiente de variación del p95 por variante, y los márgenes de 7.1.
@@ -296,7 +303,9 @@ La validez se comprueba antes que las aserciones, con estas reglas:
 
 Los errores de la API bajo carga, incluidos los *timeouts*, no invalidan una ejecución: son justamente lo que la prueba debe rechazar. Las tolerancias son amplias para una inyección que, mientras el generador da abasto, es exacta.
 
-En los picos, la ventana de observación y la condición de recuperación se fijan antes de medir. Si no hay recuperación dentro de la ventana, se informa ese límite. Los picos no bloquean la integración.
+En estrés y picos, la validez se comprueba igual. En los picos se revisan las tres fases, porque el generador también debe sostener el pico.
+
+En los picos, la ventana de observación y la condición de recuperación se fijan antes de medir. La simulación agrupa las solicitudes en bloques de 5 s según el momento en que salen y registra, por cada bloque, la cantidad, los errores y el p50, el p95 y el máximo de los tiempos que mide ella misma desde que envía cada solicitud hasta que la termina. La API se considera recuperada desde el primer bloque de la ventana a partir del cual todos los bloques, hasta el final, cumplen el criterio del perfil: un p95 menor que `UMBRAL_MS` y errores que no superan `ERRORES_MAX_PCT`. El tiempo de recuperación es el inicio de ese bloque, contado desde el final del pico. Si el último bloque no cumple, no hay recuperación dentro de la ventana y se informa ese límite. Si la base ya incumple el criterio, no hay un estado normal al que volver, y el resultado lo advierte. Los picos no bloquean la integración.
 
 ### 6.5 Observabilidad
 

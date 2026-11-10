@@ -7,7 +7,7 @@ compose-config.yaml, imagenes.json) y Gatling (gatling.log, fases.json y el
 informe HTML). Escribe metricas.json, metadatos.json, veredicto.json y resumen.md.
 
 Códigos de salida (Taller.md §6.4 y §8):
-  0  aprobado
+  0  aprobado, o informativo en estrés y picos, que no son compuertas (T10)
   1  rechazado por rendimiento
   2  inválido: la preparación falló o la medición no se puede interpretar, así
      que no dice nada de la variante (T12)
@@ -28,8 +28,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from metricas import extraer, informe_gatling, leer_env, leer_json, leer_texto, numero  # noqa: E402
 
-APROBADO, RECHAZADO, INVALIDO = "aprobado", "rechazado", "invalido"
-CODIGOS = {APROBADO: 0, RECHAZADO: 1, INVALIDO: 2}
+APROBADO, RECHAZADO, INFORMATIVO, INVALIDO = "aprobado", "rechazado", "informativo", "invalido"
+CODIGOS = {APROBADO: 0, RECHAZADO: 1, INFORMATIVO: 0, INVALIDO: 2}
+
+# Fases cuya validez se comprueba en cada tipo de prueba (Taller.md §6.3). En
+# picos importan las tres: el generador también debe sostener el pico.
+FASES_MEDIDAS = {"carga": ("medicion",), "estres": ("medicion",), "picos": ("base", "pico", "recuperacion")}
+NOMBRES_FASE = {"calentamiento": "el calentamiento", "medicion": "la medición", "base": "la base",
+                "pico": "el pico", "recuperacion": "la recuperación"}
+# Picos no tiene aserciones: su resultado sale de la serie por bloques.
+CON_ASERCIONES = ("carga", "estres")
 
 # Tolerancias de la validez (Taller.md §6.4). La inyección de Gatling es exacta
 # mientras el generador da abasto: un desvío mayor indica que no sostuvo la tasa.
@@ -52,6 +60,19 @@ FALLO_GATLING = "Gatling failed"
 # Parámetros que el script pidió (ejecucion.env) y los que usó la simulación (fases.json).
 PARAMETROS = (("TASA", "tasa"), ("UMBRAL_MS", "umbralMs"), ("ERRORES_MAX_PCT", "erroresMaxPct"),
               ("CALENTAMIENTO_S", "calentamientoS"), ("MEDICION_S", "medicionS"))
+PARAMETROS_PICOS = (("PICO_TASA", "picoTasa"), ("PICO_S", "picoS"))
+
+
+def tipo_de(ejecucion: dict[str, str]) -> str:
+    return ejecucion.get("TIPO") or "carga"
+
+
+def parametros_de(ejecucion: dict[str, str]) -> tuple:
+    return PARAMETROS + (PARAMETROS_PICOS if tipo_de(ejecucion) == "picos" else ())
+
+
+def fases_medidas(tipo: str | None) -> tuple:
+    return FASES_MEDIDAS.get(tipo or "carga", ("medicion",))
 
 
 def aserciones(log: str) -> list[dict]:
@@ -92,7 +113,7 @@ def invalidez(ejecucion: dict[str, str], fases_json: dict, resultados: dict, log
     if not fases_json:
         return "falta fases.json: no se sabe qué midió la simulación"
     usados = fases_json.get("parametros") or {}
-    for clave_env, clave_sim in PARAMETROS:
+    for clave_env, clave_sim in parametros_de(ejecucion):
         pedido, usado = numero(ejecucion.get(clave_env)), numero(str(usados.get(clave_sim)))
         if pedido is None or usado is None or abs(pedido - usado) > 1e-9:
             return f"la simulación usó {clave_sim}={usados.get(clave_sim)}, pero se pidió {ejecucion.get(clave_env)}"
@@ -103,31 +124,44 @@ def invalidez(ejecucion: dict[str, str], fases_json: dict, resultados: dict, log
         return f"la API atendía la variante {variante_api or 'desconocida'}, pero se pidió {ejecucion.get('VARIANTE')}"
 
     # Métricas exigidas.
-    medicion = resultados["fases"]["medicion"]
-    if not lista:
+    if tipo_de(ejecucion) in CON_ASERCIONES and not lista:
         return "no se encontraron aserciones en la salida de Gatling"
-    if informe is None or medicion["completadas"] is None:
-        return "no se generó el informe de Gatling de la medición"
-    if medicion["iniciadas"] is None or medicion["tasa_lograda"] is None:
-        return "fases.json no registra las solicitudes de la medición"
+    if informe is None:
+        return "no se generó el informe de Gatling"
+    for nombre in fases_medidas(tipo_de(ejecucion)):
+        motivo = invalidez_fase(nombre, resultados["fases"].get(nombre))
+        if motivo:
+            return motivo
+    return None
+
+
+def invalidez_fase(nombre: str, fase: dict | None) -> str | None:
+    """Reglas del generador y de los datos sobre una fase medida."""
+    de = NOMBRES_FASE.get(nombre, nombre)
+    if fase is None or fase["completadas"] is None:
+        return f"el informe de Gatling no tiene las solicitudes de {de}"
+    if fase["iniciadas"] is None or fase["tasa_lograda"] is None:
+        return f"fases.json no registra las solicitudes de {de}"
 
     # Generador: sin estos errores ni desvíos, la carga fue la prevista.
-    for error in medicion["errores"]:
+    for error in fase["errores"]:
         if ERRORES_GENERADOR.search(error["mensaje"]):
-            return f"el generador no pudo enviar {error['cantidad']} solicitudes ({error['mensaje']})"
-    esperadas = medicion["esperadas"]
-    if abs(medicion["iniciadas"] - esperadas) > max(1, TOLERANCIA_CANTIDAD * esperadas):
-        return f"se iniciaron {medicion['iniciadas']} solicitudes de las {esperadas} previstas"
-    if medicion["tasa_lograda"] < (1 - TOLERANCIA_TASA) * medicion["tasa_prevista"]:
-        return (f"el generador no sostuvo la tasa: {medicion['tasa_lograda']:.1f}/s "
-                f"de {medicion['tasa_prevista']:g}/s previstas")
+            return f"el generador no pudo enviar {error['cantidad']} solicitudes en {de} ({error['mensaje']})"
+    esperadas = fase["esperadas"]
+    if esperadas is None:
+        return f"no se sabe cuántas solicitudes preveía {de}"
+    if abs(fase["iniciadas"] - esperadas) > max(1, TOLERANCIA_CANTIDAD * esperadas):
+        return f"se iniciaron {fase['iniciadas']} solicitudes de las {esperadas} previstas en {de}"
+    if fase["tasa_lograda"] < (1 - TOLERANCIA_TASA) * fase["tasa_prevista"]:
+        return (f"el generador no sostuvo la tasa en {de}: {fase['tasa_lograda']:.1f}/s "
+                f"de {fase['tasa_prevista']:g}/s previstas")
 
     # Datos completos: cada solicitud iniciada debe haber terminado y figurar en el informe.
-    if medicion["terminadas"] != medicion["iniciadas"]:
-        return f"terminaron {medicion['terminadas']} de las {medicion['iniciadas']} solicitudes iniciadas"
-    if medicion["completadas"] != medicion["iniciadas"]:
-        return (f"el informe de Gatling registra {medicion['completadas']} solicitudes, "
-                f"pero se iniciaron {medicion['iniciadas']}")
+    if fase["terminadas"] != fase["iniciadas"]:
+        return f"terminaron {fase['terminadas']} de las {fase['iniciadas']} solicitudes iniciadas en {de}"
+    if fase["completadas"] != fase["iniciadas"]:
+        return (f"el informe de Gatling registra {fase['completadas']} solicitudes de {de}, "
+                f"pero se iniciaron {fase['iniciadas']}")
     return None
 
 
@@ -136,11 +170,35 @@ def decidir(ejecucion, fases_json, resultados, log, lista, informe) -> tuple[str
     motivo = invalidez(ejecucion, fases_json, resultados, log, lista, informe)
     if motivo:
         return INVALIDO, motivo
+    tipo = tipo_de(ejecucion)
+    if tipo == "picos":
+        return INFORMATIVO, describir_recuperacion(resultados["recuperacion"])
     fallidas = [a for a in lista if not a["cumple"]]
+    detalle = "; ".join(f"{a['objetivo']}: {a['descripcion']} (actual: {a['actual']})" for a in fallidas)
+    if tipo == "estres":
+        nivel = f"a {resultados['tasa']:g}/s"
+        if fallidas:
+            return INFORMATIVO, f"{nivel} no cumple el criterio del perfil: {detalle}"
+        return INFORMATIVO, f"{nivel} cumple el criterio del perfil"
     if fallidas:
-        detalle = "; ".join(f"{a['objetivo']}: {a['descripcion']} (actual: {a['actual']})" for a in fallidas)
         return RECHAZADO, f"incumple {len(fallidas)} aserción(es): {detalle}"
     return APROBADO, "cumple todas las aserciones"
+
+
+def describir_recuperacion(r: dict | None) -> str:
+    if not r or r["recuperada"] is None:
+        return "no hay serie por bloques para medir la recuperación"
+    partes = []
+    if r["base_cumple"] is False:
+        partes.append("la base ya incumple el criterio del perfil, así que no hay un estado normal al que volver")
+    partes.append("durante el pico " + ("se cumple" if r["pico_cumple"] else "no se cumple") + " el criterio del perfil")
+    if not r["recuperada"]:
+        partes.append(f"no se recupera dentro de la ventana de {r['ventana_s']:g} s")
+    elif r["recuperacion_s"] == 0:
+        partes.append("después del pico, todos los bloques cumplen el criterio")
+    else:
+        partes.append(f"se recupera {r['recuperacion_s']:g} s después del pico, en una ventana de {r['ventana_s']:g} s")
+    return "; ".join(partes)
 
 
 def metadatos(carpeta: Path, ejecucion: dict[str, str], fases_json: dict, informe: Path | None) -> dict:
@@ -157,7 +215,7 @@ def metadatos(carpeta: Path, ejecucion: dict[str, str], fases_json: dict, inform
         "variante": ejecucion.get("VARIANTE"),
         "ruta": ejecucion.get("RUTA"),
         "simulacion": ejecucion.get("SIMULACION"),
-        "parametros": {clave: ejecucion.get(clave) for clave, _ in PARAMETROS},
+        "parametros": {clave: ejecucion.get(clave) for clave, _ in parametros_de(ejecucion)},
         "codigo": {
             "revision": ejecucion.get("REVISION"),
             "cambios_sin_confirmar": ejecucion.get("CAMBIOS_SIN_CONFIRMAR") == "si",
@@ -193,32 +251,46 @@ def ms(valor) -> str:
     return "—" if valor is None else f"{valor:,.0f} ms".replace(",", " ")
 
 
+ETIQUETAS_FASE = {"calentamiento": "Calentamiento", "medicion": "Medición", "base": "Base",
+                  "pico": "Pico", "recuperacion": "Recuperación"}
+
+
 def resumen_md(datos: dict, resultados: dict, resultado: str, motivo: str, lista: list[dict]) -> str:
-    iconos = {APROBADO: "✅ Aprobado", RECHAZADO: "❌ Rechazado por rendimiento", INVALIDO: "⚠️ Inválido"}
+    iconos = {APROBADO: "✅ Aprobado", RECHAZADO: "❌ Rechazado por rendimiento",
+              INFORMATIVO: "ℹ️ Informativo", INVALIDO: "⚠️ Inválido"}
     p = datos["parametros"]
+    tasa_pedida = f"{p['TASA']}/s"
+    if "PICO_TASA" in p:
+        tasa_pedida += f"; pico de {p['PICO_TASA']}/s durante {p['PICO_S']} s"
     lineas = [
         f"### {iconos[resultado]}",
         "",
         f"{motivo[:1].upper()}{motivo[1:]}.",
         "",
-        "| Ejecución | Variante | Perfil | Tasa | Umbral p95 | Revisión |",
-        "|---|---|---|---:|---:|---|",
-        f"| `{datos['ejecucion']}` | `{datos['variante']}` | `{datos['perfil']}` | {p['TASA']}/s | {p['UMBRAL_MS']} ms "
+        "| Ejecución | Tipo | Variante | Perfil | Tasa | Umbral p95 | Revisión |",
+        "|---|---|---|---|---:|---:|---|",
+        f"| `{datos['ejecucion']}` | {datos['tipo']} | `{datos['variante']}` | `{datos['perfil']}` | {tasa_pedida} "
+        f"| {p['UMBRAL_MS']} ms "
         f"| `{(datos['codigo']['revision'] or '?')[:7]}`{' (con cambios)' if datos['codigo']['cambios_sin_confirmar'] else ''} |",
     ]
-    m = resultados["fases"]["medicion"]
-    if m["completadas"] is not None:
+    filas = []
+    for nombre in fases_medidas(datos["tipo"]):
+        m = resultados["fases"].get(nombre)
+        if not m or m["completadas"] is None:
+            continue
         t = m["tiempos_ms"] or {}
         tasa = "—" if m["tasa_lograda"] is None else f"{m['tasa_lograda']:.1f}/s".replace(".", ",")
         iniciadas = "—" if m["iniciadas"] is None else f"{m['iniciadas']}"
-        errores = f"{m['errores_pct']:.2f} %".replace(".", ",")
-        lineas += [
-            "",
-            "| Medición | p50 | p95 | p99 | Errores | Iniciadas | Tasa lograda |",
-            "|---|---:|---:|---:|---:|---:|---:|",
-            f"| {m['completadas']} solicitudes | {ms(t.get('p50'))} | {ms(t.get('p95'))} | {ms(t.get('p99'))} "
-            f"| {errores} | {iniciadas} de {m['esperadas']} | {tasa} |",
-        ]
+        errores = "—" if m["errores_pct"] is None else f"{m['errores_pct']:.2f} %".replace(".", ",")
+        filas.append(f"| {ETIQUETAS_FASE.get(nombre, nombre)} | {ms(t.get('p50'))} | {ms(t.get('p95'))} "
+                     f"| {ms(t.get('p99'))} | {errores} | {iniciadas} de {m['esperadas']} | {tasa} |")
+    if filas:
+        lineas += ["", "| Fase | p50 | p95 | p99 | Errores | Iniciadas | Tasa lograda |",
+                   "|---|---:|---:|---:|---:|---:|---:|"] + filas
+    r = resultados.get("recuperacion")
+    if r and r["recuperada"] is not None:
+        lineas += ["", f"En la ventana de recuperación, {r['bloques_que_incumplen']} de {r['bloques']} bloques "
+                       f"de {r['bloque_s']} s incumplen el criterio del perfil."]
     if lista:
         lineas += ["", "| Aserción | Actual | Cumple |", "|---|---:|:---:|"]
         lineas += [f"| {a['objetivo']}: {a['descripcion']} | {a['actual']} | {'sí' if a['cumple'] else 'no'} |" for a in lista]
@@ -252,12 +324,17 @@ def cerrar(carpeta: Path) -> tuple[str, int]:
 
     escribir_json(carpeta / "metricas.json", resultados)
     escribir_json(carpeta / "metadatos.json", datos)
-    escribir_json(carpeta / "veredicto.json", {
+    veredicto = {
         "resultado": resultado,
         "codigo": CODIGOS[resultado],
         "motivo": motivo,
         "aserciones": lista,
-    })
+    }
+    if resultado == INFORMATIVO and tipo_de(ejecucion) == "estres":
+        veredicto["cumple_criterio"] = all(a["cumple"] for a in lista)
+    if resultado == INFORMATIVO and tipo_de(ejecucion) == "picos":
+        veredicto["recuperacion"] = resultados["recuperacion"]
+    escribir_json(carpeta / "veredicto.json", veredicto)
     resumen = resumen_md(datos, resultados, resultado, motivo, lista)
     (carpeta / "resumen.md").write_text(resumen, encoding="utf-8")
     return resumen, CODIGOS[resultado]
