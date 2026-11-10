@@ -5,19 +5,21 @@ Operaciones del taller (Taller.md §5). Equivale a taller.sh.
   .\taller.ps1 funcionales [argumentos de pytest]
   .\taller.ps1 ejecutar    [-Tipo carga] [-Perfil local|ci] [-Variante V]
                            [-Ruta productos|salud] [-Tasa N] [-Umbral MS]
+  .\taller.ps1 campana     -Nombre NOMBRE [-Margen M] ID...
   .\taller.ps1 exportar    [-Ejecucion ID]
   .\taller.ps1 detener     [-BorrarDatos]
 
 ejecutar termina con 0 (aprobado), 1 (rechazado por rendimiento) o
-2 (error de infraestructura), para que la compuerta de CI falle en los dos
+2 (inválido: no se pudo medir), para que la compuerta de CI falle en los dos
 últimos casos y el resumen distinga la causa (Taller.md §8).
+campana resume varias ejecuciones de resultados/ (Taller.md §7).
 
 Funciona con Windows PowerShell 5.1 y con PowerShell 7.
 #>
 [CmdletBinding(PositionalBinding = $false)]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('preparar', 'funcionales', 'ejecutar', 'exportar', 'detener', 'ayuda')]
+    [ValidateSet('preparar', 'funcionales', 'ejecutar', 'campana', 'exportar', 'detener', 'ayuda')]
     [string]$Operacion = 'ayuda',
     [ValidateSet('carga', 'estres', 'picos')]
     [string]$Tipo = 'carga',
@@ -28,6 +30,8 @@ param(
     [string]$Tasa = '',
     [string]$Umbral = '',
     [string]$Ejecucion = '',
+    [string]$Nombre = '',
+    [string]$Margen = '3',
     [switch]$BorrarDatos,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$Resto = @()
@@ -247,6 +251,19 @@ function Invoke-Ejecutar {
     exit $resultado
 }
 
+function Invoke-Campana {
+    if (-not $Nombre) { Stop-Taller 'falta -Nombre' }
+    if (-not $Resto) { Stop-Taller 'faltan las ejecuciones de la campaña' }
+    $rutas = foreach ($ejecucionCampana in $Resto) {
+        $id = ($ejecucionCampana -replace '\\', '/' -replace '^resultados/', '').TrimEnd('/')
+        if ($id -notmatch '^[A-Za-z0-9._/-]+$' -or $id.Contains('..')) { Stop-Taller "ejecución inválida: $ejecucionCampana" }
+        if (-not (Test-Path -LiteralPath "resultados/$id" -PathType Container)) { Stop-Taller "no existe resultados/$id" }
+        "/resultados/$id"
+    }
+    exit (Invoke-Docker ($Compose + @('--profile', 'carga', 'run', '--rm', '--no-deps', '-T', 'herramientas',
+                'campana.py', '--nombre', $Nombre, '--margen', $Margen) + @($rutas)))
+}
+
 function Invoke-Exportar {
     $id = $Ejecucion
     if (-not $id) {
@@ -269,7 +286,8 @@ switch ($Operacion) {
     'preparar' { Invoke-Preparar }
     'funcionales' { Invoke-Funcionales }
     'ejecutar' { Invoke-Ejecutar }
+    'campana' { Invoke-Campana }
     'exportar' { Invoke-Exportar }
     'detener' { Invoke-Detener }
-    'ayuda' { (Get-Content -LiteralPath $PSCommandPath -Encoding UTF8 | Select-Object -Skip 1 -First 15) -join "`n" | Write-Host }
+    'ayuda' { (Get-Content -LiteralPath $PSCommandPath -Encoding UTF8 | Select-Object -Skip 1 -First 17) -join "`n" | Write-Host }
 }

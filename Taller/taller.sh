@@ -5,12 +5,14 @@
 #   ./taller.sh funcionales [argumentos de pytest]
 #   ./taller.sh ejecutar    [--tipo carga] [--perfil local|ci] [--variante V]
 #                           [--ruta productos|salud] [--tasa N] [--umbral MS]
+#   ./taller.sh campana     --nombre NOMBRE [--margen M] ID...
 #   ./taller.sh exportar    [--ejecucion ID]
 #   ./taller.sh detener     [--borrar-datos]
 #
 # ejecutar termina con 0 (aprobado), 1 (rechazado por rendimiento) o
-# 2 (error de infraestructura), para que la compuerta de CI falle en
+# 2 (inválido: no se pudo medir), para que la compuerta de CI falle en
 # los dos últimos casos y el resumen distinga la causa (Taller.md §8).
+# campana resume varias ejecuciones de resultados/ (Taller.md §7).
 
 set -eu
 
@@ -23,7 +25,7 @@ dc() { docker compose -f compose.yaml -f compose.carga.yaml "$@"; }
 error() { echo "taller: $*" >&2; exit 2; }
 aviso() { echo "taller: $*" >&2; }
 
-ayuda() { sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'; }
+ayuda() { sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; }
 
 # Exporta las líneas KEY=VALUE de un archivo .env sin ejecutarlo como código.
 cargar_env() {
@@ -212,6 +214,27 @@ EOF
   exit "$resultado"
 }
 
+op_campana() {
+  nombre="" margen=3 rutas=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --nombre) nombre=${2:?falta el valor de --nombre}; shift 2 ;;
+      --margen) margen=${2:?falta el valor de --margen}; shift 2 ;;
+      -*) error "opción desconocida para campana: $1" ;;
+      *)
+        id=${1#resultados/}; id=${id%/}
+        case "$id" in ''|*[!A-Za-z0-9._/-]*|*..*) error "ejecución inválida: $1" ;; esac
+        [ -d "resultados/$id" ] || error "no existe resultados/$id"
+        rutas="$rutas /resultados/$id"; shift ;;
+    esac
+  done
+  [ -n "$nombre" ] || error "falta --nombre"
+  [ -n "$rutas" ] || error "faltan las ejecuciones de la campaña"
+  # Los identificadores ya se validaron: sin espacios ni comodines.
+  # shellcheck disable=SC2086
+  dc --profile carga run --rm --no-deps -T herramientas campana.py --nombre "$nombre" --margen "$margen" $rutas
+}
+
 op_exportar() {
   id=""
   while [ $# -gt 0 ]; do
@@ -246,6 +269,7 @@ case "$operacion" in
   preparar) op_preparar "$@" ;;
   funcionales) op_funcionales "$@" ;;
   ejecutar) op_ejecutar "$@" ;;
+  campana) op_campana "$@" ;;
   exportar) op_exportar "$@" ;;
   detener) op_detener "$@" ;;
   ayuda|-h|--help) ayuda ;;
