@@ -100,7 +100,7 @@ La ejecución dura unos 4 minutos. Mientras corre, el panel de Grafana muestra u
 ./taller.sh ejecutar --perfil ci --variante regresion
 ```
 
-Esta tarda más, unos 6 minutos, porque al terminar la inyección todavía quedan solicitudes en la fila. En Grafana, las solicitudes en curso suben a 7 y se quedan ahí: son los 8 hilos de la API menos el que atiende a Prometheus mientras lee la métrica. De esos 7, uno tiene el candado y 6 lo esperan. Las respuestas bajan a unas 85 por segundo y la CPU queda en un quinto de núcleo, menos que con `corregida`: la API no está ocupada calculando, está esperando. El veredicto:
+Esta tarda más, unos 6 minutos, porque al terminar la inyección todavía quedan solicitudes en la fila. En Grafana, al empezar, las solicitudes en curso suben a 7, todos los hilos que deja libres la lectura de Prometheus: uno tiene el candado y los demás lo esperan. Las respuestas bajan a menos de 85 por segundo y la CPU queda por debajo de la de `corregida`: la API no está ocupada calculando, está esperando. A los pocos segundos, la fila es tan larga que la lectura de `/metrics` tampoco llega a tiempo: el panel «Recolección» pasa a 0 y los demás se quedan sin datos hasta que la fila se vacía. Ese hueco también es un síntoma de la saturación ([`INTERPRETACION.md`](INTERPRETACION.md) §5). El veredicto:
 
 ```text
 ### ❌ Rechazado por rendimiento
@@ -151,16 +151,17 @@ En el informe, las solicitudes se llaman `calentamiento` y `medicion`, según la
 
 En el panel «API del taller», el intervalo de tiempo se ajusta a las horas de `fases.json` (Grafana muestra la hora local; `fases.json`, UTC).
 
-| Panel | `corregida` | `regresion` |
+| Panel | `corregida` | `regresion`, mientras hay datos |
 |---|---|---|
-| Respuestas por segundo | Unas 150: todas las que llegan | Unas 85: el límite del candado |
+| Respuestas por segundo | Unas 150: todas las que llegan | Menos de 85: el límite del candado |
 | Solicitudes en curso | 1 o 2 | 7, todos los hilos disponibles |
-| Espera del candado | En cero: no hay candado | 6 hilos esperando |
-| CPU de la API | Un cuarto de núcleo | Un quinto: la API espera, no calcula |
+| Espera del candado | Sin datos: no hay candado | 6 o 7 hilos esperando |
+| CPU de la API | Un cuarto de núcleo | Menos: la API espera, no calcula |
+| Recolección | 1 | 0 en cuanto la fila crece: `/metrics` tampoco responde a tiempo |
 
 Las solicitudes en curso se interpretan con la ley de Little: en promedio, en el sistema hay tantas solicitudes como la tasa de llegada por el tiempo de respuesta medio. Con 150 por segundo y unos 7 ms dentro de la API, es 1. Con `regresion`, el número se queda en 7 porque no hay más hilos: la fila que sigue creciendo está afuera, en las conexiones que esperan un hilo libre, y esa espera solo la ve Gatling.
 
-Gatling mide desde afuera y decide el veredicto; Grafana muestra por qué. Los tiempos de uno y otro no coinciden, porque Gatling incluye la espera en la fila y la red, y el histograma de la API mide desde que un hilo toma la solicitud.
+Gatling mide desde afuera y decide el veredicto; Grafana muestra por qué. Los tiempos de uno y otro no coinciden, porque Gatling incluye la espera en la fila y la red, y el histograma de la API mide desde que un hilo toma la solicitud. La lectura de cada sección del informe y de cada panel, con ejemplos, está en [`INTERPRETACION.md`](INTERPRETACION.md).
 
 ## 7. Repetir
 
