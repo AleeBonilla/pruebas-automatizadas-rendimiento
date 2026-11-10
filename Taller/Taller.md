@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 en construcción. T1–T6 y T16 están terminadas, T8 tiene el workflow pero le faltan los *pull requests* de demostración, y el piloto (T7) ya fijó la configuración de 5.2. Calibración y validación pendientes.
+**Estado:** fase 1 en construcción. T1–T6 y T16 están terminadas, T8 tiene el workflow pero le faltan los *pull requests* de demostración, el piloto (T7) ya fijó la configuración de 5.2 y el perfil `ci` tiene una calibración preliminar (7.1). Faltan la calibración local y la validación.
 
 ## 1. Propósito
 
@@ -320,6 +320,34 @@ Antes de recoger datos se fijan las repeticiones, las duraciones y el margen mí
 
 Un umbral elegido con una regresión conocida no demuestra, por sí solo, que se detecten regresiones desconocidas.
 
+#### Perfil `ci`
+
+Antes de medir se fijaron tres repeticiones por variante, con las duraciones del perfil (60 s de calentamiento y 180 s de medición) y en orden alternado, y un margen de 3 veces: el umbral debía quedar al menos 3 veces por encima del peor p95 de `corregida` y 3 veces por debajo del mejor p95 de `regresion`.
+
+La exploración en el *runner*, con el perfil `piloto`, encontró el mismo punto de quiebre que en local. `regresion` cumplió a 75 solicitudes por segundo, con un p95 de 13 ms, y colapsó a 100, con 514 ms. `corregida` se mantuvo en 10 ms a 150 y en 16 ms a 300. La tasa elegida fue 150: está bien por encima del quiebre de `regresion`, deja a `corregida` lejos de su límite y no se acerca al del generador.
+
+| Orden | Variante | p50 | p95 | p99 | Errores |
+|---:|---|---:|---:|---:|---:|
+| 1 | `corregida` | 9 ms | 250 ms | 677 ms | 0 % |
+| 2 | `regresion` | 22,7 s | 46,9 s | 60 s | 14,6 % |
+| 3 | `regresion` | 23,8 s | 59,3 s | 60 s | 24,9 % |
+| 4 | `corregida` | 8 ms | 52 ms | 178 ms | 0 % |
+| 5 | `corregida` | 7 ms | 9 ms | 10 ms | 0 % |
+| 6 | `regresion` | 24,4 s | 58,7 s | 60 s | 20,1 % |
+
+*Perfil `ci` a 150 sol./s en el* runner *de GitHub Actions: corridas manuales de `compuerta.yml`, de la 42723845007 a la 42728497708. Los 60 s del p99 de `regresion` son el* timeout *de Gatling.*
+
+| p95 | Rango | Mediana | Coeficiente de variación |
+|---|---:|---:|---:|
+| `corregida` | 9–250 ms | 52 ms | 124 % |
+| `regresion` | 46,9–59,3 s | 58,7 s | 13 % |
+
+Con ese margen, el umbral podía ir de 750 ms a 15,6 s. Se eligió 3 000 ms, que redondea el punto medio en escala logarítmica entre los dos extremos (unos 3,4 s) y queda a unas 12 veces del peor `corregida` y a unas 16 del mejor `regresion`. La calibración es satisfactoria. Además, `regresion` incumple la aserción de errores, con 15 a 25 % frente al 1 % permitido, así que su rechazo no depende solo del umbral. El valor inicial de 300 ms no habría servido: la primera corrida de `corregida` quedó a 50 ms de él. El coeficiente de variación de `regresion` subestima su dispersión, porque el *timeout* recorta la cola.
+
+Lo que más condiciona el umbral es la variación de `corregida`. Su p95 cambió 28 veces entre corridas idénticas, mientras el p50 se mantuvo entre 7 y 9 ms: casi todas las solicitudes respondieron igual, pero en algunas corridas aparecieron pausas de 200 ms a 1 s repartidas por toda la medición. La causa no está identificada. Las candidatas son la latencia irregular del disco del *runner* al escribir el WAL de PostgreSQL y la competencia con otras máquinas virtuales del mismo servidor. Tres repeticiones no descartan una corrida con pausas más largas, que haría rechazar una variante correcta; eso lo pone a prueba la validación.
+
+La calibración es preliminar porque todavía no existe la detección de ejecuciones inválidas (T12), de la que depende T13: nada comprueba aún, por ejemplo, que el generador sostuviera la tasa en las seis corridas. Cuando T12 esté lista, se revisan con ella, se congela el perfil con la etiqueta `perfil-ci-v1` y se ejecuta la validación.
+
 ### 7.2 Validación
 
 Con el perfil congelado se ejecuta una campaña nueva. Se espera que todas las repeticiones válidas de `corregida` aprueben y que todas las de `regresion` sean rechazadas. El orden de las variantes se alterna y queda registrado, y en CI las campañas se reparten en momentos distintos. Se informan todas las ejecuciones, incluidas las inválidas y su causa. Si el resultado esperado no se mantiene, la validación falla, y el umbral no se ajusta sobre esos datos: se abre una nueva calibración.
@@ -378,7 +406,7 @@ La construcción avanza en tres fases. Cada una deja un resultado demostrable, y
 | | Workflows manuales y programados | Cada uno conserva su informe como artefacto |
 | | Reproducción externa | Una persona ajena al desarrollo completa la práctica con la guía |
 
-**Parámetros por definir durante la construcción:** la tasa y el umbral de cada perfil, que salen de la calibración; duraciones, repeticiones y margen, que se fijan antes de calibrar, y la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto.
+**Parámetros por definir durante la construcción:** la tasa y el umbral del perfil `local`, que salen de su calibración, y la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto, y el perfil `ci` tiene tasa, umbral, repeticiones y margen de una calibración preliminar (7.1).
 
 ```text
 Taller/
