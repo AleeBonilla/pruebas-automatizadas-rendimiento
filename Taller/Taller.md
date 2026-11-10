@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 en construcción. T1–T8 y T16 están terminadas: el piloto (T7) fijó la configuración de 5.2, y en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`. Para cerrar la fase 1 falta T9. El perfil `ci` tiene una calibración preliminar (7.1); faltan la calibración local y la validación.
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. El perfil `ci` tiene una calibración preliminar (7.1); faltan la calibración local y la validación.
 
 ## 1. Propósito
 
