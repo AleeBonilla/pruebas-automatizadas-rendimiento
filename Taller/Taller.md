@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. En la fase 2, de T10 a T14 están terminadas: hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2). Falta el plan de pruebas (T15).
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. La fase 2 está terminada (T10–T15): hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2), y el plan de pruebas que reúne objetivos, criterios y perfiles está en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md).
 
 ## 1. Propósito
 
@@ -210,6 +210,8 @@ La latencia es una condición del entorno, aplicada por igual a todas las varian
 `regresion` no se degrada de forma gradual: entre 75 y 100 solicitudes por segundo pasa de cumplir holgadamente a colapsar, porque la tasa de llegada supera la capacidad del candado y la fila crece sin límite. Para la compuerta conviene una tasa claramente por encima de ese punto y por debajo del límite del generador (7.1), donde `corregida` todavía tiene holgura. La elección final se hace en la calibración, con repeticiones.
 
 ## 6. Plan de pruebas
+
+Esta sección explica el diseño de las pruebas y sus razones. Los objetivos, los criterios y los perfiles vigentes están reunidos en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md).
 
 ### 6.1 Escenario
 
