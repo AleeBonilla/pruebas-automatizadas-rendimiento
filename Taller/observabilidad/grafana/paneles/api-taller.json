@@ -595,7 +595,7 @@
       "id": 9,
       "type": "timeseries",
       "title": "CPU de la API",
-      "description": "Tiempo de CPU del proceso de Gunicorn como fracción de un núcleo (el límite del contenedor es 1 CPU). Distingue la saturación de la espera: con el candado, la CPU puede estar baja aunque la fila crezca.",
+      "description": "Tiempo de CPU del proceso de Gunicorn como fracción de un núcleo (la API tiene un núcleo fijo, así que 1 es el núcleo entero). Distingue la saturación de la espera: con el candado, la CPU puede estar baja aunque la fila crezca.",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
