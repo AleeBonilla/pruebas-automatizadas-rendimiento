@@ -142,6 +142,9 @@ function Invoke-Preparar {
     Assert-Variante $env:VARIANTE
 
     Write-Host "Preparando el entorno con la variante $($env:VARIANTE)..."
+    # Si la carpeta no existe cuando un contenedor la monta, Docker la crea por
+    # su cuenta (como root en Linux), y después el script no puede escribir en ella.
+    $null = New-Item -ItemType Directory -Force -Path 'resultados'
     if ((Invoke-Docker ($Compose + @('up', '-d', '--wait', '--build'))) -ne 0) { Stop-Taller 'no se pudo levantar el entorno' }
     if ((Invoke-Docker ($Compose + @('--profile', 'carga', 'build', 'gatling'))) -ne 0) { Stop-Taller 'no se pudo construir la imagen de Gatling' }
     if ((Invoke-Docker ($Compose + @('--profile', 'carga', 'pull', '--quiet', 'herramientas'))) -ne 0) { Stop-Taller 'no se pudo descargar la imagen de herramientas' }

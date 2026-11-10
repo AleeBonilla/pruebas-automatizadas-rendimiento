@@ -88,6 +88,9 @@ op_preparar() {
   export VARIANTE
 
   echo "Preparando el entorno con la variante $VARIANTE..."
+  # Si la carpeta no existe cuando un contenedor la monta, Docker la crea como
+  # root en Linux, y después el script no puede escribir en ella.
+  mkdir -p resultados
   dc up -d --wait --build
   dc --profile carga build gatling
   dc --profile carga pull --quiet herramientas
