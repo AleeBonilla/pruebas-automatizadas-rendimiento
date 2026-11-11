@@ -107,7 +107,7 @@ Taller/
 ├── docs/                 GUIA.md, PLAN-DE-PRUEBAS.md, INTERPRETACION.md
 ├── compose.yaml · compose.carga.yaml
 └── taller.ps1 · taller.sh
-.github/workflows/        quality gate y workflows de escenarios, calibración y validación
+.github/workflows/        quality gate y workflows manuales
 ```
 
 ### C.2 Simulación de carga
@@ -117,17 +117,18 @@ La simulación separa el calentamiento de la medición y aplica las aserciones s
 ```java
 setUp(
     Escenarios.consulta("calentamiento", ...)
-        .injectOpen(constantUsersPerSec(Parametros.TASA).during(Parametros.CALENTAMIENTO_S))
+        .injectOpen(constantUsersPerSec(TASA).during(CALENTAMIENTO_S))
         .andThen(
             Escenarios.consulta("medicion", ...)
-                .injectOpen(constantUsersPerSec(Parametros.TASA).during(Parametros.MEDICION_S))))
+                .injectOpen(
+                    constantUsersPerSec(TASA).during(MEDICION_S))))
     .protocols(Escenarios.protocolo())
     .assertions(
-        details("medicion").responseTime().percentile(95.0).lt(Parametros.UMBRAL_MS),
-        details("medicion").failedRequests().percent().lte(Parametros.ERRORES_MAX_PCT));
+        details("medicion").responseTime().percentile(95.0).lt(UMBRAL_MS),
+        details("medicion").failedRequests().percent().lte(ERRORES_MAX_PCT));
 ```
 
-*Fuente:* `Taller/rendimiento/src/test/java/taller/rendimiento/CargaSimulation.java`, abreviado.
+*Fuente:* `CargaSimulation.java`, en `Taller/rendimiento/`, abreviado.
 
 ### C.3 Workflow de la *quality gate*
 
@@ -148,14 +149,16 @@ jobs:
       - run: ./taller.sh funcionales
       - run: ./taller.sh ejecutar --tipo carga --perfil ci
       - uses: actions/upload-artifact@v7
-        if: always()                    # conserva el informe aunque la prueba falle
-        with: { name: "resultados-${{ github.run_id }}-${{ github.run_attempt }}", path: Taller/resultados/ }
+        if: always()   # conserva el informe aunque la prueba falle
+        with:
+          name: resultados-${{ github.run_id }}-${{ github.run_attempt }}
+          path: Taller/resultados/
 ```
 
 *Fuente:* `.github/workflows/compuerta.yml`, abreviado.
 
 ### C.4 Informe de Gatling
 
-La Figura 6 compara la página de la medición en una ejecución de cada variante. En `corregida`, las respuestas siguen a las solicitudes, unas 150 por segundo; en `regresion`, las respuestas correctas se quedan en unas 66 por segundo y el resto termina en esperas agotadas.
+La Figura 6 compara la página de la medición en una ejecución de cada variante de la campaña `validacion-ci-2`. En `corregida`, las respuestas siguen a las solicitudes, unas 150 por segundo; en `regresion`, las respuestas correctas se quedan en unas 100 por segundo y el resto termina en esperas agotadas.
 
-<!-- FIGURA 6: Informe de Gatling de la medición, por variante. Dos capturas lado a lado de la página «medicion» del informe HTML, con el perfil de ejecución ci: a la izquierda, corregida (20261110T224259Z-carga-corregida: p50 9 ms, p95 12 ms, sin errores); a la derecha, regresion (20261110T224735Z-carga-regresion: p50 31,0 s, p95 60 s, 42,9 % de errores). Cada captura muestra la tabla de estadísticas y el gráfico de solicitudes y respuestas por segundo. Fuente: ejecuciones del taller en una segunda computadora, 10 de noviembre de 2026. -->
+<!-- FIGURA 6: Informe de Gatling de la medición, por variante. Dos capturas lado a lado de la página «medicion» del informe HTML, con el perfil de ejecución ci: a la izquierda, corregida (20261110T231112Z-carga-corregida: p50 7 ms, p95 8 ms, sin errores); a la derecha, regresion (20261110T230416Z-carga-regresion: p50 24,0 s, p95 59,1 s, 18,8 % de errores). Cada captura muestra la tabla de estadísticas y el gráfico de respuestas por segundo. Fuente: ejecuciones de la campaña validacion-ci-2, en un runner de GitHub Actions, 10 de noviembre de 2026. Archivo: figuras/fig6.png. -->
