@@ -2,7 +2,7 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. La fase 2 está terminada (T10–T15): hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2), y el plan de pruebas que reúne objetivos, criterios y perfiles está en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md).
+**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. La fase 2 está terminada (T10–T15): hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2), y el plan de pruebas que reúne objetivos, criterios y perfiles está en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md). De la fase 3 están terminadas T16, T17 y T19: los workflows de escenarios, calibración y validación funcionan, y con el de validación se corrió una segunda campaña de `perfil-ci-v1`, que pasa (7.2 y 8); la lectura del informe y de los paneles está en [`docs/INTERPRETACION.md`](docs/INTERPRETACION.md). T18 está comprobada en Linux, en los *runners* de GitHub Actions, y en Windows con PowerShell y con Git Bash; falta macOS, que no tiene *runner* con Docker ([`docs/GUIA.md`](docs/GUIA.md) §1). En una segunda computadora, con el perfil `ci`, `corregida` aprobó y `regresion` fue rechazada. Queda la reproducción externa (T20), que tiene que hacer una persona ajena al desarrollo.
 
 ## 1. Propósito
 
@@ -433,6 +433,21 @@ La validación de `perfil-ci-v1` se ejecutó el mismo día de la calibración, u
 
 Las siete ejecuciones son válidas y todas dieron el resultado esperado: la validación pasa. El ruido de `corregida` volvió a aparecer en una corrida, con un p95 de 114 ms, 26 veces por debajo del umbral.
 
+La segunda validación se corrió con el workflow `Validación` (T17), unas cinco horas después de la primera, con el mismo orden y cada medición en un *runner* nuevo.
+
+| Orden | Variante | p50 | p95 | p99 | Errores | Resultado |
+|---:|---|---:|---:|---:|---:|---|
+| 1 | `regresion` | 24,0 s | 59,1 s | 60 s | 18,8 % | Rechazado |
+| 2 | `corregida` | 7 ms | 8 ms | 10 ms | 0 % | Aprobado |
+| 3 | `corregida` | 8 ms | 10 ms | 11 ms | 0 % | Aprobado |
+| 4 | `regresion` | 23,3 s | 54,1 s | 60 s | 16,9 % | Rechazado |
+| 5 | `regresion` | 23,6 s | 55,3 s | 60 s | 17,5 % | Rechazado |
+| 6 | `corregida` | 7 ms | 9 ms | 11 ms | 0 % | Aprobado |
+
+*Campaña `validacion-ci-2`: corrida 42916842908 de `validacion.yml`, en la revisión `5d83c46`, el 10 de noviembre de 2026. Sus cambios respecto de `perfil-ci-v1` son solo de workflows y herramientas: no cambian la simulación, el perfil ni el sistema medido.*
+
+Las seis ejecuciones son válidas, con la tasa lograda en 150,0 por segundo, y todas dieron el resultado esperado: la validación pasa. Esta vez no aparecieron pausas en `corregida`, cuyo peor p95 quedó 300 veces por debajo del umbral, y el mejor de `regresion` quedó 18 veces por encima.
+
 #### Perfil `local`
 
 La validación de `perfil-local-v1` se ejecutó en la misma computadora, a continuación de la calibración y con el orden invertido respecto de ella.
@@ -462,6 +477,24 @@ GitHub Actions reutiliza el procedimiento local con el perfil `ci`. El código d
 | Validación | Manual o programada | Campaña nueva con el perfil congelado |
 
 La variante activa se define en la configuración. Un *pull request* que la cambia a `regresion` reproduce un cambio defectuoso y la compuerta lo rechaza; uno que la cambia a `corregida` aprueba.
+
+Los tres workflows manuales (`escenarios.yml`, `calibracion.yml` y `validacion.yml`) reutilizan `medicion.yml`, que hace una medición en un *runner* nuevo con `taller.sh` y guarda su carpeta como artefacto. En las campañas, una matriz con `max-parallel: 1` corre las seis cargas una detrás de otra, en el orden de 7.1 o en el inverso, y `campana.yml` las descarga, las resume con `campana` y decide con `herramientas/decision.py`:
+
+- **Calibración:** satisfactoria si hay tres ejecuciones válidas por variante y el umbral cabe con el margen. Propone como umbral el número redondo (1, 2, 3 o 5 por una potencia de 10) más cercano, en escala logarítmica, al punto medio del intervalo admisible: es la regla con que se eligieron a mano los 3 000 ms de `ci` y los 1 000 de `local`, y las pruebas de `decision.py` lo comprueban. La propuesta queda en `perfil-propuesto-<campaña>.env` y se revisa antes de congelarla: el workflow no modifica `config/perfiles/`.
+- **Validación:** pasa si todas las ejecuciones válidas de `corregida` aprueban y todas las de `regresion` son rechazadas; falla si alguna da otro veredicto, y queda incompleta si faltan ejecuciones válidas. Además de a mano, corre los lunes a las 09:17 UTC, así que cada semana suma una campaña nueva en otro momento del día.
+
+En las campañas, el *job* de cada medición termina bien aunque `regresion` sea rechazada, porque es lo esperado, y quien falla es el resumen. Dos campañas no corren a la vez (`concurrency`). En Escenarios, en cambio, el *job* falla como la compuerta.
+
+Los workflows se comprobaron el 10 de noviembre de 2026, en la revisión `5d83c46`:
+
+| Workflow | Corrida | Resultado |
+|---|---|---|
+| Escenarios: estrés de `regresion` con el perfil `piloto` a 50, 75, 100 y 150 sol./s | 42916806442 | Cuatro niveles válidos: cumple hasta 100 (p95 de 36 ms) y no cumple a 150 (31,7 s, unas 92 correctas por segundo) |
+| Escenarios: pico de `regresion` de 50 a 150 sol./s durante 30 s, perfil `ci` | 42916811866 | Válido; p95 de 12,0 s en el pico y recuperación 20 s después de terminar |
+| Calibración de práctica con el perfil `piloto` a 150 sol./s | 42916817636 | Seis ejecuciones válidas; p95 de `corregida` de 9 a 10 ms y de `regresion` de 21,9 a 26,9 s; satisfactoria, con una propuesta de 500 ms que no se congela, porque `piloto` es un perfil de exploración |
+| Validación de `perfil-ci-v1` | 42916842908 | En 7.2, como `validacion-ci-2` |
+
+El quiebre de `regresion` en ese *runner* (AMD EPYC 7763) quedó entre 100 y 150 solicitudes por segundo, y no entre 75 y 100 como en la exploración de 7.1. Cambiaron el equipo y la simulación, así que la diferencia no se atribuye a uno solo. La tasa de 150 sigue por encima del quiebre en los dos casos.
 
 ```yaml
 on:
@@ -504,7 +537,7 @@ La construcción avanza en tres fases. Cada una deja un resultado demostrable, y
 | | Workflows manuales y programados | Cada uno conserva su informe como artefacto |
 | | Reproducción externa | Una persona ajena al desarrollo completa la práctica con la guía |
 
-**Parámetros por definir durante la construcción:** la forma de exportar las métricas del informe de Gatling. La configuración de 5.2 ya quedó fijada en el piloto, y los perfiles quedaron congelados después de su calibración (7.1): `ci` en `perfil-ci-v1` y `local` en `perfil-local-v1`.
+**Parámetros de la construcción:** ya no queda ninguno por definir. La configuración de 5.2 quedó fijada en el piloto; las métricas del informe de Gatling se exportan en `metricas.json` (6.4), y los perfiles quedaron congelados después de su calibración (7.1): `ci` en `perfil-ci-v1` y `local` en `perfil-local-v1`.
 
 ```text
 Taller/

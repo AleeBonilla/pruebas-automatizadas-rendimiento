@@ -15,7 +15,16 @@ El caso es una API de productos con un contador de visitas. La variante `regresi
 | Puertos libres | 8000 (API), 9090 (Prometheus) y 3000 (Grafana) |
 | Línea de comandos | PowerShell 5.1 o 7 en Windows; `sh` en Linux y macOS |
 
-No hace falta instalar Python, Java ni Maven: todo corre en contenedores. El procedimiento con `taller.sh` es el mismo que usa GitHub Actions en Linux; en macOS todavía no se ha comprobado.
+No hace falta instalar Python, Java ni Maven: todo corre en contenedores.
+
+| Sistema | Script | Comprobado |
+|---|---|---|
+| Windows 11 | `taller.ps1` en PowerShell | Sí: la computadora de desarrollo |
+| Windows 11 | `taller.sh` en Git Bash | Sí: preparar, cargas y campañas en una segunda computadora |
+| Linux (Ubuntu 24.04) | `taller.sh` | Sí, en los *runners* de GitHub Actions: preparar, funcionales, carga, estrés, picos, campañas y detener |
+| macOS | `taller.sh` | No: los *runners* de macOS de GitHub no traen Docker. Las imágenes del taller existen para `arm64`, pero falta una prueba en una Mac |
+
+Con WSL2, `taller.sh` debería funcionar igual que en Linux dentro de una distribución con la integración de Docker Desktop activada, pero no se ha comprobado.
 
 Durante las mediciones conviene no usar la computadora para tareas pesadas. Otro programa que compita por la CPU cambia los resultados, y eso es justamente el ruido que la prueba intenta controlar.
 
@@ -285,6 +294,20 @@ Para reproducirlos en una cuenta propia:
 5. Para la corrección, crear `demo/corregida` desde `demo/regresion`, volver a `VARIANTE=corregida` y abrir un *pull request* hacia `demo/regresion`, de modo que su cambio sea la corrección. La compuerta aprueba.
 
 Estos *pull requests* no se integran: existen para mostrar la compuerta. Y el perfil `ci` está calibrado para las máquinas de GitHub, que no son las de la computadora local, así que sus milisegundos no se comparan con los de la sección 5.
+
+### Workflows manuales
+
+Las demás pruebas también corren en GitHub, cada medición en un *runner* nuevo. Se lanzan desde la pestaña *Actions* (*Run workflow*) o con la CLI de GitHub:
+
+| Workflow | Qué hace | Ejemplo |
+|---|---|---|
+| Escenarios (`escenarios.yml`) | Una carga, una serie de estrés o un pico sobre una variante, como `ejecutar` en local | `gh workflow run escenarios.yml -f tipo=estres -f variante=regresion -f perfil=piloto -f tasas=50,75,100,150` |
+| Calibración (`calibracion.yml`) | Seis cargas en orden alternado, una detrás de otra, y el resumen de la campaña con un perfil propuesto | `gh workflow run calibracion.yml -f perfil=ci -f tasa=150` |
+| Validación (`validacion.yml`) | Seis cargas con el perfil congelado, en el orden inverso, y la decisión: pasa si todas dan el veredicto esperado. Además corre sola los lunes | `gh workflow run validacion.yml -f perfil=ci` |
+
+Cada medición deja su artefacto `resultados-<id>-<intento>-<orden>-<variante>`, y las campañas, además, `campana-<nombre>` con `campana-<nombre>.md`, `decision-<nombre>.md` y, en la calibración, `perfil-propuesto-<nombre>.env`. El resumen de la ejecución en *Actions* muestra la decisión y la tabla de la campaña.
+
+La calibración nunca cambia `config/perfiles/` por su cuenta: el perfil propuesto se revisa, se copia a mano y se congela con una etiqueta nueva, y después se valida con otra campaña (sección 9). Una campaña completa con el perfil `ci` tarda unos 45 minutos, y dos campañas no corren a la vez. Para practicar con el procedimiento sin esperar tanto, la calibración acepta el perfil `piloto` con `-f tasa=150`. El resultado sirve para ver cómo funciona, no para fijar un perfil.
 
 ## 11. Detener
 

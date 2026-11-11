@@ -73,7 +73,7 @@ En el estrés, cada nivel es una ejecución aparte, porque en una ejecución esc
 Una medición empieza solo si se cumplen todas estas condiciones:
 
 - La preparación terminó y todos los servicios superaron su *healthcheck*.
-- Las pruebas funcionales aprobaron con la misma revisión del código. En la compuerta también aprueban las 25 pruebas de las herramientas que calculan la validez y el veredicto.
+- Las pruebas funcionales aprobaron con la misma revisión del código. En la compuerta también aprueban las 36 pruebas de las herramientas que calculan la validez, el veredicto y la decisión de las campañas.
 - Los datos y los contadores se restablecieron.
 - El perfil está congelado en su etiqueta, salvo en la exploración, que usa el perfil `piloto`.
 - No corre otra medición ni otra carga pesada en la misma máquina.
@@ -138,10 +138,11 @@ Los márgenes de cada perfil son la distancia entre el umbral y la variante más
 |---|---|---:|---:|---:|---:|
 | `ci` | Calibración | 60 ms | 54,4 s | 50 veces | 18 veces |
 | `ci` | Validación | 114 ms | 58,4 s | 26 veces | 19,5 veces |
+| `ci` | Segunda validación | 10 ms | 54,1 s | 300 veces | 18 veces |
 | `local` | Calibración | 10 ms | 60 s | 100 veces | 60 veces |
 | `local` | Validación | 10 ms | 60 s | 100 veces | 60 veces |
 
-*Calibración del perfil `ci`: segunda campaña, `calibracion-ci-2`. Las tablas completas de cada campaña están en `Taller.md` §7.*
+*Calibración del perfil `ci`: segunda campaña, `calibracion-ci-2`. Segunda validación: `validacion-ci-2`, con el workflow `Validación`. Las tablas completas de cada campaña están en `Taller.md` §7.*
 
 `regresion` incumple también la aserción de errores en todas las campañas: de 15 a 33 % frente al 1 % permitido. Su rechazo no depende solo del umbral.
 
@@ -174,14 +175,14 @@ La secuencia completa es: comprobación del generador (PG), exploración con est
 | Una campaña | `campana --nombre <nombre> <ejecuciones...>`, que escribe `resultados/campana-<nombre>.md` |
 | Compuerta | `.github/workflows/compuerta.yml`, automática en cada *push* y *pull request*, o manual con la variante, el perfil y la tasa como entradas |
 
-Cada ejecución deja su carpeta en `resultados/`, con el veredicto, `metricas.json`, `fases.json`, el informe de Gatling, los parámetros, la revisión del código y los registros. En CI esa carpeta se guarda como artefacto durante 30 días. Las campañas de calibración y validación del perfil `ci` se corrieron con disparos manuales de la compuerta. Los workflows propios de escenarios, calibración y validación están pendientes (T17).
+Cada ejecución deja su carpeta en `resultados/`, con el veredicto, `metricas.json`, `fases.json`, el informe de Gatling, los parámetros, la revisión del código y los registros. En CI esa carpeta se guarda como artefacto durante 30 días. Las campañas de calibración y validación de `perfil-ci-v1` se corrieron con disparos manuales de la compuerta. Las siguientes usan los workflows propios (`Taller.md` §8): Escenarios para la comprobación del generador, la exploración y los picos; Calibración, que propone un perfil para revisión, y Validación, que decide si la campaña da los veredictos esperados y corre además una vez por semana. En las campañas, cada medición usa un *runner* nuevo y las seis van una detrás de otra.
 
 ## 10. Riesgos y límites
 
 | Riesgo | Efecto | Tratamiento |
 |---|---|---|
 | Ruido del *runner* | El p95 de `corregida` cambió hasta 28 veces entre corridas idénticas en `ci`, con pausas de 200 ms a 1 s de causa no identificada | El umbral queda 12 veces por encima del peor valor observado, 250 ms en la primera calibración. Una corrida con pausas más largas rechazaría una variante correcta; cada validación nueva lo pone a prueba |
-| Hardware del *runner* | Fijar `ubuntu-24.04` no fija la máquina asignada | Cada corrida registra CPU, memoria y versión de Docker |
+| Hardware del *runner* | Fijar `ubuntu-24.04` no fija la máquina asignada. En una serie de estrés del 10 de noviembre, en un *runner* con AMD EPYC 7763, `regresion` todavía cumplió a 100 por segundo (p95 de 36 ms) y su techo a 150 fue de unas 92 respuestas correctas por segundo; en la exploración de la calibración, en otro *runner* y con la simulación de carga, se había quebrado entre 75 y 100. Como cambiaron el equipo y la simulación, la diferencia no se atribuye a uno solo | Cada corrida registra CPU, memoria y versión de Docker. La tasa de 150 queda por encima del quiebre en los dos casos, y la validación semanal pone a prueba el perfil con el hardware que toque |
 | Límite del generador | Por encima de unas 350 solicitudes por segundo, Gatling se queda sin puertos efímeros | La ejecución queda inválida, no rechazada; la tasa de los perfiles y de los picos queda por debajo |
 | *Timeout* de Gatling | Recorta la cola de `regresion` en 60 s, así que su coeficiente de variación subestima la dispersión | Los márgenes se calculan con el mejor p95 de `regresion`, no con su variación |
 | Regresión conocida | El umbral se eligió con una regresión que lleva el p95 a decenas de segundos. Una regresión que solo duplique el tiempo de `corregida` aprobaría | El plan no afirma detectar regresiones desconocidas ni pequeñas |
