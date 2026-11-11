@@ -19,7 +19,7 @@
 | Fase                              | Contenido                                          | Secciones del documento                                                                                                            | Estado                                         |
 | --------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | **Fase 1: Investigación**         | Investigación teórica y documental                 | 1 Portada, 2 Introducción, 3 Planteamiento del problema, 4 Metodología, 5 Marco teórico, 8 Referencias, anexos de validación de IA | **Alcance definido** (este documento)          |
-| **Fase 2: Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller | **Taller construido y validado** (`Taller/Taller.md`, estado al 2026-11-10); sección 6 y anexo C redactados; pendientes: reproducción externa (T20), comprobación en macOS, Conclusiones y montaje en el documento final |
+| **Fase 2: Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller | **Taller construido y validado** (`Taller/Taller.md`, estado al 2026-11-10); sección 6, Conclusiones y anexos A, B y C redactados y montados en el documento de Word (36 páginas, una por encima del tope); pendientes: reproducción externa (T20), comprobación en macOS, auditoría independiente de las Conclusiones y de los anexos A y B, y recortar una página |
 
 La forma de trabajo con IA está definida en §5.3, en el procedimiento de uso y validación de IA. El detalle operativo está en `Investigación/Workflow.md` y en `Investigación/Guía de redacción.md`.
 
@@ -193,6 +193,6 @@ El material extenso (código completo, registros íntegros de IA) va en un **rep
 |---|---|---|---|
 | A | Registro resumido de consultas de IA | 1 | 1 |
 | B | Resumen de la validación crítica de los productos de IA y su resolución, con el detalle del procedimiento que la Metodología resume | 1 | 1 |
-| C | Material del taller: enlace y estructura del repositorio, extractos de la simulación y de la *quality gate*, y captura del informe de Gatling (redactado; captura pendiente) | 2 | 1.5 |
+| C | Material del taller: enlace y estructura del repositorio, extractos de la simulación y de la *quality gate*, y captura del informe de Gatling (redactado y montado) | 2 | 1.5 |
 
-**Estado al 2026-11-10:** el anexo C está redactado en `Investigación/Secciones/06 Propuesta de taller práctico/03 Borrador.md`. Los anexos A y B todavía no están en el repositorio, y el documento de Word llega hasta el Marco teórico: faltan la portada, la sección 6, las Conclusiones y los anexos.
+**Estado al 2026-11-11:** las secciones 6 y 7 y los anexos A, B y C están en el documento de Word, que tiene 36 páginas, una más que el tope. El anexo C está en `Investigación/Secciones/06 Propuesta de taller práctico/03 Borrador.md`, con las Figuras 4 a 6 en `figuras/` (la 6, de las ejecuciones de `validacion-ci-2`); las Conclusiones, en `07 Conclusiones/03 Borrador.md`, y los anexos A y B, en `09 Anexos A y B/03 Borrador.md`. Estas tres partes no pasaron por el auditor. En el Word, la Tabla 6 no tiene la columna «Veredictos esperados» y la Figura 5 va antes de la Tabla 6; el borrador de la sección 6 conserva el orden original.
