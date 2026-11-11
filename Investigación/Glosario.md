@@ -87,3 +87,14 @@ Términos del documento y la forma en que se escriben. Sirve para que todas las 
 | Prueba de humo de rendimiento | performance smoke test, guard test | prueba de humo de rendimiento | prueba de guarda | Prueba breve en la etapa de *commit* que vigila puntos críticos conocidos. Provisional hasta aprobar 5.7. | 5.7 | — |
 | Detección de puntos de cambio | change point detection | detección de puntos de cambio | — | Provisional hasta aprobar 5.7. | 5.7 | — |
 | Observabilidad / APM | observability / application performance monitoring | observabilidad; monitoreo del rendimiento de aplicaciones (APM) | — | Solo se mencionan (`Alcance.md` §4). | 5.7 | — |
+
+## Taller
+
+| Término | Inglés | Forma en el texto | Evitar | Definición de trabajo | Define | Usado en |
+|---|---|---|---|---|---|---|
+| Candado | lock | candado (*lock*) la primera vez; después, candado | cerrojo, bloqueo (para el objeto) | Mecanismo de exclusión mutua entre hilos; en el taller, un `threading.Lock` compartido por todas las solicitudes. | 6.1 | — |
+| Variante | — | variante, con su nombre en código: `regresion`, `corregida`, `sana` | versión (para las variantes) | Implementación de la API que se selecciona por configuración. | 6.1 | — |
+| Perfil de ejecución | — | perfil de ejecución, con su nombre en código (`ci`, `local`) | perfil solo (choca con perfil de carga) | Archivo con la tasa, el umbral y las duraciones calibrados para un entorno. | 6.4 | — |
+| Campaña | — | campaña de calibración, campaña de validación | — | Conjunto de ejecuciones con reglas fijadas antes de medir, para elegir o comprobar un perfil de ejecución. | 6.4 | — |
+| Ejecución inválida | — | ejecución inválida | ejecución fallida (se confunde con un rechazo) | Medición que no se puede interpretar: el generador no sostuvo la tasa, faltan datos o la configuración no es la pedida. | 6.4 | — |
+| Workflow | workflow | workflow (sin cursiva, como en 5.7) | flujo de trabajo (choca con el procedimiento de la Metodología) | Archivo YAML de GitHub Actions que define cuándo y qué se ejecuta. Agregado por el redactor. | — | 05, 06 |

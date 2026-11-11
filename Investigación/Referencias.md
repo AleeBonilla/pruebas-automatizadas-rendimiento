@@ -12,6 +12,8 @@ Brunnert, A., van Hoorn, A., Willnecker, F., Danciu, A., Hasselbring, W., Heger,
 
 Daly, D., Brown, W., Ingo, H., O'Leary, J., & Bradford, D. (2020). The use of change point detection to identify software performance regressions in a continuous integration system. En *Proceedings of the 2020 ACM/SPEC International Conference on Performance Engineering (ICPE '20)* (pp. 67–75). ACM. https://doi.org/10.1145/3358960.3375791
 
+Docker Inc. (s. f.). *Docker Compose*. Docker Docs. Recuperado el 10 de noviembre de 2026, de https://docs.docker.com/compose/
+
 Friedrich, S., Wingerath, W., & Ritter, N. (2017). Coordinated omission in NoSQL database benchmarking. En B. Mitschang et al. (Eds.), *Datenbanksysteme für Business, Technologie und Web (BTW 2017) – Workshopband* (pp. 215–226). Gesellschaft für Informatik. https://dl.gi.de/items/780bef9a-d6df-4776-80e3-e85ae0158e63
 
 Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus areas in software testing. *IEEE Software, 34*(5), 38–45. https://doi.org/10.1109/MS.2017.3641116
@@ -19,6 +21,8 @@ Garousi, V., & Felderer, M. (2017). Worlds apart: Industrial and academic focus 
 Gatling Corp. (2026). *Gatling* (Versión 3.16.0) [Software]. https://docs.gatling.io/
 
 Gatling Corp. (s. f.). *Gatling pricing*. Recuperado el 7 de noviembre de 2026, de https://gatling.io/pricing
+
+GitHub. (s. f.). *Understanding GitHub Actions*. GitHub Docs. Recuperado el 10 de noviembre de 2026, de https://docs.github.com/en/actions/get-started/understand-github-actions
 
 Grafana Labs. (2026). *Grafana k6* (Versión 2.3.0) [Software]. https://grafana.com/docs/k6/latest/
 
@@ -51,6 +55,8 @@ OpenText. (2026). *OpenText Professional Performance Engineering* (Versión 26.3
 Perforce Software. (s. f.-a). *BlazeMeter documentation*. Recuperado el 7 de noviembre de 2026, de https://help.blazemeter.com/
 
 Perforce Software. (s. f.-b). *BlazeMeter pricing*. Recuperado el 7 de noviembre de 2026, de https://www.blazemeter.com/pricing
+
+Prometheus Authors. (s. f.). *Overview*. Prometheus. Recuperado el 10 de noviembre de 2026, de https://prometheus.io/docs/introduction/overview/
 
 Schroeder, B., Wierman, A., & Harchol-Balter, M. (2006). Open versus closed: A cautionary tale. En *Proceedings of the 3rd Symposium on Networked Systems Design and Implementation (NSDI '06)* (pp. 239–252). USENIX Association. https://www.usenix.org/conference/nsdi-06/open-versus-closed-cautionary-tale
 
