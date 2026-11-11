@@ -19,7 +19,7 @@
 | Fase                              | Contenido                                          | Secciones del documento                                                                                                            | Estado                                         |
 | --------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | **Fase 1: Investigación**         | Investigación teórica y documental                 | 1 Portada, 2 Introducción, 3 Planteamiento del problema, 4 Metodología, 5 Marco teórico, 8 Referencias, anexos de validación de IA | **Alcance definido** (este documento)          |
-| **Fase 2: Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller | **Diseño definido** en `Taller/Taller.md`; implementación, validación y cierre pendientes |
+| **Fase 2: Taller y cierre** | Propuesta y construcción del taller + conclusiones | 6 Propuesta de taller práctico, 7 Conclusiones, anexos del taller | **Taller construido y validado** (`Taller/Taller.md`, estado al 2026-11-10); sección 6 y anexo C redactados; pendientes: reproducción externa (T20), comprobación en macOS, Conclusiones y montaje en el documento final |
 
 La forma de trabajo con IA está definida en §5.3, en el procedimiento de uso y validación de IA. El detalle operativo está en `Investigación/Workflow.md` y en `Investigación/Guía de redacción.md`.
 
@@ -161,14 +161,14 @@ Toda afirmación sobre una herramienta debe verificarse contra su **documentaci�
 - **Restricción ética:** solo se prueba contra el entorno propio, nunca contra sistemas de terceros ni sitios públicos.
 - **Extensión:** 6 páginas en el documento; código, paneles, resultados completos y guía extendida en el repositorio.
 
-**Pendientes de implementación y medición:**
+**Pendientes de implementación y medición** (actualizado el 2026-11-10):
 
-- [ ] Ubicación del repositorio, versiones exactas y plataformas soportadas.
-- [ ] Recursos mínimos, configuración del servidor, conexiones y límites de contenedores.
-- [ ] Perfiles, duraciones, repeticiones, reglas de calibración y márgenes, fijados antes de recoger los datos correspondientes.
-- [ ] Instrumentación, extracción de métricas y exportación de evidencias.
-- [ ] Validación independiente por entorno y reproducción en otro equipo.
-- [ ] Comprobación de la guía y ajuste de la presentación al tiempo asignado por el curso.
+- [x] Ubicación del repositorio, versiones exactas y plataformas soportadas (`Taller.md` §5.1; `docs/GUIA.md` §1). Falta comprobar macOS.
+- [x] Recursos mínimos, configuración del servidor, conexiones y límites de contenedores (`Taller.md` §5.2).
+- [x] Perfiles, duraciones, repeticiones, reglas de calibración y márgenes, fijados antes de recoger los datos correspondientes (`Taller.md` §7; `docs/PLAN-DE-PRUEBAS.md`).
+- [x] Instrumentación, extracción de métricas y exportación de evidencias (`Taller.md` §6.4–§6.5; `docs/INTERPRETACION.md`).
+- [x] Validación independiente por entorno (`Taller.md` §7.2) y reproducción del veredicto `ci` en una segunda computadora del equipo. La reproducción por una persona ajena al desarrollo sigue pendiente (T20).
+- [ ] Comprobación de la guía por una persona ajena al desarrollo y ajuste de la presentación al tiempo asignado por el curso (T20).
 
 ## 8. Fuentes ancla (verificar existencia antes de usar)
 
@@ -193,4 +193,6 @@ El material extenso (código completo, registros íntegros de IA) va en un **rep
 |---|---|---|---|
 | A | Registro resumido de consultas de IA | 1 | 1 |
 | B | Resumen de la validación crítica de los productos de IA y su resolución, con el detalle del procedimiento que la Metodología resume | 1 | 1 |
-| C | Material del taller (código, resultados, capturas); contenido por definir | 2 | 1.5 |
+| C | Material del taller: enlace y estructura del repositorio, extractos de la simulación y de la *quality gate*, y captura del informe de Gatling (redactado; captura pendiente) | 2 | 1.5 |
+
+**Estado al 2026-11-10:** el anexo C está redactado en `Investigación/Secciones/06 Propuesta de taller práctico/03 Borrador.md`. Los anexos A y B todavía no están en el repositorio, y el documento de Word llega hasta el Marco teórico: faltan la portada, la sección 6, las Conclusiones y los anexos.

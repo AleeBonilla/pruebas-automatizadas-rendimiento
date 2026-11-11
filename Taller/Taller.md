@@ -2,7 +2,21 @@
 
 Diseño del taller de la Fase 2 de la investigación y plan de la sección 6 del documento. El alcance general está en [`Alcance.md`](../Alcance.md) §7.
 
-**Estado:** fase 1 terminada (T1–T9) y T16 lista. El piloto (T7) fijó la configuración de 5.2; en los *pull requests* de demostración (#6 y #7) la compuerta rechaza `regresion` y aprueba `corregida`, y la guía está en [`docs/GUIA.md`](docs/GUIA.md). La reproducción externa (T20) dirá si basta sola. La fase 2 está terminada (T10–T15): hay simulaciones de estrés y de picos (6.3); cada ejecución deja sus resultados en `metricas.json`, las campañas se resumen con `campana` y las ejecuciones inválidas se detectan (6.4). Los perfiles `ci` y `local` están calibrados, congelados en las etiquetas `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2), y el plan de pruebas que reúne objetivos, criterios y perfiles está en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md). De la fase 3 están terminadas T16, T17 y T19: los workflows de escenarios, calibración y validación funcionan, y con el de validación se corrió una segunda campaña de `perfil-ci-v1`, que pasa (7.2 y 8); la lectura del informe y de los paneles está en [`docs/INTERPRETACION.md`](docs/INTERPRETACION.md). T18 está comprobada en Linux, en los *runners* de GitHub Actions, y en Windows con PowerShell y con Git Bash; falta macOS, que no tiene *runner* con Docker ([`docs/GUIA.md`](docs/GUIA.md) §1). En una segunda computadora, con el perfil `ci`, `corregida` aprobó y `regresion` fue rechazada. Queda la reproducción externa (T20), que tiene que hacer una persona ajena al desarrollo.
+**Estado al 10 de noviembre de 2026:** terminadas T1–T17, T19 y T21; T18 está comprobada en Linux y en Windows, pero falta macOS, y T20 está pendiente.
+
+| Fase | Tareas | Resultado |
+|---|---|---|
+| 1. Núcleo | T1–T9 terminadas | El piloto (T7) fijó la configuración de 5.2. En los *pull requests* de demostración (#6 y #7), la compuerta rechaza `regresion` y aprueba `corregida`. La guía está en [`docs/GUIA.md`](docs/GUIA.md) |
+| 2. Rigor | T10–T15 terminadas | Simulaciones de estrés y de picos (6.3); `metricas.json` en cada ejecución, resumen de campañas con `campana` y detección de ejecuciones inválidas (6.4). Perfiles `ci` y `local` calibrados, congelados en `perfil-ci-v1` y `perfil-local-v1` (7.1) y validados (7.2). Plan de pruebas en [`docs/PLAN-DE-PRUEBAS.md`](docs/PLAN-DE-PRUEBAS.md) |
+| 3. Observabilidad y alcance | T16, T17 y T19 terminadas; T18 parcial; T20 pendiente | Prometheus y Grafana provisionados (6.5). Workflows de escenarios, calibración y validación (8), con una segunda validación de `perfil-ci-v1` que pasa (7.2). Lectura del informe y de los paneles en [`docs/INTERPRETACION.md`](docs/INTERPRETACION.md). Procedimiento comprobado en Linux, en los *runners* de GitHub Actions, y en Windows con PowerShell y con Git Bash ([`docs/GUIA.md`](docs/GUIA.md) §1). En una segunda computadora, con el perfil `ci`, `corregida` aprobó y `regresion` fue rechazada |
+| Documento | T21 terminada | Sección 6 y anexo C en `Investigación/Secciones/06 Propuesta de taller práctico/`, con el plan aprobado y la auditoría aprobada en la segunda ronda |
+
+**Pendientes:**
+
+- **T18:** comprobar el procedimiento en macOS. Los *runners* de macOS de GitHub no traen Docker, así que hace falta una Mac.
+- **T20:** que una persona ajena al desarrollo complete la práctica con la guía, corregir lo que encuentre y ajustar la presentación al tiempo que asigne el curso. Si esa persona usa macOS, cierra también T18.
+- **T21, al pasar al documento final:** copiar la sección 6 y el anexo C al documento de Word; dibujar las Figuras 4 y 5, que el borrador describe en comentarios, y tomar las capturas de la Figura 6 de las ejecuciones `20261110T224259Z-carga-corregida` y `20261110T224735Z-carga-regresion`. Esas dos ejecuciones no están en el repositorio, porque `resultados/` no se versiona: están en la segunda computadora, en `Taller/resultados/`. Al maquetar, si la sección supera las 6 páginas, se quita primero la Figura 5 (la Tabla 6 da los mismos rangos).
+- **Para una próxima calibración (no bloquean el taller):** servir `/metrics` en un puerto propio, para que Prometheus no pierda muestras durante la sobrecarga (6.5), y quitar la pausa de `andThen` en la carga (6.3). Las dos cambian el sistema medido, así que invalidan los perfiles vigentes.
 
 ## 1. Propósito
 
