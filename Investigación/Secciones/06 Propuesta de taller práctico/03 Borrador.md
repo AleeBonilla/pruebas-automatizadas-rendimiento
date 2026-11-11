@@ -94,21 +94,18 @@ Lo demostrado tiene límites precisos. El umbral se eligió con una regresión c
 
 ### C.1 Repositorio
 
-El taller está en https://github.com/AleeBonilla/pruebas-automatizadas-rendimiento, carpeta `Taller/`, que reúne la API, los datos, las simulaciones de Gatling, la observabilidad, los perfiles de ejecución, las herramientas de resultados y la documentación: la guía paso a paso (`docs/GUIA.md`), el plan de pruebas (`docs/PLAN-DE-PRUEBAS.md`) y la interpretación de resultados (`docs/INTERPRETACION.md`). Los *workflows* están en `.github/workflows/`, y los resultados de cada ejecución en CI se descargan como artefactos desde la pestaña *Actions*.
+El taller está en https://github.com/AleeBonilla/pruebas-automatizadas-rendimiento, carpeta `Taller/`, que reúne la API, los datos, las simulaciones, la observabilidad, los perfiles, las herramientas y la documentación: la guía (`docs/GUIA.md`), el plan de pruebas (`docs/PLAN-DE-PRUEBAS.md`) y la interpretación de resultados (`docs/INTERPRETACION.md`). Los workflows están en `.github/workflows/`, y los resultados de cada ejecución en CI se descargan como artefactos desde la pestaña *Actions*.
 
 ### C.2 Simulación de carga
 
-La simulación separa el calentamiento de la medición y aplica las aserciones solo a la medición. La tasa, las duraciones y el umbral los recibe del perfil de ejecución.
+Separa el calentamiento de la medición, aplica las aserciones solo a la medición y toma la tasa, las duraciones y el umbral del perfil de ejecución.
 
 ```java
 setUp(
     Escenarios.consulta("calentamiento", ...)
         .injectOpen(constantUsersPerSec(TASA).during(CALENTAMIENTO_S))
-        .andThen(
-            Escenarios.consulta("medicion", ...)
-                .injectOpen(
-                    constantUsersPerSec(TASA).during(MEDICION_S))))
-    .protocols(Escenarios.protocolo())
+        .andThen(Escenarios.consulta("medicion", ...)
+            .injectOpen(constantUsersPerSec(TASA).during(MEDICION_S))))
     .assertions(
         details("medicion").responseTime().percentile(95.0).lt(UMBRAL_MS),
         details("medicion").failedRequests().percent().lte(ERRORES_MAX_PCT));
