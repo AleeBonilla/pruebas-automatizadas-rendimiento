@@ -23,7 +23,7 @@ for linea in txt.splitlines():
     s = linea.strip()
     if s.startswith("<!-- FIGURA 6:"):
         sal += ['::: {custom-style="TableCaption"}', "Figura 6. Informe de Gatling de la medición, por variante.", ":::", "",
-                '::: {custom-style="Figure"}', "![](fig6.png){width=5.6in}", ":::", "",
+                '::: {custom-style="Figure"}', "![](fig6.png){width=5.2in}", ":::", "",
                 '::: {custom-style="Notadetabla"}',
                 "*Fuente:* elaboración propia. Ejecuciones `20261110T231112Z-carga-corregida` y "
                 "`20261110T230416Z-carga-regresion` de `validacion-ci-2` (*runner* de GitHub Actions, 10 de noviembre de 2026).", ":::", ""]

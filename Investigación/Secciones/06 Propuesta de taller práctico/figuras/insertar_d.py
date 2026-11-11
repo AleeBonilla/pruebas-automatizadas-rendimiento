@@ -23,7 +23,6 @@ CAP = '::: {custom-style="TableCaption"}' + NL
 ANCHOS = {
     "Tabla A1.": [18, 38, 44],
     "Tabla A2.": [24, 9, 11, 10, 9, 11, 10],
-    "Tabla A3.": [28, 52, 12],
     "Tabla B1.": [40, 15, 15, 15, 15],
     "Tabla B2.": [28, 8, 36, 28],
     "Tabla B3.": [28, 44, 28],
@@ -139,6 +138,13 @@ doc = doc[:i_salto] + salto + f_concl + doc[i_salto:]
 m_c = re.search(r'<w:p(?: [^>]*)?><w:pPr><w:pStyle w:val="Ttulo1"/></w:pPr><w:bookmarkStart [^>]*/>(?:(?!</w:p>).)*>Anexo C\.', doc)
 assert m_c
 doc = doc[:m_c.start()] + f_ab + doc[m_c.start():]
+# El anexo A empieza a continuación de las referencias, sin salto de página, para ajustar la extensión.
+if "SIN_SALTO_A" in __import__("os").environ:
+    k_ab = doc.index(f_ab)
+    previo = doc[:k_ab]
+    m_salto = re.search(re.escape(salto) + r"\s*$", previo)
+    assert m_salto
+    doc = previo[:m_salto.start()] + previo[m_salto.start() + len(salto):] + doc[k_ab:]
 # 3) Los apartados del anexo C pasan a nivel 3 (fuera del índice)
 partes = re.findall(r'<w:p(?: [^>]*)?><w:pPr><w:pStyle w:val="Ttulo2"/></w:pPr>(?:(?!</w:p>).)*?<w:t[^>]*>C\.\d [^<]*</w:t>', doc)
 assert len(partes) == 4, len(partes)

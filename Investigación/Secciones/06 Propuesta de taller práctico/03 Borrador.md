@@ -94,21 +94,7 @@ Lo demostrado tiene límites precisos. El umbral se eligió con una regresión c
 
 ### C.1 Repositorio
 
-El taller está en https://github.com/AleeBonilla/pruebas-automatizadas-rendimiento, carpeta `Taller/`. La guía paso a paso es `Taller/docs/GUIA.md`; el plan de pruebas, `Taller/docs/PLAN-DE-PRUEBAS.md`, y la guía de interpretación, `Taller/docs/INTERPRETACION.md`. Los resultados de cada ejecución en CI se descargan como artefactos desde la pestaña *Actions*.
-
-```text
-Taller/
-├── api/                  Flask, variantes, métricas, pruebas y Dockerfile
-├── base-datos/           esquema, datos sintéticos y restablecimiento
-├── rendimiento/          simulaciones de Gatling, Maven Wrapper y Dockerfile
-├── observabilidad/       Prometheus y panel de Grafana
-├── config/               perfiles de ejecución y variante activa
-├── herramientas/         extracción de resultados, validez, veredicto y campañas
-├── docs/                 GUIA.md, PLAN-DE-PRUEBAS.md, INTERPRETACION.md
-├── compose.yaml · compose.carga.yaml
-└── taller.ps1 · taller.sh
-.github/workflows/        quality gate y workflows manuales
-```
+El taller está en https://github.com/AleeBonilla/pruebas-automatizadas-rendimiento, carpeta `Taller/`, que reúne la API, los datos, las simulaciones de Gatling, la observabilidad, los perfiles de ejecución, las herramientas de resultados y la documentación: la guía paso a paso (`docs/GUIA.md`), el plan de pruebas (`docs/PLAN-DE-PRUEBAS.md`) y la interpretación de resultados (`docs/INTERPRETACION.md`). Los *workflows* están en `.github/workflows/`, y los resultados de cada ejecución en CI se descargan como artefactos desde la pestaña *Actions*.
 
 ### C.2 Simulación de carga
 
@@ -142,7 +128,6 @@ on:
 jobs:
   rendimiento:
     runs-on: ubuntu-24.04
-    defaults: { run: { working-directory: Taller } }
     steps:
       - uses: actions/checkout@v7
       - run: ./taller.sh preparar
@@ -150,15 +135,13 @@ jobs:
       - run: ./taller.sh ejecutar --tipo carga --perfil ci
       - uses: actions/upload-artifact@v7
         if: always()   # conserva el informe aunque la prueba falle
-        with:
-          name: resultados-${{ github.run_id }}-${{ github.run_attempt }}
-          path: Taller/resultados/
+        with: { path: Taller/resultados/ }
 ```
 
 *Fuente:* `.github/workflows/compuerta.yml`, abreviado.
 
 ### C.4 Informe de Gatling
 
-La Figura 6 compara la página de la medición en una ejecución de cada variante de la campaña `validacion-ci-2`. En `corregida`, las respuestas siguen a las solicitudes, unas 150 por segundo; en `regresion`, las respuestas correctas se quedan en unas 100 por segundo y el resto termina en esperas agotadas.
+La Figura 6 compara la medición de una ejecución de cada variante de `validacion-ci-2`. En `corregida`, las respuestas siguen a las solicitudes, unas 150 por segundo; en `regresion`, las correctas se quedan en unas 100 por segundo y el resto termina en esperas agotadas.
 
 <!-- FIGURA 6: Informe de Gatling de la medición, por variante. Dos capturas lado a lado de la página «medicion» del informe HTML, con el perfil de ejecución ci: a la izquierda, corregida (20261110T231112Z-carga-corregida: p50 7 ms, p95 8 ms, sin errores); a la derecha, regresion (20261110T230416Z-carga-regresion: p50 24,0 s, p95 59,1 s, 18,8 % de errores). Cada captura muestra la tabla de estadísticas y el gráfico de respuestas por segundo. Fuente: ejecuciones de la campaña validacion-ci-2, en un runner de GitHub Actions, 10 de noviembre de 2026. Archivo: figuras/fig6.png. -->

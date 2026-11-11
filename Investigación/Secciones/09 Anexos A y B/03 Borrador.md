@@ -17,7 +17,7 @@ Este anexo resume cómo se usaron las herramientas de inteligencia artificial y 
 
 ### A.2 Consultas de búsqueda
 
-Las consultas de la Introducción, del Planteamiento del problema y de la Metodología no se registraron: de esas secciones solo consta qué fuentes se verificaron. Desde el Marco teórico, cada consulta se registró con su fecha, su buscador y su cadena. Todas se hicieron el 7 de noviembre de 2026 en un buscador web.
+Las consultas de la Introducción, del Planteamiento y de la Metodología no se registraron: de esas secciones solo consta qué fuentes se verificaron. Desde el Marco teórico se registró cada consulta, todas del 7 de noviembre de 2026, en un buscador web.
 
 **Tabla A2.** Consultas, fuentes y evidencia por parte del documento
 
@@ -37,17 +37,7 @@ Las consultas de la Introducción, del Planteamiento del problema y de la Metodo
 
 ### A.3 Fuentes descartadas
 
-**Tabla A3.** Motivos por los que se descartaron fuentes
-
-| Motivo | Ejemplo | Dónde |
-|---|---|---|
-| Copia, resumen o espejo de terceros | Resúmenes del syllabus del ISTQB; espejos del libro de Lazowska et al. | 5.1, 5.3 |
-| Contenido comercial, blog o sin autoría | Guías de proveedores sobre *quality gates*; páginas de BlazeMeter | 5.1, 5.8 |
-| Solo el resumen accesible | *The Tail at Scale*; el resumen de una página de Smith (2021) | 5.3, 3 |
-| Documentación de otro producto o versión | LoadRunner Enterprise y DevWeb, en lugar de Professional | 5.8 |
-| Fuera del alcance o sin datos completos | Waller et al. (2015), un *microbenchmark*; Ingo y Daly (2020) | 2, 3 |
-
-*Fuente:* elaboración propia, a partir de los registros de búsqueda y de las listas de fuentes de cada plan.
+Las fuentes se descartaron por cinco motivos: ser una copia, un resumen o un espejo de terceros (5.1 y 5.3); ser contenido comercial, un blog o carecer de autoría (5.1 y 5.8); tener accesible solo el resumen, como *The Tail at Scale* (5.3); ser documentación de otro producto o de una versión anterior, como la de LoadRunner Enterprise frente a la de Professional (5.8), o quedar fuera del alcance o sin datos de publicación completos, como un estudio sobre *microbenchmarks* (Introducción y Planteamiento).
 
 # Anexo B. Validación crítica de los productos de IA
 
@@ -64,14 +54,11 @@ Este anexo resume los hallazgos de las auditorías y cómo se resolvieron (4.3),
 | Introducción | 6 | 2 | 4 | 3 |
 | Planteamiento del problema | 4 | 1 | 1 | 5 |
 | Metodología | 2 | 0 | 0 | 5 |
-| Marco teórico, 5.1 y 5.2 | 4 | 2 | 5 | 6 |
-| Marco teórico, 5.3 y 5.4 | 4 | 1 | 1 | 6 |
-| Marco teórico, 5.5 a 5.7 | 3 | 2 | 2 | 5 |
-| Marco teórico, 5.8 | 3 | 2 | 6 | 8 |
+| Marco teórico (cuatro grupos de subsecciones) | 14 | 7 | 14 | 25 |
 | Sección 6 | 2 | 1 | 3 | 7 |
 | **Total** | **28** | **11** | **22** | **45** |
 
-*Fuente:* elaboración propia, a partir de los informes de auditoría. Cada parte terminó con una ronda aprobada. En la Introducción, las tres primeras rondas auditaron solo la evidencia, y la primera rechazó 3 de 22 filas: dos por enlaces locales que no resolvían y una por citar solo el resumen de un informe.
+*Fuente:* elaboración propia, a partir de los informes de auditoría. Cada parte terminó con una ronda aprobada. En la Introducción, la primera ronda auditó solo la evidencia y rechazó 3 de 22 filas: dos por enlaces locales que no resolvían y una por citar solo un resumen.
 
 ### B.2 Hallazgos bloqueantes
 
@@ -79,17 +66,17 @@ Este anexo resume los hallazgos de las auditorías y cómo se resolvieron (4.3),
 
 | Tipo | Casos | Ejemplo | Resolución |
 |---|---:|---|---|
-| Fidelidad: la afirmación dice más que la fuente | 15 | Un límite aproximado de diez segundos se presentaba como pérdida categórica de atención | Se reformuló como límite aproximado |
-| Respaldo: dato o atribución sin fila que lo sostenga | 9 | Una interpretación propia se atribuía al syllabus del ISTQB; el SLO aparecía como origen necesario del umbral | Se presentó como razonamiento propio o se acotó |
-| Ubicación: pasaje literal, pero en otra sección o página | 5 | Una enumeración de modelos secuenciales estaba antes del apartado registrado | Se corrigió el registro |
+| Fidelidad: la afirmación dice más que la fuente | 15 | Un límite aproximado se presentaba como pérdida categórica | Se reformuló como límite aproximado |
+| Respaldo: dato o atribución sin fila que lo sostenga | 9 | Una interpretación propia se atribuía al syllabus del ISTQB | Se presentó como razonamiento propio o se acotó |
+| Ubicación: pasaje literal, pero en otra sección o página | 5 | Un pasaje estaba antes del apartado registrado | Se corrigió el registro |
 | Literalidad: la cita no está en el cuerpo de la fuente | 3 | Títulos de metadatos registrados como citas textuales | Se usaron pasajes del cuerpo |
-| Trazabilidad: faltan citas o identificadores | 1 | Identificadores sin cita de autor y año en la Tabla 1 | Se agregaron |
+| Trazabilidad: faltan citas o identificadores | 1 | Identificadores sin cita de autor y año | Se agregaron |
 
 *Fuente:* elaboración propia. Un hallazgo puede ser de más de un tipo, así que los casos suman más de 22. Ninguno señaló una fuente inexistente.
 
 ### B.3 Evolución del procedimiento
 
-La Introducción se produjo primero con una versión de cinco instrucciones permanentes (*skills*) que partía de la evidencia ya auditada, de modo que el redactor solo podía parafrasear filas aprobadas. El resultado fue un texto saturado de citas (17 en 880 palabras), poco desarrollado y lento de producir. Esa versión se sustituyó por la de 4.3, que parte del argumento y cita solo lo que lo necesita, y la Introducción se reescribió con ella.
+La Introducción se produjo primero con una versión de cinco instrucciones permanentes (*skills*) que partía de la evidencia ya auditada. El resultado fue un texto saturado de citas (17 en 880 palabras) y lento de producir. Se sustituyó por la versión de 4.3, que parte del argumento y cita solo lo que lo necesita, y la Introducción se reescribió con ella.
 
 ### B.4 Validación del código del taller
 
@@ -97,8 +84,7 @@ La Introducción se produjo primero con una versión de cinco instrucciones perm
 
 | Control | Qué comprueba | Resultado |
 |---|---|---|
-| 38 pruebas funcionales y de concurrencia | Contrato, reversión y contador correcto; una versión sin protección comprueba que la prueba sabe fallar | Las dos variantes aprueban |
-| 36 pruebas de las herramientas | Reglas de validez, veredicto y decisión de las campañas, con ejecuciones sintéticas | Corren en cada cambio |
+| 38 pruebas funcionales y 36 de las herramientas | Contrato, reversión y contador correcto (una versión sin protección comprueba que la prueba sabe fallar); reglas de validez y de veredicto | Las dos variantes aprueban; corren en cada cambio |
 | Compuerta en CI | Las pruebas anteriores y la carga con el perfil `ci` en cada *push* y *pull request* | Rechaza `regresion` y aprueba `corregida` |
 | Detección de ejecuciones inválidas | Tasa lograda, solicitudes, configuración y datos de cada medición | Una ejecución interrumpida por falta de memoria quedó inválida y se repitió |
 
