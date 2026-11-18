@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
  * <p>También guarda una serie de tiempos por bloques de BLOQUE_S segundos, según
  * el momento en que salió cada solicitud. Con ella se ve cómo evoluciona la
  * degradación dentro de una fase y se mide la recuperación después de un pico.
+ * Las duraciones y los bloques usan nanoTime. UTC se proyecta desde un ancla
+ * común: los ajustes del reloj del contenedor no cambian la tasa ni la latencia.
  */
 public final class Fases {
 
@@ -40,6 +42,7 @@ public final class Fases {
 
   /** Una fase. Los hilos de Gatling la actualizan en paralelo. */
   public static final class Fase {
+    private final Reloj reloj;
     private final double tasaPrevista;
     private final int duracionPrevistaS;
     private final AtomicLong inicio = new AtomicLong(Long.MAX_VALUE);
@@ -49,14 +52,15 @@ public final class Fases {
     private final AtomicLong terminadas = new AtomicLong();
     private final ConcurrentLinkedQueue<Muestra> muestras = new ConcurrentLinkedQueue<>();
 
-    private Fase(double tasaPrevista, int duracionPrevistaS) {
+    Fase(double tasaPrevista, int duracionPrevistaS, Reloj reloj) {
+      this.reloj = reloj;
       this.tasaPrevista = tasaPrevista;
       this.duracionPrevistaS = duracionPrevistaS;
     }
 
     /** Devuelve el instante de salida, que el escenario guarda en la sesión. */
     long marcarInicio() {
-      long ahora = System.currentTimeMillis();
+      long ahora = reloj.ahora();
       inicio.accumulateAndGet(ahora, Math::min);
       ultimoInicio.accumulateAndGet(ahora, Math::max);
       iniciadas.incrementAndGet();
@@ -65,13 +69,13 @@ public final class Fases {
 
     /** Se llama también cuando la solicitud falla: Gatling sigue con el escenario. */
     void marcarFin(long inicioSolicitud, boolean fallida) {
-      long ahora = System.currentTimeMillis();
+      long ahora = reloj.ahora();
       fin.accumulateAndGet(ahora, Math::max);
       terminadas.incrementAndGet();
-      muestras.add(new Muestra(inicioSolicitud, ahora - inicioSolicitud, fallida));
+      muestras.add(new Muestra(inicioSolicitud, (ahora - inicioSolicitud) / 1_000_000, fallida));
     }
 
-    private String json() {
+    String json() {
       long i = inicio.get();
       long u = ultimoInicio.get();
       long f = fin.get();
@@ -82,17 +86,18 @@ public final class Fases {
           "{\"inicio\": \"%s\", \"fin\": \"%s\", \"inicio_ms\": %d, \"fin_ms\": %d, \"duracion_s\": %.3f,"
               + " \"ultimo_inicio_ms\": %d, \"inyeccion_s\": %.3f, \"iniciadas\": %d, \"terminadas\": %d,"
               + " \"tasa_prevista\": %s, \"duracion_prevista_s\": %d, \"bloques\": %s}",
-          Instant.ofEpochMilli(i), Instant.ofEpochMilli(f), i, f, (f - i) / 1000.0,
-          u, (u - i) / 1000.0, iniciadas.get(), terminadas.get(),
+          Instant.ofEpochMilli(reloj.utcMs(i)), Instant.ofEpochMilli(reloj.utcMs(f)),
+          reloj.utcMs(i), reloj.utcMs(f), (f - i) / 1_000_000_000.0,
+          reloj.utcMs(u), (u - i) / 1_000_000_000.0, iniciadas.get(), terminadas.get(),
           tasaPrevista, duracionPrevistaS, bloques(i));
     }
 
     /** Serie por bloques, contados desde la primera salida de la fase. */
     private String bloques(long desde) {
-      long bloqueMs = Parametros.BLOQUE_S * 1000L;
+      long bloqueNs = Parametros.BLOQUE_S * 1_000_000_000L;
       TreeMap<Long, List<Muestra>> porBloque = new TreeMap<>();
       for (Muestra m : muestras) {
-        porBloque.computeIfAbsent((m.inicio() - desde) / bloqueMs, k -> new ArrayList<>()).add(m);
+        porBloque.computeIfAbsent((m.inicio() - desde) / bloqueNs, k -> new ArrayList<>()).add(m);
       }
       StringJoiner json = new StringJoiner(", ", "[", "]");
       for (Map.Entry<Long, List<Muestra>> bloque : porBloque.entrySet()) {
@@ -117,12 +122,13 @@ public final class Fases {
   private static final Pattern VARIANTE = Pattern.compile("\"variante\"\\s*:\\s*\"([^\"]*)\"");
 
   private final Map<String, Fase> fases = new LinkedHashMap<>();
+  private final Reloj reloj = new Reloj();
   private long inicioSimulacion;
   private String varianteApi = "desconocida";
 
   /** Crea la fase con la tasa y la duración de su inyección, de las que salen las solicitudes previstas. */
   public synchronized Fase fase(String nombre, double tasa, int duracionS) {
-    return fases.computeIfAbsent(nombre, n -> new Fase(tasa, duracionS));
+    return fases.computeIfAbsent(nombre, n -> new Fase(tasa, duracionS, reloj));
   }
 
   /**
@@ -130,7 +136,7 @@ public final class Fases {
    * que una API levantada con otra variante invalide la ejecución (§6.4).
    */
   public void iniciarSimulacion() {
-    inicioSimulacion = System.currentTimeMillis();
+    inicioSimulacion = reloj.utcMs(reloj.ahora());
     varianteApi = consultarVariante();
   }
 
@@ -151,12 +157,14 @@ public final class Fases {
 
   /** Escribe fases.json con las fases y los parámetros efectivos de la ejecución. */
   public void escribir(String simulacion) {
-    long finSimulacion = System.currentTimeMillis();
+    long finSimulacion = reloj.utcMs(reloj.ahora());
     StringBuilder json = new StringBuilder("{\n");
     json.append("  \"simulacion\": \"").append(simulacion).append("\",\n");
     json.append("  \"inicio\": \"").append(Instant.ofEpochMilli(inicioSimulacion)).append("\",\n");
     json.append("  \"fin\": \"").append(Instant.ofEpochMilli(finSimulacion)).append("\",\n");
     json.append("  \"variante_api\": \"").append(varianteApi).append("\",\n");
+    json.append("  \"reloj\": \"monotonico\",\n");
+    json.append("  \"desajuste_reloj_ms\": ").append(reloj.desajusteMs()).append(",\n");
     json.append(String.format(Locale.ROOT,
         "  \"parametros\": {\"baseUrl\": \"%s\", \"ruta\": \"%s\", \"csv\": \"%s\", \"tasa\": %s,"
             + " \"umbralMs\": %d, \"erroresMaxPct\": %s, \"calentamientoS\": %d, \"medicionS\": %d,"

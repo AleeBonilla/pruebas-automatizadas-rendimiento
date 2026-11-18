@@ -232,6 +232,8 @@ def metadatos(carpeta: Path, ejecucion: dict[str, str], fases_json: dict, inform
             "imagenes": leer_json(carpeta / "imagenes.json"),
         },
         "intervalos": {
+            "reloj": fases_json.get("reloj", "utc"),
+            "desajuste_reloj_ms": fases_json.get("desajuste_reloj_ms"),
             "inicio_utc": ejecucion.get("INICIO_UTC"),
             "fin_utc": ejecucion.get("FIN_UTC"),
             "fases": fases_json.get("fases"),

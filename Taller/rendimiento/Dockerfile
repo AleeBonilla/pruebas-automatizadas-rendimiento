@@ -13,6 +13,7 @@ COPY src src
 # Compila y resuelve el classpath del plugin durante la construcción, así la
 # ejecución funciona sin red (-o).
 RUN ./mvnw -B -q test-compile dependency:resolve-plugins
+RUN java -cp target/test-classes taller.rendimiento.RelojPrueba
 
 # Los parámetros llegan como propiedades del sistema: docker compose run gatling -Dtasa=20 ...
 ENTRYPOINT ["./mvnw", "-B", "-o", "gatling:test"]
