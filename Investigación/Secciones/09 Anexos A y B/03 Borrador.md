@@ -41,7 +41,7 @@ Se descartaron las copias, los resúmenes y los espejos de terceros (5.1 y 5.3);
 
 # Anexo B. Validación crítica de los productos de IA
 
-<!-- Borrador v4 | 2026-11-11 | Resume los informes de auditoría (Investigación/Secciones/*/04 Auditoría.md) y los controles del taller (Taller/Taller.md §7 y docs/PLAN-DE-PRUEBAS.md). -->
+<!-- Borrador v4 | 2026-11-11 | Resume los informes de auditoría (Investigación/Secciones/*/04 Auditoría.md) y los controles del taller (Taller/Taller.md §7 y docs/PLAN-DE-PRUEBAS.md). v5 (2026-11-17): actualiza las Tablas B1 y B2 con las rondas 3 a 7 de la sección 6 y precisa en la Tabla B3 que las 38 pruebas son el total de la suite. v6 (2026-11-17): corrige el hallazgo bloqueante 1 de la auditoría, ronda 3 (el control negativo detecta la pérdida de visitas; no falla). -->
 
 Este anexo resume los hallazgos de las auditorías y cómo se resolvieron (4.3), y los controles con que se validó el código del taller. Los informes completos están en `Investigación/Secciones/`. Las Tablas B1 a B3 resumen las rondas, los hallazgos bloqueantes y los controles.
 
@@ -55,8 +55,8 @@ Este anexo resume los hallazgos de las auditorías y cómo se resolvieron (4.3),
 | Planteamiento del problema | 4 | 1 | 1 | 5 |
 | Metodología | 2 | 0 | 0 | 5 |
 | Marco teórico (cuatro grupos) | 14 | 7 | 14 | 25 |
-| Sección 6 | 2 | 1 | 3 | 7 |
-| **Total** | **28** | **11** | **22** | **45** |
+| Sección 6 | 7 | 5 | 14 | 11 |
+| **Total** | **33** | **15** | **33** | **49** |
 
 *Fuente:* elaboración propia, a partir de los informes de auditoría. Cada parte terminó con una ronda aprobada. La primera de la Introducción auditó solo la evidencia y rechazó 3 de 22 filas: dos por enlaces locales sin resolver y una por citar un resumen.
 
@@ -66,8 +66,8 @@ Este anexo resume los hallazgos de las auditorías y cómo se resolvieron (4.3),
 
 | Tipo | Casos | Ejemplo | Resolución |
 |---|---:|---|---|
+| Respaldo: dato o atribución sin fila que lo sostenga | 20 | Una interpretación propia se atribuía al syllabus del ISTQB | Se acotó o se presentó como razonamiento propio |
 | Fidelidad: la afirmación dice más que la fuente | 15 | Un límite aproximado se presentaba como pérdida categórica | Se reformuló como límite aproximado |
-| Respaldo: dato o atribución sin fila que lo sostenga | 9 | Una interpretación propia se atribuía al syllabus del ISTQB | Se acotó o se presentó como razonamiento propio |
 | Ubicación: pasaje literal, pero en otra sección o página | 5 | Un pasaje estaba antes del apartado registrado | Se corrigió el registro |
 | Literalidad, incluida la ubicación cuando el informe las agrupa | 3 | Títulos de metadatos registrados como citas textuales | Se usaron pasajes del cuerpo o se corrigió el localizador |
 | Trazabilidad: faltan citas o identificadores | 1 | Identificadores sin cita de autor y año | Se agregaron |
@@ -84,7 +84,7 @@ La Introducción se produjo con cinco instrucciones permanentes (*skills*) que p
 
 | Control | Qué comprueba | Resultado |
 |---|---|---|
-| 38 pruebas funcionales y 36 de las herramientas | Contrato, reversión y contador, con una versión sin protección que debe fallar; reglas de validez y de veredicto | Las dos variantes aprueban; ambas baterías corren en la *quality gate* |
+| 38 pruebas funcionales y 36 de las herramientas | Contrato, reversión y contador, con una versión sin protección que debe fallar; reglas de validez y de veredicto | La suite comprende 38 casos en total; los de cada variante aprueban y el control negativo detecta la pérdida de visitas en la versión sin protección. Ambas baterías corren en la *quality gate* |
 | *Quality gate* en CI | Las pruebas anteriores y la carga con el perfil de ejecución `ci`, en los *pushes* a `main` y los *pull requests* con cambios en `Taller/**` o `.github/workflows/**` | Rechaza `regresion` y aprueba `corregida` |
 | Detección de ejecuciones inválidas | Tasa lograda, solicitudes, configuración y datos de cada medición | Una ejecución interrumpida por falta de memoria quedó inválida y se repitió |
 

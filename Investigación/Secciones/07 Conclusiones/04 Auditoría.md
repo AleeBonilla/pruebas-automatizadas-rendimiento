@@ -1,5 +1,47 @@
 # Auditoría — 07 Conclusiones
 
+## Ronda 3 — 2026-11-17 — Borrador v8 · Evidencia sin versión (sin filas)
+
+**Veredicto:** Aprobada | **Citas revisadas:** ninguna; la sección no cita fuentes externas | **Alcance:** seguimiento del hallazgo bloqueante 1 de la ronda 2
+
+El hallazgo 1 queda subsanado. En B5, v8 dice «De 33 rondas de auditoría, 15 no fueron aprobadas, con 33 hallazgos bloqueantes…», la redacción sugerida en la ronda 2. Ya no atribuye a las 15 rondas la desaprobación de un texto: el recuento incluye la ronda 1 de Introducción, que revisó solo evidencia. Los totales se toman del cotejo registrado en la ronda 2.
+
+La aprobación se refiere exclusivamente a este seguimiento; no se vuelven a evaluar las demás partes del borrador ni las observaciones anteriores.
+
+**Extensión:** no se revisó en esta ronda acotada.
+
+
+## Ronda 2 — 2026-11-17 — Borrador v7 · Evidencia sin versión (sin filas)
+
+**Veredicto:** No aprobada | **Citas revisadas:** ninguna; la sección no cita fuentes externas | **Alcance:** únicamente los dos cambios indicados en B2 y B5
+
+Se cotejaron las afirmaciones modificadas con la ronda 3 de la auditoría de la sección 6, las pruebas del taller, los ocho informes de auditoría anteriores a Conclusiones y la Tabla B1 del anexo B. La evidencia sigue sin filas. La ronda 1 se conserva íntegra; sus observaciones y las partes del borrador ajenas a estos cambios no se vuelven a evaluar en esta revisión acotada.
+
+| # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
+|---|---|---|---|---|---|
+| 1 | Bloqueante | B5, «De 33 rondas de auditoría, 15 no aprobaron el texto» | 4 — Respaldo y fidelidad al registro interno | Las 15 rondas con veredicto «No aprobada» están bien contadas, pero una de ellas, la ronda 1 de Introducción, auditó solamente la evidencia y rechazó tres filas; no auditó ni desaprobó un borrador. La nota de la Tabla B1 también distingue esa ronda. Por tanto, el conjunto no respalda que las 15 no aprobaran el texto. | Escribir «De 33 rondas de auditoría, 15 no fueron aprobadas, con 33 hallazgos bloqueantes…». Así se conserva el total sin atribuir a todas una evaluación del texto. |
+
+### Cotejo de los cambios
+
+- **B2, pruebas funcionales:** la ronda 3 de la sección 6 precisa que 38 es el total de casos parametrizados de la suite, no la cantidad ejecutada por cada variante. Las pruebas de contrato, concurrencia y reversión parametrizadas para `regresion` y `corregida` comprueban los mismos casos aplicables a ambas; otras pruebas son específicas de una variante y el control negativo es independiente. La nueva frase, sin la cifra 38, se sostiene como referencia a las pruebas compartidas y no afirma que cada variante ejecute toda la suite. Este resultado corrige el alcance del cotejo 1 de la ronda anterior.
+- **B5, recuento:** se contaron por informe los encabezados de ronda, los veredictos «No aprobada» y las filas rotuladas «Bloqueante». Cada fila bloqueante se cuenta una vez, incluso si tiene varios criterios; las tres filas de evidencia rechazadas en la ronda 1 de Introducción se informan aparte y no se suman como filas bloqueantes. Se excluyen las auditorías de Conclusiones y anexos, igual que en B1.
+
+| Parte | Rondas | No aprobadas | Bloqueantes |
+|---|---:|---:|---:|
+| Introducción | 6 | 2 | 4 |
+| Planteamiento del problema | 4 | 1 | 1 |
+| Metodología | 2 | 0 | 0 |
+| Marco teórico, 5.1–5.2 | 4 | 2 | 5 |
+| Marco teórico, 5.3–5.4 | 4 | 1 | 1 |
+| Marco teórico, 5.5–5.7 | 3 | 2 | 2 |
+| Marco teórico, 5.8 | 3 | 2 | 6 |
+| Sección 6 | 7 | 5 | 14 |
+| **Total** | **33** | **15** | **33** |
+
+El total y los subtotales por parte coinciden con la Tabla B1, que agrupa los cuatro informes del Marco teórico en 14 rondas, 7 no aprobadas y 14 bloqueantes. El total de rondas no aprobadas incluye la ronda de evidencia señalada en el hallazgo 1. La Tabla B2 registra 20 apariciones de respaldo y 15 de fidelidad, los dos criterios más frecuentes; sus categorías pueden coincidir en un hallazgo. Por ello, «sobre todo de respaldo y de fidelidad» concuerda con ese desglose.
+
+**Extensión:** esta revisión se limita a los cambios solicitados; el control de extensión de la ronda 1 se conserva como antecedente y no se actualiza aquí.
+
 ## Ronda 1 — 2026-11-11 — Borrador v5 · Evidencia sin versión (sin filas)
 
 **Veredicto:** Aprobada | **Citas revisadas:** ninguna; no hay citas externas | **Afirmaciones internas verificadas:** las 11 del plan | **Plan:** v1, aprobado, modo ligero

@@ -1,13 +1,18 @@
 # 06 Propuesta de taller práctico
 
-<!-- Borrador v2 | Plan v1 | Evidencia v2 | 2026-11-10 -->
+<!-- Borrador v7 | Plan v2 | Evidencia v2 | 2026-11-16 -->
+<!-- v7 (2026-11-16): acota las filas de tasa y de solicitudes de la Tabla 6 (hallazgos 1 y 2 de la ronda 6). -->
+<!-- v6 (2026-11-16): corrige los hallazgos bloqueantes 1–4 de la auditoría, ronda 5: Tabla 6 con filas acotadas y sin columna «fuera de rango», y nota de la Tabla 7. -->
+<!-- v5 (2026-11-16): corrige los hallazgos bloqueantes 1 y 2 y aplica la sugerencia 3 de la auditoría, ronda 4. -->
+<!-- v4 (2026-11-16): corrige los hallazgos bloqueantes 1–3 y aplica las sugerencias 4–6 de la auditoría, ronda 3. -->
+<!-- v3 (2026-11-16): agrega la Tabla 6 (valores de prueba) y sustituye la antigua Tabla 6 por la Tabla 7 (resultados esperados y obtenidos), para cubrir la rúbrica. Pendiente de auditoría. -->
 <!-- v2: corrige los hallazgos bloqueantes 1–3 y aplica las sugerencias 4, 5, 6 (salvo la cursiva de «workflow»), 7, 8, 9 y 10 de la auditoría, ronda 1. -->
 
 ## 6.1 Contexto de aplicación
 
 El taller parte de un caso que cualquier equipo de desarrollo puede encontrar: una API REST de productos de una tienda a la que se le agrega un contador de visitas. La primera implementación, la variante `regresion`, protege el contador con un candado (*lock*) que comparten todos los hilos del servidor. Lee el valor, lo incrementa y lo escribe sin perder visitas, pero obliga a atender las solicitudes de a una, aunque consulten productos distintos. La corrección, la variante `corregida`, elimina el candado y hace el incremento con una sola instrucción SQL atómica, de modo que la base de datos solo bloquea la fila modificada. La variante `sana`, sin contador, sirve de referencia.
 
-Las dos implementaciones del contador aprueban las mismas 38 pruebas funcionales y de concurrencia: ninguna prueba funcional las distingue. Es la situación que plantean 5.1 y 5.2, en la que el rendimiento es un atributo de calidad propio y necesita pruebas propias. El defecto, además, no se fabrica con pausas en el código. Para que la espera del candado tenga el peso que tendría en producción, PostgreSQL recibe 2 ms de latencia de red en cada ida y vuelta, como si estuviera en otro servidor, y esa condición se aplica por igual a las tres variantes. La hipótesis es que `regresion` se degrada a tasas en las que `corregida` todavía cumple; la magnitud de la diferencia la fijan las mediciones (6.6).
+Las dos implementaciones del contador aprueban las mismas pruebas funcionales y de concurrencia: ninguna prueba funcional las distingue. Es la situación que plantean 5.1 y 5.2, en la que el rendimiento es un atributo de calidad propio y necesita pruebas propias. El defecto, además, no se fabrica con pausas en el código. Para que la espera del candado tenga el peso que tendría en producción, PostgreSQL recibe 2 ms de latencia de red en cada ida y vuelta, como si estuviera en otro servidor, y esa condición se aplica por igual a las tres variantes. La hipótesis es que `regresion` se degrada a tasas en las que `corregida` todavía cumple; la magnitud de la diferencia la fijan las mediciones (6.6).
 
 ## 6.2 Recursos y código
 
@@ -56,7 +61,20 @@ La Tabla 5 resume las pruebas. Las funcionales son una condición previa; la de 
 
 *Fuente:* elaboración propia.
 
-Como cada computadora es distinta, la tasa y el umbral no se fijan de antemano: cada entorno tiene su perfil de ejecución, calibrado con sus propias mediciones (5.5). La campaña de calibración repite la carga tres veces por variante, en orden alternado, y ubica el umbral al menos tres veces por encima del peor p95 de `corregida` y tres veces por debajo del mejor de `regresion`. Después, el perfil de ejecución se congela y se comprueba con una campaña de validación nueva, porque un umbral evaluado con los mismos datos con que se eligió parecería funcionar siempre (5.7). Los dos perfiles de ejecución quedaron en 150 solicitudes por segundo, con umbrales de 3 000 ms en `ci` y de 1 000 ms en `local`.
+Como cada computadora es distinta, la tasa y el umbral no se fijan de antemano: cada entorno tiene su perfil de ejecución, calibrado con sus propias mediciones (5.5). La campaña de calibración repite la carga tres veces por variante, en orden alternado, y ubica el umbral al menos tres veces por encima del peor p95 de `corregida` y tres veces por debajo del mejor de `regresion`. Después, el perfil de ejecución se congela y se comprueba con una campaña de validación nueva, porque un umbral evaluado con los mismos datos con que se eligió parecería funcionar siempre (5.7). La Tabla 6 reúne los valores de prueba, incluidos identificadores inexistentes, que deben devolver 404 sin modificar contadores.
+
+**Tabla 6.** Valores de prueba
+
+| Parámetro | Mínimo | Medio | Máximo |
+|---|---|---|---|
+| Tasa de llegada en las cargas de validación, el estrés y los picos de la Tabla 7, en solicitudes por segundo | 50: estrés y base del pico | 150: carga con los perfiles `ci` y `local`, y cima del pico de `regresion` | 300: estrés y cima del pico de `corregida` |
+| Identificador de producto existente | 1 | 4182, en la prueba de contrato | 10 000 |
+| Identificador inexistente, que debe devolver 404 | 0 | 2³¹ | 10²⁰ |
+| Solicitudes por caso de pytest que hace solicitudes HTTP | 1: contrato y 404 | 64, con hasta 16 hilos a la vez; 32 con un fallo provocado | 400, con hasta 16 hilos a la vez |
+| Umbral de p95 de los perfiles | 300 ms: `piloto` | 1 000 ms: `local` | 3 000 ms: `ci` |
+| Duración de una fase en las mediciones informadas | 10 s: pico de `corregida` | 60 s: calentamiento de `ci` y `local` | 180 s: medición de `ci` y `local` |
+
+*Fuente:* elaboración propia, a partir de los perfiles de ejecución, las pruebas del repositorio y las mediciones de 6.6. Mínimo y máximo son el valor más bajo y el más alto que usan las pruebas de cada fila, y medio, uno intermedio; no son límites del sistema. Los identificadores inexistentes probados son 0, 10 001, 2³¹ − 1, 2³¹ y 10²⁰. La tasa de error permitida es del 1 % en todos los perfiles.
 
 ## 6.5 Guía paso a paso
 
@@ -66,19 +84,24 @@ En GitHub Actions, un workflow es un archivo YAML del repositorio que se dispara
 
 ## 6.6 Resultados e interpretación
 
-Las 19 ejecuciones de validación, resumidas en la Tabla 6, fueron válidas y dieron los veredictos esperados. El menor margen de `corregida` apareció en `validacion-ci-1`, 26 veces por debajo del umbral; el de `regresion`, en `validacion-ci-2`, con 18 veces por encima. La Figura 5 muestra la separación. `regresion` incumple además la tasa de error, con 17 a 33 % frente al 1 % permitido, por esperas agotadas del cliente y no por respuestas de error de la API.
+La Tabla 7 contrasta el resultado esperado de cada prueba con el obtenido: todos coinciden, aunque el quiebre de `regresion` varió entre ejecuciones con distinto equipo y simulación. Las 19 cargas de validación fueron válidas. El menor margen de `corregida` apareció en `validacion-ci-1`, 26 veces por debajo del umbral; el de `regresion`, en `validacion-ci-2`, 18 veces por encima (Figura 5). `regresion` incumple además la tasa de error, por esperas agotadas, no por errores de la API.
 
-**Tabla 6.** Resultados de las campañas de validación
+**Tabla 7.** Resultados esperados y obtenidos
 
-| Campaña | Entorno | Válidas | p95 de `corregida` | p95 de `regresion` | Errores de `regresion` | Umbral | Veredictos esperados |
-|---|---|---:|---:|---:|---:|---:|---|
-| `validacion-ci-1` | *Runner* de GitHub Actions | 7 de 7 | 8–114 ms | 58,4–58,9 s | 19,0–23,0 % | 3 000 ms | Sí |
-| `validacion-ci-2` | *Runner* de GitHub Actions | 6 de 6 | 8–10 ms | 54,1–59,1 s | 16,9–18,8 % | 3 000 ms | Sí |
-| `validacion-local` | Computadora de desarrollo | 6 de 6 | 10 ms | 60 s | 31,6–33,0 % | 1 000 ms | Sí |
+| Prueba y valores | Resultado esperado | Resultado obtenido |
+|---|---|---|
+| Funcionales: suite de 38 casos de pytest | Aprueban los casos de `regresion` y de `corregida`; el control negativo, un contador sin protección, pierde visitas | La suite aprobó completa; el control detectó la pérdida de visitas |
+| Generador: `/salud` a 150, 300 y 500 solicitudes por segundo | Sostiene al menos el 98 % de la tasa sin errores; si no la sostiene, la ejecución es inválida | Sostuvo 150 y 300 sin errores; a 500 se agotaron los puertos y la ejecución fue inválida |
+| Estrés de `regresion`: 50 a 150 solicitudes por segundo | Cumple a tasas bajas y deja de cumplir al subir la tasa | Cumple a 50 y 75 (p95 de 13 a 15 ms). A 100, 514 ms en un *runner* y 14,0 s en local, aunque otro *runner* cumplió (36 ms). A 150, 31,7 s, con unas 92 respuestas correctas por segundo |
+| Estrés de `corregida`: 150 y 300 solicitudes por segundo | Cumple en los dos niveles | p95 de 10 y 16 ms en el *runner*; 10 ms en los dos niveles en local |
+| Carga de `corregida`: 150 solicitudes por segundo, perfiles `ci` y `local` | Aprobada: p95 bajo el umbral y errores hasta el 1 % | 10 de 10 aprobadas (4 en `validacion-ci-1`, 3 en `validacion-ci-2` y 3 en `validacion-local`); p95 de 8 a 114 ms, sin errores |
+| Carga de `regresion`: mismos valores | Rechazada por rendimiento | 9 de 9 rechazadas (3 en cada campaña); p95 de 54,1 a 60 s, con 16,9 a 33,0 % de errores |
+| Picos de `regresion`: de 50 a 150 solicitudes por segundo durante 30 s | El p95 sube en el pico y se recupera dentro de la ventana de 180 s | En el *runner*, p95 de 12,0 s en el pico y recuperada 20 s después; en local, recuperada a los 55 s |
+| Picos de `corregida`: de 150 a 300 solicitudes por segundo durante 10 s | Sin efecto visible | p95 de 12 ms |
 
-*Fuente:* elaboración propia, con las campañas del 10 de noviembre de 2026. Un p95 de 60 s es el límite de espera de Gatling: el tiempo real fue mayor.
+*Fuente:* elaboración propia, con las mediciones del 10 de noviembre de 2026 (`Taller/Taller.md` §6.3, §7 y §8). Las cargas son las de las tres campañas de validación; por campaña, p95 de `corregida`, p95 de `regresion` y sus errores: `validacion-ci-1`, 8–114 ms, 58,4–58,9 s y 19,0–23,0 %; `validacion-ci-2`, 8–10 ms, 54,1–59,1 s y 16,9–18,8 %; `validacion-local`, 10 ms, 60 s y 31,6–33,0 %. Los picos y el estrés son informativos. Un p95 de 60 s alcanza el límite de espera de Gatling; la medición no permite conocer cuánto habrían tardado las solicitudes afectadas.
 
-<!-- FIGURA 5: p95 de cada ejecución de validación frente al umbral. Diagrama de puntos con el eje vertical en escala logarítmica (de 1 ms a 100 s) y, en el horizontal, las tres campañas de la Tabla 6. Cada ejecución es un punto: círculos para corregida (de 8 a 114 ms) y triángulos para regresion (de 54,1 a 60 s). Las repeticiones con el mismo valor se desplazan un poco en horizontal para que se vean todas. Una línea horizontal marca el umbral de cada perfil de ejecución: 3 000 ms en las dos campañas ci y 1 000 ms en la local. Fuente: elaboración propia con los valores individuales de las tres campañas de validación (Taller/Taller.md §7.2). -->
+<!-- FIGURA 5: p95 de cada ejecución de validación frente al umbral. Diagrama de puntos con el eje vertical en escala logarítmica (de 1 ms a 100 s) y, en el horizontal, las tres campañas de validación. Cada ejecución es un punto: círculos para corregida (de 8 a 114 ms) y triángulos para regresion (de 54,1 a 60 s). Las repeticiones con el mismo valor se desplazan un poco en horizontal para que se vean todas. Una línea horizontal marca el umbral de cada perfil de ejecución: 3 000 ms en las dos campañas ci y 1 000 ms en la local. Fuente: elaboración propia con los valores individuales de las tres campañas de validación (Taller/Taller.md §7.2). -->
 
 La mayor variación se observó en `corregida`, en GitHub Actions, y su causa no quedó identificada. Entre corridas idénticas de la calibración, su p95 varió hasta 28 veces, mientras su p50 se mantenía entre 7 y 9 ms; en la computadora de desarrollo fue de 10 ms en todas. Esa variación es la que justifica exigir un margen (5.6). En una segunda computadora, con el perfil de ejecución `ci`, los veredictos se repitieron.
 

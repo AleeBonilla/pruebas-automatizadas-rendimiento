@@ -1,5 +1,49 @@
 # Auditoría — 09 Anexos A y B
 
+## Ronda 4 — 2026-11-17 — Borrador v6 · Evidencia sin versión (sin filas)
+
+**Veredicto:** Aprobada | **Citas revisadas:** ninguna; no hay citas externas | **Alcance:** seguimiento exclusivo del hallazgo bloqueante 1 de la ronda 3, en la primera fila de la Tabla B3.
+
+El hallazgo queda **resuelto**. La celda de resultado identifica 38 como el total de la suite y dice que el control negativo detecta la pérdida de visitas en la versión sin protección, en lugar de atribuirle un fallo. La formulación coincide con la corrección sugerida en la ronda 3. El cotejo de `Taller/api/pruebas/test_concurrencia.py` confirma que el control exige discrepancias y un contador inferior al número de solicitudes; `.github/workflows/compuerta.yml` incluye pasos para las pruebas funcionales y las de herramientas. Se conserva el recuento estático y el cotejo de resultados de la ronda anterior; no se ejecutaron las pruebas.
+
+**Extensión:** la modificación revisada está en una tabla; se conserva el recuento de la ronda 3: 254 palabras de prosa frente a unas 250 previstas. La ocupación de las cinco tablas sigue pendiente de comprobación en la maquetación.
+
+## Ronda 3 — 2026-11-17 — Borrador v5 · Evidencia sin versión (sin filas)
+
+**Veredicto:** No aprobada | **Citas revisadas:** ninguna; no hay citas externas | **Alcance:** cambios indicados en B1, B2 y la primera fila de B3, y seguimiento de las sugerencias de la ronda 2.
+
+| # | Tipo | Ubicación | Criterio | Hallazgo | Corrección sugerida |
+|---|---|---|---|---|---|
+| 1 | Bloqueante | Tabla B3, primera fila, resultado | 4 — Fidelidad de la síntesis interna | «el control falla» atribuye el fallo al caso de prueba. En `test_concurrencia.py`, el control negativo aprueba cuando detecta discrepancias y visitas perdidas en la implementación sin protección; falla si no las detecta. Es uno de los 38 casos de la suite, no una prueba adicional. La celda tampoco explicita que 38 es el total de la suite, aunque ese es el alcance indicado para el cambio. | Precisar: «La suite comprende 38 casos en total; los casos de cada variante aprueban y el control negativo detecta la pérdida de visitas en la versión sin protección. Ambas baterías corren en la *quality gate*». |
+
+### Cotejo de las cifras modificadas
+
+Se contaron los encabezados de ronda, sus veredictos y las filas de hallazgos identificadas como «Bloqueante» o «Sugerencia», sin contar tablas de seguimiento. Las repeticiones en rondas distintas se cuentan de nuevo. El conjunto es el de B1: Introducción, Planteamiento, Metodología, los cuatro grupos del Marco teórico y la sección 6; excluye Conclusiones y los anexos.
+
+| Parte | Rondas | No aprobadas | Bloqueantes | Sugerencias |
+|---|---:|---:|---:|---:|
+| Introducción | 6 | 2 | 4 | 3 |
+| Planteamiento | 4 | 1 | 1 | 5 |
+| Metodología | 2 | 0 | 0 | 5 |
+| Marco teórico: A / B / C / D | 4 / 4 / 3 / 3 | 2 / 1 / 2 / 2 | 5 / 1 / 2 / 6 | 6 / 6 / 5 / 8 |
+| Marco teórico, subtotal | 14 | 7 | 14 | 25 |
+| Sección 6 | 7 | 5 | 14 | 11 |
+| **Total** | **33** | **15** | **33** | **49** |
+
+Las rondas 3–7 de la sección 6 aportan 5 rondas, 4 no aprobadas, 11 bloqueantes y 4 sugerencias; la ronda 7 aprueba. Las cifras modificadas de B1 concuerdan con los informes.
+
+Para B2 se contaron las apariciones de cada rótulo en la columna «Criterio» de las filas bloqueantes del mismo conjunto, no los números de criterio ni problemas únicos; una fila puede contar en varias categorías. El resultado es respaldo 20, fidelidad 15, ubicación 5, literalidad 3 y trazabilidad 1. Respaldo se distribuye en Introducción 1, Marco teórico A 1, B 1, C 2 y D 2, y sección 6 13. De estos últimos, 11 corresponden a R3 H1–H3, R4 H1–H2, R5 H1–H4 y R6 H1–H2; se suman a los dos de R1. El aumento de 9 a 20 y el nuevo orden de B2 son conformes con ese método.
+
+En `Taller/api/pruebas/`, las parametrizaciones de `test_contrato.py` producen 29 casos, las de `test_concurrencia.py` 5, incluido el control negativo, y las de `test_reversion.py` 4: 38 en total. `conftest.py` define las tres variantes y las dos con contador. Este es un recuento estático, no una ejecución ni una comprobación nueva de los resultados observados de la batería. La formulación del resultado requiere la corrección indicada arriba.
+
+### Seguimiento de la ronda 2
+
+1. **Terminología:** atendida en B3: ya no aparece «*workflows*»; se usan las rutas literales.
+2. **Legibilidad de B.3:** atendida: la lentitud se atribuye a la producción, no al texto.
+3. **Filtros y plan:** parcialmente atendida. B3 precisa los patrones de ruta, pero «los *pushes* a `main` y los *pull requests* con cambios…» todavía puede leerse como si el filtro solo afectara a los segundos. El plan conserva la afirmación general anterior. Sigue siendo recomendable explicitar «en ambos casos» y sincronizar el plan, como se propuso en la ronda 2. Esta sugerencia no añade un bloqueante.
+
+**Extensión:** los cambios revisados están en tablas; se conserva el recuento de la ronda 2 de 254 palabras de prosa frente a unas 250 previstas. La ocupación de las cinco tablas sigue pendiente de comprobación en la maquetación.
+
 ## Ronda 2 — 2026-11-11 — Borrador v4 · Evidencia sin versión (sin filas)
 
 **Veredicto:** Aprobada | **Citas revisadas:** ninguna; no hay citas externas | **Seguimiento:** 2 bloqueantes resueltos y 5 sugerencias atendidas | **Hallazgos de esta ronda:** 0 bloqueantes y 3 sugerencias | **Plan:** v1, aprobado, modo ligero; presupuesto actual de 2 páginas, unas 250 palabras de prosa y cinco tablas
